@@ -1,0 +1,416 @@
+{
+  "active": true,
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar_pedido": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Realizar_cancelacion": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-22T04:30:09.934Z",
+  "id": "VLymisJfE8Hl5FUz",
+  "isArchived": false,
+  "meta": null,
+  "name": "Cancelar_pedido",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "532cd7bb-da19-4976-9e93-9b895ac2fbd8",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -208,
+        -80
+      ],
+      "id": "8886eb3f-39fb-433d-bbc0-e14da6e67d37",
+      "name": "Webhook",
+      "webhookId": "532cd7bb-da19-4976-9e93-9b895ac2fbd8"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Modificar_pedido"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -16,
+        -80
+      ],
+      "id": "6f7b1114-bf2a-4106-8094-09bd20811699",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec03870a-5897-452d-9d55-a0fe08736901",
+              "name": "Hora_recogida",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_recogida }}",
+              "type": "string"
+            },
+            {
+              "id": "c2290d0f-2ea5-4f9a-af91-eef4d603e2cc",
+              "name": "Nombre",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "de4d40a8-8244-412c-8201-6d25809bb0db",
+              "name": "Telefono",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Telefono }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        -80
+      ],
+      "id": "f9605e48-1ee6-49d3-b549-e659954a4cc8",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Hora_Recogida:{{ $json.Hora_recogida }}\nTelefono: {{ $json.Telefono }}\nNombre:{{ $json.Nombre }}",
+        "options": {
+          "systemMessage": "=Eres el asistente virtual de un restaurante de comida para recoger en local.\n\nTU TAREA EN ESTE FLUJO\n- Gestionar la CANCELACIÓN de pedidos ya registrados en el sistema.\n- El cliente normalmente te dará: nombre, hora de recogida y teléfono.\n- No inventes información ni canceles nada “de palabra”: usa siempre las herramientas conectadas.\n\nHERRAMIENTAS DISPONIBLES\n1) Tool \"Buscar_pedido\"\n   - Úsala siempre que necesites comprobar si existe un pedido para ese cliente.\n   - Busca el pedido usando el nombre, la hora de recogida y, si está disponible, el teléfono.\n   - Si no encuentra ningún pedido, explícaselo al cliente de forma amable y sugiere alternativas (por ejemplo, revisar la hora o el nombre).\n\n2) Tool \"Realizar_cancelacion\"\n   - Úsala solo cuando tengas localizado el pedido correcto.\n   - Sirve para marcar el pedido como cancelado o eliminarlo en la base de datos.\n   - Después de usarla, confirma de forma clara que el pedido ha quedado cancelado.\n\nREGLAS IMPORTANTES\n- No menciones palabras técnicas como “JSON”, “toolCalls”, “nodo”, “Airtable” o “base de datos”.\n- Para el cliente, tú simplemente “compruebas el pedido en el sistema del restaurante”.\n- Si no encuentras ningún pedido con los datos del cliente:\n  - No digas que está cancelado.\n  - Indica que no ves ningún pedido con esos datos y pide confirmar nombre y hora, o sugiere que quizá ya se haya recogido o no llegó a completarse.\n- Si encuentras varios pedidos posibles:\n  - Pide una aclaración: por ejemplo, confirmar el importe, los productos o la hora exacta.\n  - Solo cuando estés seguro de cuál es el correcto, llama a \"Realizar_cancelacion\".\n- Si el cliente pide algo distinto de cancelar (por ejemplo cambiar la hora o el pedido completo), explícale que en este flujo solo puedes cancelar el pedido actual y sugerirle que haga un nuevo pedido con los datos correctos.\n\nESTILO DE RESPUESTA\n- Tono cercano, amable y profesional.\n- Respuestas cortas y claras, orientadas a la acción.\n- Siempre que canceles un pedido, incluye un breve resumen:\n  - Nombre del cliente.\n  - Hora de recogida que se ha cancelado.\n  - Aviso de que ese hueco vuelve a quedar libre.\n- Al final, ofrece ayuda extra si encaja: por ejemplo, preguntar si quiere hacer un nuevo pedido o necesita algo más.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        368,
+        -80
+      ],
+      "id": "e2152247-15d0-4de4-99c3-36466a65bef0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        80
+      ],
+      "id": "53b229df-161f-450b-bccc-edd89b8e34d0",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({\n  results: [\n    {\n      toolCallId: $node[\"Webhook\"].json.body.message.toolCallList[0].id,\n      result: $json.output,\n    },\n  ],\n}) }}\n",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        672,
+        -80
+      ],
+      "id": "463fd513-a96c-42d2-a9eb-16fa3c66b1af",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "description": "Llama a esta herramienta para buscar el pedido a modificar",
+        "workflowId": {
+          "__rl": true,
+          "value": "uCBzDkAIRP6wbKZ6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/uCBzDkAIRP6wbKZ6",
+          "cachedResultName": "Verificar_Horas_Disponibles"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        112
+      ],
+      "id": "2ef3b483-ebb6-4d65-9499-f2cb6d6c3d4a",
+      "name": "Buscar_pedido"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwsWKteRjGM6oKu",
+          "mode": "list",
+          "cachedResultName": "reservas_restaurante_profesional.csv",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblxR9aVECNLh7SBh",
+          "mode": "list",
+          "cachedResultName": "Pedidos",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu/tblxR9aVECNLh7SBh"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'string') }}",
+            "Nombre": "=",
+            "Telefono": "=",
+            "Pedido": "=",
+            "Precio_Total": "=",
+            "Metodo_Pago": "="
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Hora_recogida",
+              "displayName": "Hora_recogida",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Pedido",
+              "displayName": "Pedido",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Precio_Total",
+              "displayName": "Precio_Total",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Metodo_Pago",
+              "displayName": "Metodo_Pago",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        112
+      ],
+      "id": "e1b348d4-48c9-4d5a-8374-adaf81a274e9",
+      "name": "Realizar_cancelacion",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "xo9Z42x9DIHItt7m",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T04:30:09.937Z",
+      "createdAt": "2025-11-22T04:30:09.937Z",
+      "role": "workflow:owner",
+      "workflowId": "VLymisJfE8Hl5FUz",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-22T21:33:09.000Z",
+  "versionId": "be4389ef-6b39-4d03-9bae-86d571c0b4d5"
+}
