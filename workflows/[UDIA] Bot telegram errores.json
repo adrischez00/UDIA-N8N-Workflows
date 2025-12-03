@@ -1,0 +1,254 @@
+{
+  "active": false,
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send a text message",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Send a text message1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Send a text message2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-10T05:39:53.676Z",
+  "id": "5sxnq8faV5xNULJL",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "[UDIA] Bot telegram errores",
+  "nodes": [
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "BLCFYOU8aQXVIlci",
+          "name": "Telegram account"
+        }
+      },
+      "id": "d8873a44-c3bc-4f1b-8261-a586a220739f",
+      "name": "Telegram Trigger",
+      "parameters": {
+        "additionalFields": {},
+        "updates": [
+          "message"
+        ]
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "webhookId": "813f2d0f-c120-4d42-bc18-eb2e7451ca48"
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "BLCFYOU8aQXVIlci",
+          "name": "Telegram account"
+        }
+      },
+      "id": "f5b34a37-6c17-4e09-999d-d5acb0b6851b",
+      "name": "Send a text message",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false
+        },
+        "chatId": "={{ $json.message.chat.id }}",
+        "text": "=Hola!"
+      },
+      "position": [
+        400,
+        -320
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "73928679-39fc-463d-b42b-b1a3b115f132"
+    },
+    {
+      "id": "248a777e-b788-4d31-a940-0a557d0f1984",
+      "name": "Switch",
+      "parameters": {
+        "options": {
+          "fallbackOutput": "extra"
+        },
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "c2135711-11af-494c-a54a-ba1a5eaf741d",
+                    "leftValue": "={{ $json.message.text }}",
+                    "operator": {
+                      "operation": "contains",
+                      "type": "string"
+                    },
+                    "rightValue": "Hola"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Saludo",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "d5c0688a-5854-41ba-bbd4-4182f924281b",
+                    "leftValue": "={{ $json.message.text }}",
+                    "operator": {
+                      "operation": "contains",
+                      "type": "string"
+                    },
+                    "rightValue": "Adios"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Despedida",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "ff2e27b5-852e-469b-8fd6-d37b74106757",
+                    "leftValue": "={{ $json.message.text }}",
+                    "operator": {
+                      "operation": "notContains",
+                      "type": "string"
+                    },
+                    "rightValue": "=Hola"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Indefinido",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        208,
+        0
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "BLCFYOU8aQXVIlci",
+          "name": "Telegram account"
+        }
+      },
+      "id": "948ccf5e-89bf-4862-83ee-ccb1d0eeb98b",
+      "name": "Send a text message1",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false
+        },
+        "chatId": "={{ $json.message.chat.id }}",
+        "text": "=Adios!"
+      },
+      "position": [
+        400,
+        -160
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "73928679-39fc-463d-b42b-b1a3b115f132"
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "BLCFYOU8aQXVIlci",
+          "name": "Telegram account"
+        }
+      },
+      "id": "6812ec0c-99b2-4f46-9369-104e62009c57",
+      "name": "Send a text message2",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false
+        },
+        "chatId": "={{ $json.message.chat.id }}",
+        "text": "=Eco: {{ $json.message.text }}"
+      },
+      "position": [
+        400,
+        -32
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "73928679-39fc-463d-b42b-b1a3b115f132"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-11-10T05:39:53.679Z",
+      "projectId": "4uSls6g8LWC7Ie72",
+      "role": "workflow:owner",
+      "updatedAt": "2025-11-10T05:39:53.679Z",
+      "workflowId": "5sxnq8faV5xNULJL"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-10T06:08:26.000Z",
+  "versionId": "af6de6e1-ddee-4fac-acef-ae414641396b"
+}
