@@ -1,0 +1,281 @@
+{
+  "active": true,
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Verificar_horas_disponibles'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-18T01:15:28.625Z",
+  "id": "HiMiWGr0iszWsMK0",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Comprobar_Disponibilidad_Mesas",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4eae56a4-d0ef-4b41-9124-ea244fd73636",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -496,
+        32
+      ],
+      "id": "f9a7887b-27ce-4869-925c-426dc47d2f2d",
+      "name": "Webhook",
+      "webhookId": "4eae56a4-d0ef-4b41-9124-ea244fd73636"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Comprobar_Disponibilidad_Mesas"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -288,
+        32
+      ],
+      "id": "e087b39b-1e5b-44a8-8513-9d500700f2b4",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec03870a-5897-452d-9d55-a0fe08736901",
+              "name": "Hora",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora }}",
+              "type": "string"
+            },
+            {
+              "id": "8687fe98-fb82-4959-8dd3-3c9abb849383",
+              "name": "Fecha",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Fecha }}",
+              "type": "string"
+            },
+            {
+              "id": "df5945ea-9078-450f-87e3-57535959d38f",
+              "name": "Tipo_mesa",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Tipo_de_mesa }}",
+              "type": "string"
+            },
+            {
+              "id": "99a75194-1b82-409e-b8be-5fa0e95a3a64",
+              "name": "Numero_personas",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Numero_personas }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        32
+      ],
+      "id": "b90a3c57-a794-489a-8f67-dbfdfd2da4a5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Hora: {{ $json.Hora }}\nFecha: {{ $json.Fecha }}\nTipo_mesa: {{ $json.Tipo_mesa }}\nNumero_personas: {{ $json.Numero_personas }}\nDisponibilidad ",
+        "options": {
+          "systemMessage": "=Tu tarea es comprobar si hay alguna mesa disponible para las características que ha pedido el cliente\n\nLa fórmula que tienes que usar para comprobar la disponibilidad tiene que ser la siguiente forma \nAND(\n    \n    Tipo_de_mesa = 'terraza'\n    Disponibilidad = 'Disponible'\n    Hora = '{{ $json.Hora }}'\n)\n\nEl Tipo_mesa si recibes algo como dentro o salón o interior, tienes que en el campo Tipo_de_mesa poner 'Interior'\n\nUsa la herramienta \"Verificar_Horas_Disponibles\" cuando el cliente te diga una hora a la que quiere reservar y esa hora no esté disponible para darle otros horarios. También la tienes que usar para comprobar tipo de mesa y fechas\n\nSi no encuentras una mesa con las características que quiere el cliente que esté Disponible sugiere otras opciones que se asemejen\n    \n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        128,
+        32
+      ],
+      "id": "e1d9221e-bac4-483b-b86a-0c46d8bbe487",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        176
+      ],
+      "id": "4bca99df-3c18-4cf2-8ca7-d35e8802c8e6",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"results\": [\n    {\n      \"toolCallId\": \"{{ $('Webhook').item.json.body.message.toolCallList[0].id }}\",\n      \"result\": {{ JSON.stringify($json.output) }}\n    }\n  ]\n}\n\n",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        464,
+        32
+      ],
+      "id": "33fa1330-a1ff-40f5-a6b3-e3ddbb75becd",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "description": "Llama a esta herramienta para verificar horas disponibles",
+        "workflowId": {
+          "__rl": true,
+          "value": "CRkBUPu1fR6gOTuX",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/CRkBUPu1fR6gOTuX",
+          "cachedResultName": "Verificar_horas_disponibles_mesas"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        272,
+        192
+      ],
+      "id": "40a7a9c0-102a-4fe5-ad2d-0928e41ed187",
+      "name": "Call 'Verificar_horas_disponibles'"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-18T01:15:28.636Z",
+      "createdAt": "2025-11-18T01:15:28.636Z",
+      "role": "workflow:owner",
+      "workflowId": "HiMiWGr0iszWsMK0",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-22T22:30:14.000Z",
+  "versionId": "073a5ce0-6f22-4ba8-ae29-781707370d45"
+}
