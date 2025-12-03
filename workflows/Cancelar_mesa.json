@@ -1,0 +1,487 @@
+{
+  "active": true,
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Airtable - Buscar cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable - Buscar cliente": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eliminar_reserva": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-22T00:40:05.007Z",
+  "id": "XB2XuR2Vw0SlHYkD",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Cancelar_mesa",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Comprobar_Disponibilidad_Mesas"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -336,
+        -64
+      ],
+      "id": "9bf888e4-bdd4-46a3-8221-4563972c5b80",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec03870a-5897-452d-9d55-a0fe08736901",
+              "name": "Hora",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora }}",
+              "type": "string"
+            },
+            {
+              "id": "8687fe98-fb82-4959-8dd3-3c9abb849383",
+              "name": "Fecha",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Fecha }}",
+              "type": "string"
+            },
+            {
+              "id": "df5945ea-9078-450f-87e3-57535959d38f",
+              "name": "Nombre",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "99a75194-1b82-409e-b8be-5fa0e95a3a64",
+              "name": "Telefono",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Telefono }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        -64
+      ],
+      "id": "9a458a26-ae21-4ef6-8d45-76d6f9641eff",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appwsWKteRjGM6oKu",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblhZnESIvW2eBHX5",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        -64
+      ],
+      "id": "8e5002cb-deb1-448b-893d-8af1dcf71715",
+      "name": "Airtable - Buscar cliente",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "xo9Z42x9DIHItt7m",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Paso 1: Obtener los datos del cliente desde el nodo 'Edit Fields'\nconst cliente = $('Edit Fields').first().json;\n\nconst horaCliente   = cliente.Hora?.trim();\nconst fechaCliente  = cliente.Fecha?.trim();\nconst nombreCliente = cliente.Nombre?.trim().toLowerCase(); // comparación insensible a mayúsculas\n\n// Paso 2: Obtener todos los registros de Airtable (cada item viene en item.json)\nconst registros = $input.all();\n\n// Paso 3: Filtrar registros que coincidan exactamente con los tres campos\nconst coincidencias = registros.filter(item => {\n\n  // ⚠️ En TU caso, Airtable trae los campos en item.json, NO item.json.fields\n  const r = item.json || {};\n\n  const hora   = r.Hora?.trim();\n  const fecha  = r.Fecha?.trim();\n  const nombre = r.Nombre?.trim().toLowerCase();\n\n  return (\n    hora === horaCliente &&\n    fecha === fechaCliente &&\n    nombre === nombreCliente\n  );\n});\n\n// Paso 4: Si quieres que SIEMPRE devuelva algo aunque no haya coincidencias:\nreturn [\n  {\n    json: {\n      cliente: {\n        hora: horaCliente,\n        fecha: fechaCliente,\n        nombre: nombreCliente,\n      },\n      totalRegistros: registros.length,\n      coincidencias: coincidencias.map(c => c.json),\n      existeReserva: coincidencias.length > 0\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        -64
+      ],
+      "id": "04d44ba7-e2bc-4fdb-a496-726ec640aba8",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Hora:{{ $json.coincidencias[0].Fecha }}\nFecha:{{ $json.coincidencias[0].Fecha }}\nNombre:{{ $json.coincidencias[0].Nombre }}\nTelefono:{{ $json.coincidencias[0].Telefono }}\nID: {{ $json.coincidencias[0].id }}",
+        "options": {
+          "systemMessage": "Tienes que eliminar la reserva de la mesa que tenga los datos proporcionados.\nPara ello usa la herramienta \"Eliminar reserva\" para dejar los datos en blanco.\n\nNo digas el ID de la reserva en el mensaje que des al cliente"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        432,
+        -64
+      ],
+      "id": "00919102-2114-47c3-b50f-06dc39936182",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        112
+      ],
+      "id": "a1768278-5d96-4fa4-a667-8ab2e33f851d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwsWKteRjGM6oKu",
+          "mode": "list",
+          "cachedResultName": "reservas_restaurante_profesional.csv",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblhZnESIvW2eBHX5",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu/tblhZnESIvW2eBHX5"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Numero_personas": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Numero_personas', ``, 'number') }}",
+            "Disponibilidad": "Disponible",
+            "Tipo_de_mesa": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Tipo_de_mesa', ``, 'string') }}",
+            "Telefono": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefono', ``, 'string') }}",
+            "Nombre": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Nombre', ``, 'string') }}",
+            "Notas": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Notas', ``, 'string') }}",
+            "Fecha": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Fecha', ``, 'string') }}",
+            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'string') }}",
+            "Hora": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Hora', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notas",
+              "displayName": "Notas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo_de_mesa",
+              "displayName": "Tipo_de_mesa",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Numero_personas",
+              "displayName": "Numero_personas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Disponibilidad",
+              "displayName": "Disponibilidad",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Reservada",
+                  "value": "Reservada"
+                },
+                {
+                  "name": "Disponible",
+                  "value": "Disponible"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        576,
+        112
+      ],
+      "id": "9e3c2752-b6c3-417f-8819-02a3d4161b7b",
+      "name": "Eliminar_reserva",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "xo9Z42x9DIHItt7m",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({\n  results: [\n    {\n      toolCallId: $node[\"Webhook\"].json.body.message.toolCallList[0].id,\n      result: $json.output,\n    },\n  ],\n}) }}\n",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        736,
+        -64
+      ],
+      "id": "ae3c20d2-1298-449f-934b-3eb199a1cf64",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b847ce0c-a6cb-4b10-8687-848b6d4c0ee4",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -512,
+        -64
+      ],
+      "id": "88ba4fa9-884e-47e0-9652-051041b093dc",
+      "name": "Webhook",
+      "webhookId": "b847ce0c-a6cb-4b10-8687-848b6d4c0ee4"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T00:40:05.022Z",
+      "createdAt": "2025-11-22T00:40:05.022Z",
+      "role": "workflow:owner",
+      "workflowId": "XB2XuR2Vw0SlHYkD",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-22T23:13:30.000Z",
+  "versionId": "7d9e6640-1466-4155-bc25-c892e536d01a"
+}
