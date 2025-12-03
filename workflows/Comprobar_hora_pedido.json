@@ -1,0 +1,261 @@
+{
+  "active": true,
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar_Horas_Disponibles": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-22T02:02:49.702Z",
+  "id": "XtVW31i7EWtMdkYZ",
+  "isArchived": false,
+  "meta": null,
+  "name": "Comprobar_hora_pedido",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Comprobar_disponibilidad_pedidos"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -1376,
+        -64
+      ],
+      "id": "76ac62cd-be7f-4c4b-8c80-273a21325f09",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec03870a-5897-452d-9d55-a0fe08736901",
+              "name": "Hora_recogida",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_recogida }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1184,
+        -64
+      ],
+      "id": "553e388d-04f6-41fe-9c47-8fe4c0c0cef0",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Hora:{{ $json.Hora_recogida }}",
+        "options": {
+          "systemMessage": "Tu tarea es comprobar si hay disponibilidad para recoger un pedido a la hora indicada por el cliente.\n\nRecibirás:\n- La hora que pide el cliente (por ejemplo: \"22:00\").\n- Un listado de registros en formato JSON procedente de Airtable.\n\nCada registro tiene esta estructura general (la salida viene simplificada, sin objeto \"fields\"):\n\n{\n  \"id\": \"recXXX...\",\n  \"createdTime\": \"2025-11-22T01:47:01.000Z\",\n  \"Hora_recogida\": \"21:30\",\n  \"Nombre\": \"Opcional\",\n  \"Telefono\": \"Opcional\",\n  \"Pedido\": \"Opcional\",\n  \"Precio_Total\": \"Opcional\",\n  \"Metodo_Pago\": \"Opcional\"\n}\n\nREGLAS IMPORTANTES:\n\n1) Debes fijarte SOLO en el registro cuya propiedad \"Hora_recogida\" coincida EXACTAMENTE con la hora que pide el cliente.\n\n2) Considera que una hora está OCUPADA cuando ese registro tiene algún dato de pedido, por ejemplo:\n   - Nombre\n   - Telefono\n   - Pedido\n   - Precio_Total\n   - Metodo_Pago\n\n   Es decir, si alguno de esos campos aparece con contenido, esa hora NO está disponible.\n\n3) Considera que una hora está LIBRE cuando el registro de esa hora SOLO tiene \"id\", \"createdTime\" y \"Hora_recogida\" y NO tiene datos de Nombre, Telefono, Pedido, Precio_Total ni Metodo_Pago.\n\n4) Si la hora que pide el cliente está LIBRE:\n   - Responde diciendo que esa hora está disponible para recoger el pedido y pidiendo confirmación.\n\n5) Si la hora que pide el cliente está OCUPADA o no existe en el listado:\n   - Indica que esa hora no está disponible.\n   - Ofrece otras horas libres usando el propio listado recibido (las horas que tengan solo \"Hora_recogida\" y sin datos de pedido).\n   - No digas que \"ya ha sido entregado\", solo indica que \"esa hora no está disponible\" y ofrece alternativas.\n\nTu respuesta debe ser clara y natural para el cliente (no menciones JSON, ni Airtable, ni detalles técnicos). Y en castellano de España, no utilices terminos como ordenar\n\nHora solicitada por el cliente: {{ $('Edit Fields').first().json.Hora }}\n\nListado completo de horas y pedidos en JSON:\n{{ JSON.stringify($json) }}\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -992,
+        -64
+      ],
+      "id": "f4c81d58-d4d2-4288-8106-866678e5310e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -1024,
+        144
+      ],
+      "id": "6bf6d76c-ce20-4657-84b0-1ecec2781dfc",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({\n  results: [\n    {\n      toolCallId: $node[\"Webhook\"].json.body.message.toolCallList[0].id,\n      result: $json.output,\n    },\n  ],\n}) }}\n",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -688,
+        -64
+      ],
+      "id": "65f874ba-beb0-4775-af12-588acf7c76e2",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "description": "Llama a esta herramienta para verificar horas disponibles",
+        "workflowId": {
+          "__rl": true,
+          "value": "uCBzDkAIRP6wbKZ6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/uCBzDkAIRP6wbKZ6",
+          "cachedResultName": "Verificar_Horas_Disponibles"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -848,
+        144
+      ],
+      "id": "45b6a6fa-eb4c-4e76-8af7-08797d9b38e9",
+      "name": "Verificar_Horas_Disponibles"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "85c1ad15-f846-452b-b473-3ac2250bbc90",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1568,
+        -64
+      ],
+      "id": "0b641e54-c3ab-46de-a7ea-12512ea1b428",
+      "name": "Webhook",
+      "webhookId": "85c1ad15-f846-452b-b473-3ac2250bbc90"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T02:02:49.711Z",
+      "createdAt": "2025-11-22T02:02:49.711Z",
+      "role": "workflow:owner",
+      "workflowId": "XtVW31i7EWtMdkYZ",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-22T21:43:21.000Z",
+  "versionId": "3cf02c10-2d88-48a1-87db-c88dfe8128c7"
+}
