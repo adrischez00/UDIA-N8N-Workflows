@@ -1,0 +1,323 @@
+{
+  "active": true,
+  "connections": {
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Etiquetador de Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Etiquetador de Gmail",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - get message": {
+      "ai_tool": [
+        [
+          {
+            "node": "Etiquetador de Gmail",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - read labels": {
+      "ai_tool": [
+        [
+          {
+            "node": "Etiquetador de Gmail",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - create label": {
+      "ai_tool": [
+        [
+          {
+            "node": "Etiquetador de Gmail",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Etiquetador de Gmail",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - add label to message": {
+      "ai_tool": [
+        [
+          {
+            "node": "Etiquetador de Gmail",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vigila Correos": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-01T20:45:32.226Z",
+  "id": "TIXOofTYDe7Xkxrq",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Etiquetador/Administrador Email",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "maxTokens": 4096
+        }
+      },
+      "id": "5450df95-152e-4f21-9e23-9f053e13bb15",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        880,
+        32
+      ],
+      "notesInFlow": false,
+      "typeVersion": 1,
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "\nHerramienta para leer todas las etiquetas de Gmail existentes",
+        "resource": "label",
+        "returnAll": true
+      },
+      "id": "e1acc719-2a08-4ff6-9d7d-078a17d803af",
+      "name": "Gmail - read labels",
+      "type": "n8n-nodes-base.gmailTool",
+      "position": [
+        1344,
+        128
+      ],
+      "webhookId": "d8ec9401-a9ff-4fe2-9c1e-5a8036cd96c9",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8oiXd9w5jkwovane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Herramienta para leer un mensaje específico según el ID del mensaje\n",
+        "operation": "get",
+        "messageId": "={{ $fromAI('gmail_message_id', 'id of the gmail message, like 1944fdc33f544369', 'string') }}"
+      },
+      "id": "4aad457c-8fee-4a0c-8bf6-1e5ec8058a60",
+      "name": "Gmail - get message",
+      "type": "n8n-nodes-base.gmailTool",
+      "position": [
+        1520,
+        176
+      ],
+      "webhookId": "d8ec9401-a9ff-4fe2-9c1e-5a8036cd96c9",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8oiXd9w5jkwovane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "\nHerramienta para agregar etiquetas a los mensajes",
+        "operation": "addLabels",
+        "messageId": "={{ $fromAI('gmail_message_id') }}",
+        "labelIds": "={{ $fromAI('gmail_categories', 'array of label ids') }}"
+      },
+      "id": "1ea3fef0-ff3b-447f-ae33-33e676ef190c",
+      "name": "Gmail - add label to message",
+      "type": "n8n-nodes-base.gmailTool",
+      "position": [
+        1696,
+        160
+      ],
+      "webhookId": "7a87b026-1c6e-40e1-a062-aefdd1af1585",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8oiXd9w5jkwovane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Herramienta para crear una nueva etiqueta, usar solo si la etiqueta aún no existe",
+        "resource": "label",
+        "operation": "create",
+        "name": "={{ $fromAI('new_label_name', 'new label name', 'string' ) }} ",
+        "options": {}
+      },
+      "id": "f9884ad8-387e-43d6-8979-db62a15a69d2",
+      "name": "Gmail - create label",
+      "type": "n8n-nodes-base.gmailTool",
+      "position": [
+        1184,
+        176
+      ],
+      "webhookId": "d8ec9401-a9ff-4fe2-9c1e-5a8036cd96c9",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8oiXd9w5jkwovane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.id }}",
+        "contextWindowLength": 10
+      },
+      "id": "b9e65ed6-6e81-44b2-b3d5-569d521d66d2",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        1088,
+        32
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "id": "4c0a85d6-5518-4bef-b95b-29ffcd572d4e",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        960,
+        -192
+      ],
+      "webhookId": "2066b863-4526-40cf-90aa-82229895a73c",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 15,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "id": "b933eee0-3924-4948-b7e6-7548f06619ea",
+      "name": "Vigila Correos",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "position": [
+        752,
+        -192
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8oiXd9w5jkwovane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Etiquete el correo electrónico según los detalles a continuación:\n{{ JSON.stringify($json) }}",
+        "options": {
+          "systemMessage": "#ROL\nEres mi asistente administrativo inteligente (180IQ).\n\n#Objetivo:\nCategorizar automáticamente los correos entrantes según las etiquetas de Gmail existentes o crear una nueva si ninguna coincide.\n\n#Herramientas:\n- Obtener mensaje\n- Leer todas las etiquetas\n- Crear etiqueta\n- Asignar etiqueta al mensaje\n\n#Instrucciones:\n\n- Coincidencia de etiquetas:\nAnaliza el asunto, el remitente, el destinatario, las palabras clave y el contenido del correo.\nCompara con las etiquetas de Gmail existentes para encontrar la coincidencia más relevante.\n\n- Asignación de etiquetas:\nAsigna al correo la etiqueta existente más adecuada.\nElimina la etiqueta de la bandeja de entrada si el correo es menos importante (como anuncios, promociones, o \"Reclamar\") y mantén los correos normales e importantes en la bandeja de entrada.\nSi no existe una etiqueta adecuada, crea una nueva basada en las existentes. Intenta reutilizar las etiquetas existentes siempre que sea posible. Cree siempre una etiqueta como subetiqueta. Si no hay ninguna etiqueta aplicable, si la etiqueta principal ya existe, cree la nueva etiqueta debajo de la etiqueta existente. Si no hay ninguna etiqueta principal, cree la etiqueta AI y cree la nueva etiqueta debajo de esta.\n\n- Creación de etiquetas:\nAsegúrese de que las nuevas etiquetas se ajusten a la estructura de las existentes, incluyendo mayúsculas y minúsculas, delimitadores y prefijos.\n",
+          "maxIterations": 5
+        }
+      },
+      "id": "815275f3-7572-41bd-841a-735a7625cc87",
+      "name": "Etiquetador de Gmail",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1200,
+        -192
+      ],
+      "notesInFlow": true,
+      "retryOnFail": false,
+      "typeVersion": 1.7,
+      "onError": "continueErrorOutput",
+      "notes": "Objetivo:\nCategorizar automáticamente los correos electrónicos entrantes según las etiquetas de Gmail existentes o crear una nueva si ninguna coincide.\n\nHerramientas:\n- Obtener mensaje\n- Leer todas las etiquetas\n- Crear etiqueta\n- Asignar etiqueta al mensaje\n\nInstrucciones:\n\nCoincidencia de etiquetas:\n\nAnalice el asunto, el remitente, el destinatario, las palabras clave y el contenido del correo electrónico.\nCompárelo con las etiquetas de Gmail existentes para encontrar la coincidencia más relevante.\nAsignación de etiquetas:\n\nAsigne el correo electrónico a la etiqueta existente más adecuada.\nElimine la etiqueta de la bandeja de entrada si el correo electrónico es menos importante (como anuncios, promociones, o \"Reclamar\") y mantenga los correos electrónicos normales e importantes en la bandeja de entrada.\nSi no existe una etiqueta adecuada, cree una nueva etiqueta basada en las existentes. Intente reutilizar las etiquetas existentes siempre que sea posible. Cree siempre una etiqueta como subetiqueta. Si no hay ninguna etiqueta aplicable, si la etiqueta principal ya existe, cree la nueva etiqueta debajo de la etiqueta existente. Si no existe una etiqueta principal, cree la etiqueta AI y cree la nueva etiqueta debajo de esta. Creación de etiquetas:\n\nAsegúrese de que las nuevas etiquetas se ajusten a la estructura de las existentes, incluyendo el uso de mayúsculas y minúsculas, los delimitadores y los prefijos.\nEjemplos:\n\nSi el asunto del correo electrónico es \"Actualización del Proyecto Alfa\", asígnelo a [Proyecto Alfa] si existe.\nPara \"Consulta a un nuevo proveedor\", cree \"Consulta a un proveedor\" si no existe una etiqueta relevante.\nResultado:\nLos correos electrónicos se categorizan de forma coherente bajo las etiquetas adecuadas o recién creadas, manteniendo así la estructura organizativa de Gmail.\n"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-01T20:45:32.229Z",
+      "createdAt": "2025-12-01T20:45:32.229Z",
+      "role": "workflow:owner",
+      "workflowId": "TIXOofTYDe7Xkxrq",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": {
+    "node:Vigila Correos": {
+      "Vigila Correos": {
+        "lastTimeChecked": 1764622119
+      }
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-12-01T20:48:39.000Z",
+  "versionId": "f9624480-b673-4112-b8aa-3412d069d1b4"
+}
