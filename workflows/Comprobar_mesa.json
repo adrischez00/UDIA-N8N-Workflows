@@ -1,0 +1,306 @@
+{
+  "active": true,
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Airtable - Buscar cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable - Buscar cliente": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-21T18:19:33.437Z",
+  "id": "dNb7facyi0eyYlpP",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Comprobar_mesa",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Comprobar_Mesa"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        16,
+        -32
+      ],
+      "id": "9bdc9887-6228-489b-9163-b1cd7b672089",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec03870a-5897-452d-9d55-a0fe08736901",
+              "name": "Hora",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora }}",
+              "type": "string"
+            },
+            {
+              "id": "8687fe98-fb82-4959-8dd3-3c9abb849383",
+              "name": "Fecha",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Fecha }}",
+              "type": "string"
+            },
+            {
+              "id": "99a75194-1b82-409e-b8be-5fa0e95a3a64",
+              "name": "Nombre",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Nombre }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -32
+      ],
+      "id": "fc51b6c8-dafd-4d30-9add-8204835d06cf",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Nombre: {{ $json.Nombre }}\nHora: {{ $json.Hora }}\nFecha: {{ $json.Fecha }}\nNumero_Personas: {{ $json.Numero_personas }}\nTipo_de_mesa: {{ $json.Tipo_de_mesa }}\n\n",
+        "options": {
+          "systemMessage": "=Tienes que decirle al cliente que si existe una mesa o reserva a su nombre.\n\nImportante: este flujo SOLO se ejecuta cuando ya se ha encontrado una reserva en la base de datos.\nSi recibes estos datos (Nombre, Hora, Fecha, etc.) es porque la reserva YA EXISTE.\n\nPor tanto:\n- No digas que vas a verificar ni que vas a comprobar nada.\n- No digas que no hay reserva.\n- Tu respuesta debe ser siempre una confirmación clara de la reserva usando los datos que recibes.\n\nEjemplo de estilo:\n\"Hola [Nombre], te confirmo que existe una reserva a tu nombre para el [Fecha] a las [Hora] para [Numero_personas] personas en una mesa [Tipo_de_mesa].\"\n\nResponde siempre en español, de forma breve, amable y profesional.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        848,
+        -32
+      ],
+      "id": "939e18bf-81c8-4a2d-aa89-2adcafa9b3a1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        784,
+        112
+      ],
+      "id": "8594149d-1b9c-4386-9757-a7549944e4f0",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"results\": [\n    {\n      \"toolCallId\": \"{{ $('Webhook').item.json.body.message.toolCallList[0].id }}\",\n      \"result\": {{ JSON.stringify($json.output) }}\n    }\n  ]\n}\n\n",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1184,
+        -32
+      ],
+      "id": "095b864d-047e-486b-9596-0efa27838ca3",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appwsWKteRjGM6oKu",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblhZnESIvW2eBHX5",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        -32
+      ],
+      "id": "49061128-d8ee-44a0-a221-3bcb1700acc7",
+      "name": "Airtable - Buscar cliente",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "xo9Z42x9DIHItt7m",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Paso 1: Datos del cliente desde 'Edit Fields'\nconst cliente = $('Edit Fields').first().json;\n\nconst horaCliente    = cliente.Hora?.trim();\nconst fechaCliente   = cliente.Fecha?.trim();       // asegúrate de que sea '2025-11-27'\nconst nombreCliente  = cliente.Nombre?.trim().toLowerCase();\n\n// Paso 2: Todos los registros de Airtable\nconst registros = $input.all();\n\n// Paso 3: Filtrar coincidencias\nconst coincidencias = registros.filter(item => {\n  const r = item.json;  // <<--- aquí usamos item.json directamente, no .fields\n\n  const hora   = r.Hora?.trim();\n  const fecha  = r.Fecha?.trim();\n  const nombre = r.Nombre?.trim().toLowerCase();\n\n  return (\n    hora === horaCliente &&\n    fecha === fechaCliente &&\n    nombre === nombreCliente\n  );\n});\n\n// Paso 4: Devolver solo los que coincidan\nreturn coincidencias;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -32
+      ],
+      "id": "829e9348-dd0d-4e2a-b154-13d1061dc682",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "41464f07-46ca-46d6-bf5f-e49cb16c9f4c",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -144,
+        -32
+      ],
+      "id": "d7c53f9f-c9f3-413f-a3a4-6fc7d15785a9",
+      "name": "Webhook",
+      "webhookId": "41464f07-46ca-46d6-bf5f-e49cb16c9f4c"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-21T18:19:33.446Z",
+      "createdAt": "2025-11-21T18:19:33.446Z",
+      "role": "workflow:owner",
+      "workflowId": "dNb7facyi0eyYlpP",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-22T21:45:50.000Z",
+  "versionId": "1dd7274a-1c45-4ae4-910b-b1c26a545b92"
+}
