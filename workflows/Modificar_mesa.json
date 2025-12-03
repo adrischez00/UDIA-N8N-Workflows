@@ -1,0 +1,787 @@
+{
+  "active": true,
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Airtable - Buscar cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable - Buscar cliente": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cambiar_disponibilidad": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modificar_mesa": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-21T22:49:35.125Z",
+  "error": "The resource you are requesting could not be found",
+  "id": "C7LU6pOSpL02tnsU",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Modificar_mesa",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "48354b9a-863e-498b-a3db-d95b14478998",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1120,
+        -64
+      ],
+      "id": "b85930f3-b929-4809-afca-7696c0a31ebc",
+      "name": "Webhook",
+      "webhookId": "48354b9a-863e-498b-a3db-d95b14478998"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Modificar_mesa"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -944,
+        -64
+      ],
+      "id": "d9037808-f721-4cc3-b691-072973d39943",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec03870a-5897-452d-9d55-a0fe08736901",
+              "name": "Hora",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora }}",
+              "type": "string"
+            },
+            {
+              "id": "8687fe98-fb82-4959-8dd3-3c9abb849383",
+              "name": "Fecha",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Fecha }}",
+              "type": "string"
+            },
+            {
+              "id": "99a75194-1b82-409e-b8be-5fa0e95a3a64",
+              "name": "Nombre",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "13b2d804-6721-45d0-bebb-997fea76af10",
+              "name": "Tipo_mesa",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Tipo_mesa }}",
+              "type": "string"
+            },
+            {
+              "id": "6ed32f8b-3f32-4f1e-ac78-8bd40f84bcbf",
+              "name": "Hora_nueva",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_nueva }}",
+              "type": "string"
+            },
+            {
+              "id": "69229e66-c912-4e42-8a68-517b22fad613",
+              "name": "Fecha_nueva",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Fecha_nueva }}",
+              "type": "string"
+            },
+            {
+              "id": "2a1afbd3-1546-46a8-a3e6-0e75b0405068",
+              "name": "Numero_personas_nuevo",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Numero_personas_nuevo }}",
+              "type": "string"
+            },
+            {
+              "id": "c6c6ff2c-eeb6-4614-85af-94bff0160f91",
+              "name": "Notas_nuevas",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Notas_nuevas }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -784,
+        -64
+      ],
+      "id": "4bb154fc-be0d-4739-a990-abb855237492",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appwsWKteRjGM6oKu",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblhZnESIvW2eBHX5",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -608,
+        -64
+      ],
+      "id": "a2ecc259-70b3-4411-b4ae-5df8f3a910d7",
+      "name": "Airtable - Buscar cliente",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "xo9Z42x9DIHItt7m",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Paso 1: Obtener los datos del cliente desde el nodo 'Edit Fields'\nconst cliente = $('Edit Fields').first().json;\n\nconst horaCliente   = cliente.Hora?.trim();\nconst fechaCliente  = cliente.Fecha?.trim();              // asegúrate de que venga como '2025-11-27'\nconst nombreCliente = cliente.Nombre?.trim().toLowerCase(); // comparación insensible a mayúsculas\n\n// Paso 2: Obtener todos los registros de Airtable\nconst registros = $input.all();\n\n// Paso 3: Filtrar registros que coincidan exactamente con los tres campos\nconst coincidencias = registros.filter(item => {\n  // 👇 en tu caso los campos están en item.json, no en item.json.fields\n  const r = item.json || {};\n\n  const hora   = r.Hora?.trim();\n  const fecha  = r.Fecha?.trim();\n  const nombre = r.Nombre?.trim().toLowerCase();\n\n  return (\n    hora === horaCliente &&\n    fecha === fechaCliente &&\n    nombre === nombreCliente\n  );\n});\n\n// Paso 4: Devolver solo los que coincidan\nreturn coincidencias;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -192
+      ],
+      "id": "39f01618-a929-4d89-8854-52c983b6ace7",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "Reservas",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        32
+      ],
+      "id": "7f2f3b3f-e220-48e4-b858-67ad981e3cef",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "Reserva_cliente",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -192
+      ],
+      "id": "21ae7a3f-b8fa-4196-8505-a4a2365c3966",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -48,
+        -64
+      ],
+      "id": "1929b5fc-254e-438e-b7d3-15dcb3da91a2",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "datos_combinados",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -64
+      ],
+      "id": "bdb4c0f7-946c-40d3-ba39-9b252f7024db",
+      "name": "Aggregate2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Reserva_cliente:{{ JSON.stringify($json.datos_combinados[0].Reserva_cliente) }}\nReservas:{{ JSON.stringify($json.datos_combinados[1].Reservas) }}\nDatos_a_modificar_de_la_reserva_del_cliente:\nHora_nueva:{{ $('Edit Fields').item.json.Hora_nueva }}\nFecha_nueva:{{ $('Edit Fields').item.json.Fecha_nueva }}\nNumero_personas_nuevo:{{ $('Edit Fields').item.json.Numero_personas_nuevo }}\nNotas_nuevas:{{ $('Edit Fields').item.json.Notas_nuevas }}\nTipo_mesa:{{ $('Edit Fields').item.json.Tipo_mesa }}\nHora:{{ $('Edit Fields').item.json.Hora }}\nNombre:{{ $('Edit Fields').item.json.Nombre }}\nFecha: {{ $('Edit Fields').item.json.Fecha }}",
+        "options": {
+          "systemMessage": "🧠 Prompt extendido para el agente:\n\nTu tarea es procesar solicitudes de modificación de reservas de clientes. Debes verificar si los cambios que el cliente desea hacer (ya sea en tipo de mesa, hora o fecha) se pueden llevar a cabo siguiendo las reglas del sistema de disponibilidad.\n\n🪜 PASOS A SEGUIR\n\n1) Comparar datos actuales con los datos deseados\n\n- Recibirás los datos de la reserva actual del cliente (nombre, fecha, hora, tipo de mesa, número de personas, etc.).\n- El cliente te indicará qué desea cambiar: tipo de mesa, fecha y/o hora.\n- Identifica claramente qué campos quiere modificar.\n\n2) Verificar disponibilidad\n\n- Para poder aplicar un cambio, debe existir una mesa disponible que cumpla EXACTAMENTE con los datos solicitados por el cliente (mismo tipo, nueva fecha y/o nueva hora que pide).\n- Si no encuentras ninguna mesa disponible con esas nuevas condiciones, NO se puede hacer el cambio y debes explicárselo al cliente de forma clara y amable.\n\n3) Aplicar la lógica de intercambio (swap)\n\nSi encuentras una mesa disponible que cumple las nuevas condiciones del cliente:\n\n- La nueva mesa pasa a tener los datos del cliente (nombre, teléfono, número de personas, etc.).\n- La mesa anterior del cliente (su reserva original) pasa a quedar libre en su fecha y hora originales.\n\nEste intercambio garantiza que siempre se mantiene el control sobre la disponibilidad de mesas, sin solapar reservas.\n\n📌 EJEMPLOS DE CASOS\n\n🪑 Caso 1 – Cambio de tipo de mesa  \nEl cliente tiene una mesa interior a las 20:00.  \nQuiere cambiar a una mesa terraza a las 20:00.\n\n- Si hay una mesa disponible en terraza a las 20:00, puedes hacer el cambio:  \n  - La mesa en terraza pasa a ser la reserva del cliente.  \n  - La mesa interior que tenía el cliente queda disponible a las 20:00 (mismo día, misma hora, otro tipo).\n\n⏰ Caso 2 – Cambio de hora  \nEl cliente tiene una mesa en terraza a las 19:00.  \nQuiere cambiarla a las 21:00.\n\n- Si hay una mesa disponible en terraza a las 21:00, haz el intercambio:  \n  - La mesa de las 21:00 se asigna al cliente.  \n  - La mesa anterior queda libre a las 19:00, sin cambiar el tipo.\n\n📅 Caso 3 – Cambio de fecha  \nEl cliente tiene una mesa interior el 25 de julio a las 13:00.  \nQuiere cambiar al 26 de julio a las 13:00.\n\n- Si hay una mesa disponible con esas condiciones (interior, 26 de julio a las 13:00), se hace el cambio:  \n  - La nueva mesa en esa fecha y hora se asigna al cliente.  \n  - La mesa original del 25 de julio a las 13:00 queda libre como disponible.\n\n❌ IMPORTANTE: NO MODIFICAR\n\n- No modifiques el tipo, la fecha ni la hora de la mesa ANTERIOR del cliente.  \n- Solo cambia su estado a “disponible” (o equivalente en el sistema).  \n- Si no puedes cumplir TODAS las condiciones del nuevo pedido del cliente (no hay mesa disponible con esos datos), NO realices ninguna modificación. Debes informar al cliente de que no es posible el cambio y, si procede, sugerir alternativas (otra hora o tipo de mesa).\n\n✅ ACCIÓN\n\nSi el cambio es válido y posible:\n\n1. Usa la herramienta `modificar_mesa` (o la herramienta equivalente de tu sistema) para aplicar los nuevos datos del cliente a la nueva mesa disponible (tipo, fecha, hora, etc.) y reasignar correctamente la reserva.\n2. Usa la herramienta `cambiar_a_disponible` (o la herramienta equivalente) para marcar la mesa anterior como disponible y, si corresponde, limpiar el número de personas u otros datos que ya no apliquen.\n\nTu respuesta al cliente siempre debe:\n\n- Ser clara, breve y en español.  \n- Confirmar si el cambio se ha podido realizar o no.  \n- En caso afirmativo, repetir los nuevos datos de la reserva (fecha, hora, tipo de mesa, número de personas).  \n- En caso negativo, explicar que no hay mesa disponible con esas condiciones y ofrecer, si es posible, alternativas razonables.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        272,
+        -64
+      ],
+      "id": "1e1521af-5024-411f-8f98-8017f34b17fc",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        128
+      ],
+      "id": "a34b444b-bbbf-4bff-a973-f8b4639aab0b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwsWKteRjGM6oKu",
+          "mode": "list",
+          "cachedResultName": "reservas_restaurante_profesional.csv",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblhZnESIvW2eBHX5",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu/tblhZnESIvW2eBHX5"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'string') }}",
+            "Notas": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Notas', ``, 'string') }}",
+            "Nombre": "=",
+            "Telefono": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefono', ``, 'string') }}",
+            "Numero_personas": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Numero_personas', ``, 'number') }}",
+            "Disponibilidad": "Disponible"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Notas",
+              "displayName": "Notas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo_de_mesa",
+              "displayName": "Tipo_de_mesa",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero_personas",
+              "displayName": "Numero_personas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Disponibilidad",
+              "displayName": "Disponibilidad",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Reservada",
+                  "value": "Reservada"
+                },
+                {
+                  "name": "Disponible",
+                  "value": "Disponible"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        336,
+        160
+      ],
+      "id": "f70e6b20-6897-4db0-ab4a-9291a3db9446",
+      "name": "Cambiar_disponibilidad",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "xo9Z42x9DIHItt7m",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwsWKteRjGM6oKu",
+          "mode": "list",
+          "cachedResultName": "reservas_restaurante_profesional.csv",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblhZnESIvW2eBHX5",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu/tblhZnESIvW2eBHX5"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'string') }}",
+            "Notas": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Notas', ``, 'string') }}",
+            "Telefono": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefono', ``, 'string') }}",
+            "Numero_personas": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Numero_personas', ``, 'number') }}",
+            "Disponibilidad": "Reservada",
+            "Nombre": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Nombre', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Notas",
+              "displayName": "Notas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo_de_mesa",
+              "displayName": "Tipo_de_mesa",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero_personas",
+              "displayName": "Numero_personas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Disponibilidad",
+              "displayName": "Disponibilidad",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Reservada",
+                  "value": "Reservada"
+                },
+                {
+                  "name": "Disponible",
+                  "value": "Disponible"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        496,
+        160
+      ],
+      "id": "46abf6a8-3d66-4625-a0d9-d6a96fdb7015",
+      "name": "Modificar_mesa",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "xo9Z42x9DIHItt7m",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"results\": [\n    {\n      \"toolCallId\": \"{{ $('Webhook').item.json.body.message.toolCallList[0].id }}\",\n      \"result\": {{ JSON.stringify($json.output) }}\n    }\n  ]\n}\n\n",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        576,
+        -64
+      ],
+      "id": "2f11f0cc-9fdb-449e-9d42-592c07780b15",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-21T22:49:35.133Z",
+      "createdAt": "2025-11-21T22:49:35.133Z",
+      "role": "workflow:owner",
+      "workflowId": "C7LU6pOSpL02tnsU",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-22T22:48:19.000Z",
+  "versionId": "d9b2e862-60d5-423f-8c99-daa308ebaf56"
+}
