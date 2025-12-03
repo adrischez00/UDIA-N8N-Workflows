@@ -1,0 +1,755 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Obtener HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Correos": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Replace Me1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener HTML": {
+      "main": [
+        [
+          {
+            "node": "Extraer Correos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraer Correos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-01T18:21:11.354Z",
+  "id": "CHqLSikojdGHI6E8",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Captación de leads - Email Marketing",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2016,
+        208
+      ],
+      "id": "44d9a7d1-fa2c-42e7-8cd6-882ef66134be",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/nwua9Gu5YrADL7ZDj/run-sync-get-dataset-items",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer APIFY_TOKEN_MASKED"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"includeWebResults\": false,\n    \"language\": \"es\",\n    \"locationQuery\": \"Madrid, ES\",\n    \"maxCrawledPlacesPerSearch\": 50,\n    \"maxImages\": 0,\n    \"maximumLeadsEnrichmentRecords\": 0,\n    \"scrapeContacts\": false,\n    \"scrapeDirectories\": false,\n    \"scrapeImageAuthors\": false,\n    \"scrapePlaceDetailPage\": false,\n    \"scrapeReviewsPersonalData\": true,\n    \"scrapeTableReservationProvider\": false,\n    \"searchStringsArray\": [\n        \"restaurante\"\n    ],\n    \"skipClosedPlaces\": false\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1792,
+        208
+      ],
+      "id": "97f08f51-5b57-4d93-9431-d3e3ac257fd4",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6a281f4d-a8ab-46ba-b30c-803e6abd5def",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "73d47726-b16e-44a7-9449-fc1a1670b8c4",
+              "name": "address",
+              "value": "={{ $json.address }}",
+              "type": "string"
+            },
+            {
+              "id": "aee8122c-c602-4e33-b271-197c927d0df3",
+              "name": "city",
+              "value": "={{ $json.city }}",
+              "type": "string"
+            },
+            {
+              "id": "fa157d89-82fe-47e2-bd2d-7d94e8e9d64d",
+              "name": "postalCode",
+              "value": "={{ $json.postalCode }}",
+              "type": "string"
+            },
+            {
+              "id": "534adfb4-c187-4d44-a907-7868106c0c3f",
+              "name": "website",
+              "value": "={{ $json.website }}",
+              "type": "string"
+            },
+            {
+              "id": "ff3fba33-78b7-496d-a6d9-07e88592708c",
+              "name": "phone",
+              "value": "={{ $json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "90de7de3-0fc7-49af-898a-d3cacf34ab39",
+              "name": "totalScore",
+              "value": "={{ $json.totalScore }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1568,
+        208
+      ],
+      "id": "7e44bd5c-f645-41ef-93ad-a3de4137ebab",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -896,
+        208
+      ],
+      "id": "f7d5ce8c-441f-4d74-b27f-d8ba9bfcfde4",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me1",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        208
+      ],
+      "id": "4cc0e282-8cca-48e2-8043-22b0766849e6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ee3b8b4d-b9f0-49cf-b68b-564cb9c816f4",
+              "leftValue": "={{ $json.website }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1344,
+        208
+      ],
+      "id": "2206f918-314b-4adf-b10b-2c3e2ef5f080",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "functionCode": "const html = $json.data || '';\n\n// Expresión regular para correos electrónicos\nconst matches = html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/g);\n\nreturn [{\n  json: {\n    url: $json.url || 'URL no encontrada',\n    email: matches ? [...new Set(matches)] : ['No encontrado']\n  }\n}];\n"
+      },
+      "id": "cd231921-d7db-4fca-b067-7982202af95a",
+      "name": "Extraer Correos",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Nombre: {{ $('Append row in sheet').item.json.Empresa }}\nCorreo: {{ $json.email[0] }} \n",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Eres un especialista en ventas técnicas. Vas a crear una propuesta comercial en ESPAÑOL, en **HTML puro** (sin Markdown ni JSON), para ofrecer **servicios de IA y automatizaciones con n8n**.\n\nDATOS DE ENTRADA\n- Nombre de la empresa: {{company_name}}\n- Sitio web: {{website}}\n- Email de contacto: {{email}}\n\nTAREA\n1) **Inferir el tipo de empresa** (sector y tamaño aproximado) usando solo pistas del nombre, dominio del sitio y correo. No navegues la web.\n2) **Elegir 3–5 servicios** de IA/automatización con n8n que más valor aporten a ese perfil (ej.: chatbot web/WhatsApp, captura y scoring de leads, agenda y recordatorios, integración CRM/Sheets, OCR y clasificación de documentos, flujos omnicanal, etc.).\n3) **Redactar la propuesta en HTML** (cuerpo del email) con tono consultivo, claro y profesional, personalizada con {{company_name}}.\n\nFORMATO OBLIGATORIO (DEVUELVE ÚNICAMENTE HTML VÁLIDO)\n- Estructura de email compatible (tablas e **inline CSS**). Nada externo (sin fuentes ni CSS externos).\n- Móvil primero (máx. 600px de ancho).\n- Incluye:\n  - `<title>` (asunto breve).\n  - **Preheader** oculto (línea previa).\n  - Cabecera con el nombre de la empresa.\n  - Párrafo de contexto personalizado.\n  - Lista con 3–5 propuestas (cada ítem: “beneficio → impacto” y una idea de flujo en n8n).\n  - Botón CTA (ej. “Agendar una reunión”) con enlace genérico `https://calendly.com/`.\n  - Mini prueba social genérica (sin nombres reales).\n  - Línea de privacidad/opt-out corta.\n  - Pie con datos de contacto (usa {{email}} como referencia).\n- Estilo sobrio (tipografía del sistema, colores neutros con un color de acento).\n- **No** incluyas backticks, comentarios fuera de HTML, ni texto antes/después del `<html>`.\n\nENTREGABLE\nDevuelve solo algo como esto (pero **completamente redactado** y **personalizado**):\n<html>\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Propuesta para {{company_name}} · IA & Automatizaciones</title>\n    <style>/* deja vacío: usa inline CSS en el body */</style>\n  </head>\n  <body style=\"margin:0;padding:0;background:#f6f7f9;\">\n    <!-- Preheader -->\n    <div style=\"display:none;max-height:0;overflow:hidden;opacity:0;\">\n      Propuesta personalizada para {{company_name}}: IA y automatizaciones con n8n para acelerar captación y operaciones.\n    </div>\n\n    <table role=\"presentation\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n      <tr>\n        <td align=\"center\" style=\"padding:24px;\">\n          <table role=\"presentation\" width=\"600\" style=\"width:100%;max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;\">\n            <tr>\n              <td style=\"padding:28px 28px 12px 28px;background:#0f172a;color:#ffffff;font-family:Arial,Helvetica,sans-serif;\">\n                <h1 style=\"margin:0;font-size:22px;line-height:1.3;\">{{company_name}}</h1>\n                <p style=\"margin:6px 0 0 0;font-size:14px;opacity:.9;\">Sitio: {{website}} · Contacto: {{email}}</p>\n              </td>\n            </tr>\n\n            <tr>\n              <td style=\"padding:24px 28px 12px 28px;font-family:Arial,Helvetica,sans-serif;color:#0f172a;\">\n                <p style=\"margin:0 0 12px 0;font-size:16px;\">Hola equipo de {{company_name}},</p>\n                <p style=\"margin:0 0 16px 0;font-size:15px;color:#334155;\">\n                  Con base en la información disponible, su actividad encaja principalmente en <strong>[sector inferido]</strong> y estimamos un tamaño <strong>[micro/pyme/mediana]</strong>. A continuación, una propuesta enfocada en resultados rápidos mediante IA y flujos con n8n.\n                </p>\n              </td>\n            </tr>\n\n            <tr>\n              <td style=\"padding:0 28px 8px 28px;font-family:Arial,Helvetica,sans-serif;\">\n                <h2 style=\"font-size:16px;margin:0 0 8px 0;color:#0f172a;\">Propuestas prioritarias</h2>\n                <ul style=\"padding-left:18px;margin:8px 0 0 0;color:#334155;font-size:15px;line-height:1.5;\">\n                  <li><strong>Servicio 1:</strong> beneficio → impacto. <em>Idea n8n:</em> [integraciones/fuentes/destinos].</li>\n                  <li><strong>Servicio 2:</strong> beneficio → impacto. <em>Idea n8n:</em> [integraciones/fuentes/destinos].</li>\n                  <li><strong>Servicio 3:</strong> beneficio → impacto. <em>Idea n8n:</em> [integraciones/fuentes/destinos].</li>\n                  <li><strong>Servicio 4 (opcional):</strong> beneficio → impacto. <em>Idea n8n:</em> [integraciones/fuentes/destinos].</li>\n                </ul>\n              </td>\n            </tr>\n\n            <tr>\n              <td align=\"center\" style=\"padding:20px 28px 8px 28px;\">\n                <a href=\"https://calendly.com/\" target=\"_blank\"\n                   style=\"display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;\n                          padding:12px 20px;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;\">\n                  Agendar una reunión\n                </a>\n              </td>\n            </tr>\n\n            <tr>\n              <td style=\"padding:12px 28px 0 28px;font-family:Arial,Helvetica,sans-serif;color:#334155;\">\n                <p style=\"margin:0 0 12px 0;font-size:14px;\">\n                  Hemos implementado soluciones similares en PYMES de distintos sectores, logrando mejoras en tiempos de respuesta y conversión de oportunidades.\n                </p>\n                <p style=\"margin:0 0 18px 0;font-size:14px;\">\n                  Si lo prefieren, respondan a este correo ({{Francescbb19@gmail}}) con su disponibilidad y preparamos una demo corta.\n                </p>\n              </td>\n            </tr>\n\n            <tr>\n              <td style=\"padding:16px 28px 28px 28px;font-family:Arial,Helvetica,sans-serif;color:#64748b;font-size:12px;\">\n                <p style=\"margin:0;\">Recibiste este mensaje porque contactamos a {{company_name}} de forma profesional. Si no deseas más propuestas, responde con “remover”.</p>\n              </td>\n            </tr>\n          </table>\n\n          <p style=\"font-family:Arial,Helvetica,sans-serif;color:#94a3b8;font-size:11px;margin:12px 0 0 0;\">\n            © {{new Date().getFullYear && new Date().getFullYear()}} IA & Automatizaciones con n8n\n          </p>\n        </td>\n      </tr>\n    </table>\n  </body>\n</html>\n\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e9f84ab9-f25b-4028-a6ba-ba1db10f3afb",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        224
+      ],
+      "id": "65e691f3-aa83-44ad-b1a3-08b5ec82a1de",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=adri-sanch@hotmail.com",
+        "subject": "Tenemos que hablar!",
+        "message": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        576,
+        0
+      ],
+      "id": "1490ad7d-5e4b-49b6-8e3c-7f898278e9da",
+      "name": "Send a message",
+      "webhookId": "2dfca845-0a80-49c3-a5f1-d9bb54679d6d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8oiXd9w5jkwovane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GLPJe9LsYqC6mE0DoYB8fIevMxUREpmRh-hXJQ8gkOE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Extraer Correos').item.json.email[0] }}",
+            "Sitio Web": "={{ $('Append row in sheet').item.json['Sitio Web'] }}"
+          },
+          "matchingColumns": [
+            "Sitio Web"
+          ],
+          "schema": [
+            {
+              "id": "Empresa",
+              "displayName": "Empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sitio Web",
+              "displayName": "Sitio Web",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ciudad",
+              "displayName": "Ciudad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dirección ",
+              "displayName": "Dirección ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estrellas",
+              "displayName": "Estrellas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        800,
+        128
+      ],
+      "id": "618f90d3-871f-495e-bb5f-4e44970790d8",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "XHtKlMeWz7J9QV4n",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b4e91613-6fdc-4345-a2cf-1f016ec0dc0d",
+              "leftValue": "={{ $json.email[0] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -224,
+        128
+      ],
+      "id": "84afc4c9-a3c5-44fa-b56c-9d10e0a5d0b3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json['Sitio Web'] }}",
+        "responseFormat": "string",
+        "options": {}
+      },
+      "id": "6d33e20b-d9ce-47d5-a2bc-7be2d865c2e1",
+      "name": "Obtener HTML",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        128
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = items[0].json.text || '';\n\n// 1) intenta bloque ```html ... ```\nconst mHtml = raw.match(/```html([\\s\\S]*?)```/i);\n// 2) o bloque genérico ``` ... ```\nconst mAny  = raw.match(/```([\\s\\S]*?)```/);\n\nlet cleaned = mHtml?.[1] ?? mAny?.[1] ?? raw;\ncleaned = cleaned.trim();\n\n// (OPCIONAL) si después del bloque hay notas separadas por '---', córtalas\ncleaned = cleaned.split('---')[0].trim();\n\nreturn [{ json: { html: cleaned } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        0
+      ],
+      "id": "3a37611b-6426-4372-a669-4bd35eeb58dd",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Empresa": "={{ $json.title }}",
+            "Sitio Web": "={{ $json.website }}",
+            "Ciudad": "={{ $json.city }}",
+            "Dirección ": "={{ $json.address }}",
+            "Estrellas": "={{ $json.totalScore }}",
+            "Telefono": "={{ \"'\" + $json.phone }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Empresa",
+              "displayName": "Empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Sitio Web",
+              "displayName": "Sitio Web",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Ciudad",
+              "displayName": "Ciudad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Dirección ",
+              "displayName": "Dirección ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estrellas",
+              "displayName": "Estrellas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1104,
+        192
+      ],
+      "id": "c9ec1f7c-3b5f-4fa1-94e8-f377c847a6b1",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "XHtKlMeWz7J9QV4n",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-01T18:21:11.385Z",
+      "createdAt": "2025-12-01T18:21:11.385Z",
+      "role": "workflow:owner",
+      "workflowId": "CHqLSikojdGHI6E8",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-01T20:43:00.000Z",
+  "versionId": "eb7a1d10-80dd-4af4-a5bd-4d8955e1f895"
+}
