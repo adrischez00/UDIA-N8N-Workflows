@@ -1,0 +1,90 @@
+{
+  "active": false,
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Buscar_Horas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-22T02:06:57.846Z",
+  "id": "uCBzDkAIRP6wbKZ6",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Verificar_Horas_Disponibles",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -144,
+        32
+      ],
+      "id": "2d805a36-dd2c-4f41-9520-3c5e8a4a1a6a",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appwsWKteRjGM6oKu",
+          "mode": "list",
+          "cachedResultName": "reservas_restaurante_profesional.csv",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblxR9aVECNLh7SBh",
+          "mode": "list",
+          "cachedResultName": "Pedidos",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu/tblxR9aVECNLh7SBh"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        32
+      ],
+      "id": "90fc13e6-c8d5-4623-99e8-83496db691b3",
+      "name": "Buscar_Horas",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "xo9Z42x9DIHItt7m",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-22T02:06:57.860Z",
+      "createdAt": "2025-11-22T02:06:57.860Z",
+      "role": "workflow:owner",
+      "workflowId": "uCBzDkAIRP6wbKZ6",
+      "projectId": "4uSls6g8LWC7Ie72"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-22T22:30:35.000Z",
+  "versionId": "4fdc229a-3dc3-4509-a359-fff207fa09bb"
+}
