@@ -1,0 +1,1832 @@
+{
+  "active": true,
+  "activeVersion": {
+    "authors": "Adrián Sánchez",
+    "autosaved": false,
+    "connections": {
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Send email",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Construir URL firmada (CSV)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Descargar CSV (signed)",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Construir URL firmada (PDF)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Descargar PDF (signed)",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Descargar CSV (signed)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Parsear CSV - Alumnos",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Descargar PDF (signed)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Merge Alumnos + PDF",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Preparar actualización ticket (Execute Once)",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request (PATCH Supabase)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Preparar respuesta",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request - Crear Signed URL": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Construir URL firmada (CSV)",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request - Crear Signed URL (PDF)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Construir URL firmada (PDF)",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request - GET ticket Supabase": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Ticket tiene datos curso",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request - marcar ticket como failed": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Respond to Webhook  - marcar ticket failed",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Merge - Alumno + Ticket": {
+        "main": [
+          [
+            {
+              "index": 1,
+              "node": "Merge Alumnos + PDF",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Merge Alumnos + PDF": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Code in JavaScript",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Normalizar campos alumnos": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Merge - Alumno + Ticket",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Normalizar ticket + preparar storage path": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "HTTP Request - Crear Signed URL (PDF)",
+              "type": "main"
+            },
+            {
+              "index": 0,
+              "node": "HTTP Request - Crear Signed URL",
+              "type": "main"
+            },
+            {
+              "index": 1,
+              "node": "Merge - Alumno + Ticket",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Parsear CSV - Alumnos": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Normalizar campos alumnos",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Preparar actualización ticket (Execute Once)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "HTTP Request (PATCH Supabase)",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Preparar respuesta": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Respond to Webhook",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Send email": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "HTTP Request",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Ticket tiene datos curso": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Normalizar ticket + preparar storage path",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "HTTP Request - marcar ticket como failed",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "HTTP Request - GET ticket Supabase",
+              "type": "main"
+            }
+          ]
+        ]
+      }
+    },
+    "createdAt": "2026-03-21T21:40:09.097Z",
+    "description": null,
+    "name": null,
+    "nodes": [
+      {
+        "id": "92aa3457-707f-41c1-8e40-408f113bc0ca",
+        "name": "Webhook",
+        "parameters": {
+          "httpMethod": "POST",
+          "options": {},
+          "path": "/alta-confirmada",
+          "responseMode": "responseNode"
+        },
+        "position": [
+          -16,
+          96
+        ],
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "webhookId": "6bb1eea1-dd03-47e8-bf62-3f4fee78da8e"
+      },
+      {
+        "credentials": {
+          "supabaseApi": {
+            "id": "RhF1ouYC5xU2Uidc",
+            "name": "Supabase account"
+          }
+        },
+        "id": "4f5de705-4cd3-471a-bd30-20619971d406",
+        "name": "HTTP Request - GET ticket Supabase",
+        "parameters": {
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "supabaseApi",
+          "options": {},
+          "url": "=https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/tickets?id=eq.{{$json.body.ticket_id ?? $json.ticket_id ?? $json.id}}&select=id,empresa_id,estado,csv_key,xlsx_key,empresa_nombre,curso_nombre,duracion_minutos,fecha_inicio,fecha_fin"
+        },
+        "position": [
+          160,
+          96
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "id": "a2d5a11f-91a1-4b11-b449-971408d5c374",
+        "name": "Normalizar ticket + preparar storage path",
+        "parameters": {
+          "jsCode": "const rows = $input.first().json;\nconst t = Array.isArray(rows) ? rows[0] : rows;\nif (!t) throw new Error(\"Ticket no encontrado\");\n\nconst bucket = \"empresas\"; // si tu bucket se llama así\nconst prefix = bucket + \"/\";\nconst objectPath = t.csv_key?.startsWith(prefix) ? t.csv_key.slice(prefix.length) : t.csv_key;\n\nif (!objectPath) throw new Error(\"Ticket sin csv_key\");\n\nreturn [{\n  json: {\n    ticket: t,\n    bucket,\n    objectPath\n  }\n}];"
+        },
+        "position": [
+          560,
+          128
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "credentials": {
+          "supabaseApi": {
+            "id": "RhF1ouYC5xU2Uidc",
+            "name": "Supabase account"
+          }
+        },
+        "id": "6e6ad128-835f-4b0e-906d-579d1652e3b9",
+        "name": "HTTP Request - Crear Signed URL",
+        "parameters": {
+          "authentication": "predefinedCredentialType",
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "expiresIn",
+                "value": "600"
+              }
+            ]
+          },
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "method": "POST",
+          "nodeCredentialType": "supabaseApi",
+          "options": {},
+          "sendBody": true,
+          "sendHeaders": true,
+          "url": "=https://oyktngpmaevmahrtmguw.supabase.co/storage/v1/object/sign/altas-cursos/{{$json.ticket.csv_key}}"
+        },
+        "position": [
+          816,
+          16
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "id": "5d29b450-0a08-43d6-baf2-5ae51c76d4e5",
+        "name": "Construir URL firmada (CSV)",
+        "parameters": {
+          "jsCode": "const rows = $input.first().json;\nconst r = Array.isArray(rows) ? rows[0] : rows;\n\nif (!r?.signedURL) throw new Error(\"No viene signedURL\");\n\nconst base = \"https://oyktngpmaevmahrtmguw.supabase.co/storage/v1\";\nconst full = base + r.signedURL; // r.signedURL empieza por /object/sign/...\n\nreturn [{ json: { signedUrlFull: full } }];"
+        },
+        "position": [
+          1008,
+          16
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "7813892b-26a7-4394-8695-9c3f991cec2e",
+        "name": "Descargar CSV (signed)",
+        "parameters": {
+          "options": {
+            "response": {
+              "response": {
+                "outputPropertyName": "csv",
+                "responseFormat": "file"
+              }
+            }
+          },
+          "url": "={{$json.signedUrlFull}}"
+        },
+        "position": [
+          1200,
+          16
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "id": "bd6b30e0-7a6a-4432-9cd9-befa1ff62761",
+        "name": "Parsear CSV - Alumnos",
+        "parameters": {
+          "binaryPropertyName": "csv",
+          "options": {
+            "delimiter": ";",
+            "headerRow": true
+          }
+        },
+        "position": [
+          1392,
+          16
+        ],
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1
+      },
+      {
+        "alwaysOutputData": true,
+        "credentials": {
+          "smtp": {
+            "id": "yzPQYtqPMXa8RGyH",
+            "name": "SMTP account"
+          }
+        },
+        "executeOnce": false,
+        "id": "9b2d4521-70ea-4a36-a68f-5072684594f6",
+        "name": "Send email",
+        "onError": "continueRegularOutput",
+        "parameters": {
+          "fromEmail": "=produccion@harveylluch.com",
+          "html": "=<div style=\"font-family: Arial, Helvetica, sans-serif; font-size: 14px; color:#111; line-height: 1.5;\">\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Estimad@ {{$json.firstname}} {{$json.lastname}}:\n  </p>\n\n  <p style=\"margin: 0 0 14px 0;\">\n    Desde el departamento de formación le damos la bienvenida al curso de referencia que ha gestionado su empresa \n    “<strong>{{$json.ticket.empresa_nombre}}</strong>”.\n  </p>\n\n  <p style=\"margin: 0 0 10px 0;\">\n    Para el correcto desarrollo del mismo, hay que seguir los siguientes pasos:\n  </p>\n\n  <ol style=\"margin: 0 0 16px 20px; padding: 0;\">\n    <li style=\"margin: 0 0 6px 0;\">\n      Acceder a \n      <a href=\"https://campus.centrodeformacionvirtual.es/\" style=\"color:#0b57d0; text-decoration: underline;\">\n        https://campus.centrodeformacionvirtual.es/\n      </a>\n    </li>\n    <li style=\"margin: 0 0 6px 0;\">\n      <strong>Nombre de usuario:</strong> {{$json.username}}\n    </li>\n    <li style=\"margin: 0;\">\n      <strong>Contraseña:</strong> {{$json.password}}\n    </li>\n  </ol>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    El curso es muy intuitivo, hay que seguir las instrucciones de la plataforma hasta su finalización.\n  </p>\n\n  <p style=\"margin: 0 0 18px 0; color:#8a0055; font-weight: 600;\">\n    Por favor, revise en su navegador que tiene desbloqueadas las ventanas emergentes (pop-up). \n    Consulte el PDF adjunto en caso de duda.\n  </p>\n\n  <p style=\"margin: 0 0 12px 0;\">\n    <strong>MUY IMPORTANTE:</strong> \n    El curso tiene una duración de \n    <strong>{{ Math.floor($json.ticket.duracion_minutos / 60) }} horas</strong>, \n    siendo la fecha de inicio el \n    <strong>{{ $json.ticket.fecha_inicio.split('-').reverse().join('/') }}</strong> \n    y la de finalización el \n    <strong>{{ $json.ticket.fecha_fin.split('-').reverse().join('/') }}</strong>. \n    Para dar por finalizada la formación es necesario cumplir los siguientes requisitos:\n  </p>\n\n  <ul style=\"margin: 0 0 18px 20px; padding: 0;\">\n    <li style=\"margin: 0 0 6px 0;\">Visualizar el 100% del curso.</li>\n    <li style=\"margin: 0 0 6px 0;\">Realizar como mínimo el 75% del tiempo total de conexión de la duración total del curso.</li>\n    <li style=\"margin: 0;\">Superar el 100% de las evaluaciones del curso.</li>\n  </ul>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Si no se cumplen dichos requisitos, la FUNDAE puede incidentar el curso en las inspecciones que pueda realizar posteriormente, \n    calificándolo como “no válido”.\n  </p>\n\n  <p style=\"margin: 0;\">\n    En caso de cualquier duda y/o aclaración, estoy a su disposición. \n    Reciba un cordial saludo,\n  </p>\n\n</div>",
+          "options": {
+            "attachments": "pdf"
+          },
+          "subject": "=MAIL DE BIENVENIDA AL CURSO \"{{$json.ticket.curso_nombre}}\"",
+          "toEmail": "={{ $json.email }}"
+        },
+        "position": [
+          2320,
+          -176
+        ],
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2.1,
+        "webhookId": "2e3d27b7-d6b8-4dce-9e04-1bd540f7aa52"
+      },
+      {
+        "id": "fe67b1ae-19e0-480b-8d3d-89a8fc0bf62e",
+        "name": "Ticket tiene datos curso",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "5512448f-cdff-437f-974b-37f52a1fdba9",
+                "leftValue": "={{ !['', 'null', 'undefined'].includes(String($json.empresa_nombre ?? '').trim().toLowerCase()) }}",
+                "operator": {
+                  "operation": "true",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": "null"
+              },
+              {
+                "id": "2e531059-e5c2-4d99-bc48-8800224d9b7c",
+                "leftValue": "={{ !['', 'null', 'undefined'].includes(String($json.curso_nombre ?? '').trim().toLowerCase()) }}",
+                "operator": {
+                  "operation": "true",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": "null"
+              },
+              {
+                "id": "6eff8d6c-5528-4829-9005-47292beaf492",
+                "leftValue": "={{ Number($json.duracion_minutos ?? 0) > 0 }}",
+                "operator": {
+                  "operation": "true",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": "=null"
+              },
+              {
+                "id": "192b8905-a2d0-441d-a434-577987a2bb85",
+                "leftValue": "={{ !['', 'null', 'undefined'].includes(String($json.fecha_inicio ?? '').trim().toLowerCase()) }}",
+                "operator": {
+                  "operation": "true",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": "null"
+              },
+              {
+                "id": "f9259892-e167-4f7f-a623-cb8d12340f5c",
+                "leftValue": "={{ !['', 'null', 'undefined'].includes(String($json.fecha_fin ?? '').trim().toLowerCase()) }}",
+                "operator": {
+                  "operation": "true",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": "null"
+              }
+            ],
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            }
+          },
+          "options": {}
+        },
+        "position": [
+          352,
+          96
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2
+      },
+      {
+        "id": "5d3239e9-a7bc-4158-bd12-250f8433ace2",
+        "name": "HTTP Request - marcar ticket como failed",
+        "parameters": {
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "welcome_email_status",
+                "value": "failed"
+              },
+              {
+                "name": "welcome_email_error",
+                "value": "Faltan datos del curso"
+              },
+              {
+                "name": "updated_at",
+                "value": "=now()"
+              }
+            ]
+          },
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Authorization",
+                "value": "Bearer SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Prefer",
+                "value": "return=representation"
+              }
+            ]
+          },
+          "method": "PATCH",
+          "options": {},
+          "sendBody": true,
+          "sendHeaders": true,
+          "url": "=https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/tickets?id=eq.{{ $json.id }}"
+        },
+        "position": [
+          544,
+          288
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "id": "f64d6135-917a-4a54-a216-0d5662a713b7",
+        "name": "Respond to Webhook  - marcar ticket failed",
+        "parameters": {
+          "options": {},
+          "respondWith": "json",
+          "responseBody": "{\n  \"ok\": false,\n  \"status\": \"failed\",\n  \"reason\": \"missing_fields\",\n  \"ticket_id\": \"={{$json.id}}\"\n}"
+        },
+        "position": [
+          768,
+          288
+        ],
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4
+      },
+      {
+        "id": "185f2cf8-ea39-4a74-9f42-35564e3cde0e",
+        "name": "HTTP Request - Crear Signed URL (PDF)",
+        "parameters": {
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "expiresIn",
+                "value": "86400"
+              }
+            ]
+          },
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Authorization",
+                "value": "Bearer SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "method": "POST",
+          "options": {},
+          "sendBody": true,
+          "sendHeaders": true,
+          "url": "https://oyktngpmaevmahrtmguw.supabase.co/storage/v1/object/sign/email-assets/ayuda/COMO%20DESBLOQUEAR%20VENTANAS%20EMERGENTES.pdf"
+        },
+        "position": [
+          816,
+          -192
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "id": "a6ca2ba9-cc29-4680-8c84-3a2c02881b8f",
+        "name": "Construir URL firmada (PDF)",
+        "parameters": {
+          "jsCode": "const signedURL = $json.signedURL;\n\nif (!signedURL) {\n  throw new Error(\"No viene signedURL en la respuesta de Supabase\");\n}\n\n// Cambia este dominio por el tuyo real de Supabase\nconst SUPABASE_URL = \"https://oyktngpmaevmahrtmguw.supabase.co\";\n\nreturn [\n  {\n    pdfUrl: `${SUPABASE_URL}/storage/v1${signedURL}`,\n  },\n];"
+        },
+        "position": [
+          1120,
+          -192
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "1d849079-2752-43cc-9c8a-a78075f1e7b6",
+        "name": "Descargar PDF (signed)",
+        "parameters": {
+          "options": {
+            "response": {
+              "response": {
+                "outputPropertyName": "pdf",
+                "responseFormat": "file"
+              }
+            }
+          },
+          "url": "={{$json.pdfUrl}}"
+        },
+        "position": [
+          1376,
+          -192
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "id": "c5e331b9-c577-48ef-bd9c-f8e0f05dd0c3",
+        "name": "Merge Alumnos + PDF",
+        "parameters": {
+          "combineBy": "combineAll",
+          "mode": "combine",
+          "options": {}
+        },
+        "position": [
+          1936,
+          -176
+        ],
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2
+      },
+      {
+        "id": "f53e5fdd-3603-45af-b8f6-dcfc784218af",
+        "name": "Normalizar campos alumnos",
+        "parameters": {
+          "jsCode": "// Corrige BOM en el nombre de campo \"firstname\"\nfunction formatearNombre(s) {\n  if (!s) return \"\";\n  return String(s)\n    .replace(/^\\uFEFF/, \"\")      // quitar BOM\n    .trim()\n    .replace(/\\s+/g, \" \")\n    .toLowerCase()\n    .split(\" \")\n    .map(p => p ? p[0].toUpperCase() + p.slice(1) : \"\")\n    .join(\" \");\n}\n\nconst firstnameRaw = $json[\"﻿firstname\"] ?? $json.firstname ?? \"\";\nconst lastnameRaw  = $json.lastname ?? \"\";\n\nreturn {\n  ...$json,\n  firstname: formatearNombre(firstnameRaw),\n  lastname: formatearNombre(lastnameRaw),\n  nombre_completo: `${formatearNombre(firstnameRaw)} ${formatearNombre(lastnameRaw)}`.trim()\n};",
+          "mode": "runOnceForEachItem"
+        },
+        "position": [
+          1600,
+          16
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "9ea9269d-7a69-410f-86c7-32a8efd3cfe5",
+        "name": "Merge - Alumno + Ticket",
+        "parameters": {
+          "combineBy": "combineAll",
+          "mode": "combine",
+          "options": {}
+        },
+        "position": [
+          1824,
+          144
+        ],
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2
+      },
+      {
+        "id": "0a07c84c-6c57-4bd1-bb56-a9cbce72c358",
+        "name": "Respond to Webhook",
+        "parameters": {
+          "options": {}
+        },
+        "position": [
+          3296,
+          -176
+        ],
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4
+      },
+      {
+        "executeOnce": true,
+        "id": "e8a36f60-4f13-425c-a33a-e1276bdf107b",
+        "name": "Preparar actualización ticket (Execute Once)",
+        "parameters": {
+          "jsCode": "const t = $items(\"Normalizar ticket + preparar storage path\")[0].json.ticket;\n\nreturn {\n  ticket_id: t.id,\n};"
+        },
+        "position": [
+          2752,
+          -176
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "alwaysOutputData": true,
+        "id": "89e5904d-d7a8-43db-a986-8da6a2ffb50f",
+        "name": "HTTP Request (PATCH Supabase)",
+        "parameters": {
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "welcome_email_status",
+                "value": "sent"
+              },
+              {
+                "name": "welcome_email_sent_at",
+                "value": "={{new Date().toISOString()}}"
+              }
+            ]
+          },
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Authorization",
+                "value": "Bearer SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Prefer",
+                "value": "return=representation"
+              }
+            ]
+          },
+          "method": "PATCH",
+          "options": {},
+          "sendBody": true,
+          "sendHeaders": true,
+          "url": "=https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/tickets?id=eq.{{$json.ticket_id}}"
+        },
+        "position": [
+          2960,
+          -176
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "id": "6beecade-d0a7-4785-95e1-f87d055d3d9a",
+        "name": "Preparar respuesta",
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "24291865-dc3d-4731-8ad2-47b1a564b352",
+                "name": "ticket_id",
+                "type": "string",
+                "value": "={{ $json.id }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "position": [
+          3136,
+          -176
+        ],
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4
+      },
+      {
+        "id": "f13c7fcb-7b5e-4b33-b30e-cb34a6be03da",
+        "name": "Code in JavaScript",
+        "parameters": {
+          "jsCode": "if (item.binary?.pdf?.fileName) {\n  let decoded = decodeURIComponent(item.binary.pdf.fileName);\n\n  const corrections = {\n    \"COMO\": \"CÓMO\",\n    \"MAS\": \"MÁS\",\n    \"ANIOS\": \"AÑOS\"\n  };\n\n  for (const [wrong, correct] of Object.entries(corrections)) {\n    const regex = new RegExp(`\\\\b${wrong}\\\\b`, \"g\");\n    decoded = decoded.replace(regex, correct);\n  }\n\n  item.binary.pdf.fileName = decoded;\n}\n\nreturn item;",
+          "mode": "runOnceForEachItem"
+        },
+        "position": [
+          2144,
+          -176
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "3afac5e9-7428-486c-acbc-09ab3610ed7e",
+        "name": "HTTP Request",
+        "parameters": {
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "ticket_id",
+                "value": "={{$items(\"HTTP Request - GET ticket Supabase\")[0].json.id}}"
+              },
+              {
+                "name": "workflow_run_id",
+                "value": "{{$execution.id}}"
+              },
+              {
+                "name": "step",
+                "value": "bienvenida"
+              },
+              {
+                "name": "provider",
+                "value": "smtp"
+              },
+              {
+                "name": "to_email",
+                "value": "={{ $('Merge - Alumno + Ticket').item.json.email }}"
+              },
+              {
+                "name": "subject",
+                "value": "={{ 'MAIL DE BIENVENIDA AL CURSO \"' + $('Code in JavaScript').first().json.ticket.curso_nombre + '\"' }}"
+              },
+              {
+                "name": "status",
+                "value": "={{ $json.error ? \"ERROR\" : \"OK\" }}"
+              },
+              {
+                "name": "message_id",
+                "value": "={{$json.messageId || null}}"
+              },
+              {
+                "name": "response",
+                "value": "={{ JSON.stringify($json) }}"
+              },
+              {
+                "name": "error",
+                "value": "={{ $json.error || null }}"
+              }
+            ]
+          },
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Authorization",
+                "value": "Bearer SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Prefer",
+                "value": "return=representation"
+              }
+            ]
+          },
+          "method": "POST",
+          "options": {},
+          "sendBody": true,
+          "sendHeaders": true,
+          "specifyBody": "=keypair",
+          "url": "https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/ticket_email_logs"
+        },
+        "position": [
+          2528,
+          -176
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      }
+    ],
+    "updatedAt": "2026-03-21T21:40:09.097Z",
+    "versionId": "124c660e-9781-43c5-a914-bbf2fc451b38",
+    "workflowId": "00rhy00KuogH0Y2o"
+  },
+  "activeVersionId": "124c660e-9781-43c5-a914-bbf2fc451b38",
+  "connections": {
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send email",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Construir URL firmada (CSV)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Descargar CSV (signed)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Construir URL firmada (PDF)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Descargar PDF (signed)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Descargar CSV (signed)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parsear CSV - Alumnos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Descargar PDF (signed)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge Alumnos + PDF",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparar actualización ticket (Execute Once)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request (PATCH Supabase)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparar respuesta",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Crear Signed URL": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Construir URL firmada (CSV)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Crear Signed URL (PDF)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Construir URL firmada (PDF)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request - GET ticket Supabase": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ticket tiene datos curso",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request - marcar ticket como failed": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Respond to Webhook  - marcar ticket failed",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Merge - Alumno + Ticket": {
+      "main": [
+        [
+          {
+            "index": 1,
+            "node": "Merge Alumnos + PDF",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Merge Alumnos + PDF": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normalizar campos alumnos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge - Alumno + Ticket",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normalizar ticket + preparar storage path": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request - Crear Signed URL (PDF)",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "HTTP Request - Crear Signed URL",
+            "type": "main"
+          },
+          {
+            "index": 1,
+            "node": "Merge - Alumno + Ticket",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parsear CSV - Alumnos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normalizar campos alumnos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparar actualización ticket (Execute Once)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request (PATCH Supabase)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparar respuesta": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Respond to Webhook",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send email": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ticket tiene datos curso": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normalizar ticket + preparar storage path",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request - marcar ticket como failed",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request - GET ticket Supabase",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-27T08:03:43.148Z",
+  "id": "00rhy00KuogH0Y2o",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "2. Alta confirmada → Bienvenida",
+  "nodes": [
+    {
+      "id": "92aa3457-707f-41c1-8e40-408f113bc0ca",
+      "name": "Webhook",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "/alta-confirmada",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        -16,
+        96
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "webhookId": "6bb1eea1-dd03-47e8-bf62-3f4fee78da8e"
+    },
+    {
+      "credentials": {
+        "supabaseApi": {
+          "id": "RhF1ouYC5xU2Uidc",
+          "name": "Supabase account"
+        }
+      },
+      "id": "4f5de705-4cd3-471a-bd30-20619971d406",
+      "name": "HTTP Request - GET ticket Supabase",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {},
+        "url": "=https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/tickets?id=eq.{{$json.body.ticket_id ?? $json.ticket_id ?? $json.id}}&select=id,empresa_id,estado,csv_key,xlsx_key,empresa_nombre,curso_nombre,duracion_minutos,fecha_inicio,fecha_fin"
+      },
+      "position": [
+        160,
+        96
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "a2d5a11f-91a1-4b11-b449-971408d5c374",
+      "name": "Normalizar ticket + preparar storage path",
+      "parameters": {
+        "jsCode": "const rows = $input.first().json;\nconst t = Array.isArray(rows) ? rows[0] : rows;\nif (!t) throw new Error(\"Ticket no encontrado\");\n\nconst bucket = \"empresas\"; // si tu bucket se llama así\nconst prefix = bucket + \"/\";\nconst objectPath = t.csv_key?.startsWith(prefix) ? t.csv_key.slice(prefix.length) : t.csv_key;\n\nif (!objectPath) throw new Error(\"Ticket sin csv_key\");\n\nreturn [{\n  json: {\n    ticket: t,\n    bucket,\n    objectPath\n  }\n}];"
+      },
+      "position": [
+        560,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "supabaseApi": {
+          "id": "RhF1ouYC5xU2Uidc",
+          "name": "Supabase account"
+        }
+      },
+      "id": "6e6ad128-835f-4b0e-906d-579d1652e3b9",
+      "name": "HTTP Request - Crear Signed URL",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "expiresIn",
+              "value": "600"
+            }
+          ]
+        },
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "method": "POST",
+        "nodeCredentialType": "supabaseApi",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "=https://oyktngpmaevmahrtmguw.supabase.co/storage/v1/object/sign/altas-cursos/{{$json.ticket.csv_key}}"
+      },
+      "position": [
+        816,
+        16
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "5d29b450-0a08-43d6-baf2-5ae51c76d4e5",
+      "name": "Construir URL firmada (CSV)",
+      "parameters": {
+        "jsCode": "const rows = $input.first().json;\nconst r = Array.isArray(rows) ? rows[0] : rows;\n\nif (!r?.signedURL) throw new Error(\"No viene signedURL\");\n\nconst base = \"https://oyktngpmaevmahrtmguw.supabase.co/storage/v1\";\nconst full = base + r.signedURL; // r.signedURL empieza por /object/sign/...\n\nreturn [{ json: { signedUrlFull: full } }];"
+      },
+      "position": [
+        1008,
+        16
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "7813892b-26a7-4394-8695-9c3f991cec2e",
+      "name": "Descargar CSV (signed)",
+      "parameters": {
+        "options": {
+          "response": {
+            "response": {
+              "outputPropertyName": "csv",
+              "responseFormat": "file"
+            }
+          }
+        },
+        "url": "={{$json.signedUrlFull}}"
+      },
+      "position": [
+        1200,
+        16
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "bd6b30e0-7a6a-4432-9cd9-befa1ff62761",
+      "name": "Parsear CSV - Alumnos",
+      "parameters": {
+        "binaryPropertyName": "csv",
+        "options": {
+          "delimiter": ";",
+          "headerRow": true
+        }
+      },
+      "position": [
+        1392,
+        16
+      ],
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "smtp": {
+          "id": "yzPQYtqPMXa8RGyH",
+          "name": "SMTP account"
+        }
+      },
+      "executeOnce": false,
+      "id": "9b2d4521-70ea-4a36-a68f-5072684594f6",
+      "name": "Send email",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "fromEmail": "=produccion@harveylluch.com",
+        "html": "=<div style=\"font-family: Arial, Helvetica, sans-serif; font-size: 14px; color:#111; line-height: 1.5;\">\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Estimad@ {{$json.firstname}} {{$json.lastname}}:\n  </p>\n\n  <p style=\"margin: 0 0 14px 0;\">\n    Desde el departamento de formación le damos la bienvenida al curso de referencia que ha gestionado su empresa \n    “<strong>{{$json.ticket.empresa_nombre}}</strong>”.\n  </p>\n\n  <p style=\"margin: 0 0 10px 0;\">\n    Para el correcto desarrollo del mismo, hay que seguir los siguientes pasos:\n  </p>\n\n  <ol style=\"margin: 0 0 16px 20px; padding: 0;\">\n    <li style=\"margin: 0 0 6px 0;\">\n      Acceder a \n      <a href=\"https://campus.centrodeformacionvirtual.es/\" style=\"color:#0b57d0; text-decoration: underline;\">\n        https://campus.centrodeformacionvirtual.es/\n      </a>\n    </li>\n    <li style=\"margin: 0 0 6px 0;\">\n      <strong>Nombre de usuario:</strong> {{$json.username}}\n    </li>\n    <li style=\"margin: 0;\">\n      <strong>Contraseña:</strong> {{$json.password}}\n    </li>\n  </ol>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    El curso es muy intuitivo, hay que seguir las instrucciones de la plataforma hasta su finalización.\n  </p>\n\n  <p style=\"margin: 0 0 18px 0; color:#8a0055; font-weight: 600;\">\n    Por favor, revise en su navegador que tiene desbloqueadas las ventanas emergentes (pop-up). \n    Consulte el PDF adjunto en caso de duda.\n  </p>\n\n  <p style=\"margin: 0 0 12px 0;\">\n    <strong>MUY IMPORTANTE:</strong> \n    El curso tiene una duración de \n    <strong>{{ Math.floor($json.ticket.duracion_minutos / 60) }} horas</strong>, \n    siendo la fecha de inicio el \n    <strong>{{ $json.ticket.fecha_inicio.split('-').reverse().join('/') }}</strong> \n    y la de finalización el \n    <strong>{{ $json.ticket.fecha_fin.split('-').reverse().join('/') }}</strong>. \n    Para dar por finalizada la formación es necesario cumplir los siguientes requisitos:\n  </p>\n\n  <ul style=\"margin: 0 0 18px 20px; padding: 0;\">\n    <li style=\"margin: 0 0 6px 0;\">Visualizar el 100% del curso.</li>\n    <li style=\"margin: 0 0 6px 0;\">Realizar como mínimo el 75% del tiempo total de conexión de la duración total del curso.</li>\n    <li style=\"margin: 0;\">Superar el 100% de las evaluaciones del curso.</li>\n  </ul>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Si no se cumplen dichos requisitos, la FUNDAE puede incidentar el curso en las inspecciones que pueda realizar posteriormente, \n    calificándolo como “no válido”.\n  </p>\n\n  <p style=\"margin: 0;\">\n    En caso de cualquier duda y/o aclaración, estoy a su disposición. \n    Reciba un cordial saludo,\n  </p>\n\n</div>",
+        "options": {
+          "attachments": "pdf"
+        },
+        "subject": "=MAIL DE BIENVENIDA AL CURSO \"{{$json.ticket.curso_nombre}}\"",
+        "toEmail": "={{ $json.email }}"
+      },
+      "position": [
+        2320,
+        -176
+      ],
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "webhookId": "2e3d27b7-d6b8-4dce-9e04-1bd540f7aa52"
+    },
+    {
+      "id": "fe67b1ae-19e0-480b-8d3d-89a8fc0bf62e",
+      "name": "Ticket tiene datos curso",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "5512448f-cdff-437f-974b-37f52a1fdba9",
+              "leftValue": "={{ !['', 'null', 'undefined'].includes(String($json.empresa_nombre ?? '').trim().toLowerCase()) }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": "null"
+            },
+            {
+              "id": "2e531059-e5c2-4d99-bc48-8800224d9b7c",
+              "leftValue": "={{ !['', 'null', 'undefined'].includes(String($json.curso_nombre ?? '').trim().toLowerCase()) }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": "null"
+            },
+            {
+              "id": "6eff8d6c-5528-4829-9005-47292beaf492",
+              "leftValue": "={{ Number($json.duracion_minutos ?? 0) > 0 }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": "=null"
+            },
+            {
+              "id": "192b8905-a2d0-441d-a434-577987a2bb85",
+              "leftValue": "={{ !['', 'null', 'undefined'].includes(String($json.fecha_inicio ?? '').trim().toLowerCase()) }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": "null"
+            },
+            {
+              "id": "f9259892-e167-4f7f-a623-cb8d12340f5c",
+              "leftValue": "={{ !['', 'null', 'undefined'].includes(String($json.fecha_fin ?? '').trim().toLowerCase()) }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": "null"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        352,
+        96
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "5d3239e9-a7bc-4158-bd12-250f8433ace2",
+      "name": "HTTP Request - marcar ticket como failed",
+      "parameters": {
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "welcome_email_status",
+              "value": "failed"
+            },
+            {
+              "name": "welcome_email_error",
+              "value": "Faltan datos del curso"
+            },
+            {
+              "name": "updated_at",
+              "value": "=now()"
+            }
+          ]
+        },
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "SUPABASE_SECRET_MASKED"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer SUPABASE_SECRET_MASKED"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "=https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/tickets?id=eq.{{ $json.id }}"
+      },
+      "position": [
+        544,
+        288
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "f64d6135-917a-4a54-a216-0d5662a713b7",
+      "name": "Respond to Webhook  - marcar ticket failed",
+      "parameters": {
+        "options": {},
+        "respondWith": "json",
+        "responseBody": "{\n  \"ok\": false,\n  \"status\": \"failed\",\n  \"reason\": \"missing_fields\",\n  \"ticket_id\": \"={{$json.id}}\"\n}"
+      },
+      "position": [
+        768,
+        288
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "185f2cf8-ea39-4a74-9f42-35564e3cde0e",
+      "name": "HTTP Request - Crear Signed URL (PDF)",
+      "parameters": {
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "expiresIn",
+              "value": "86400"
+            }
+          ]
+        },
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "SUPABASE_SECRET_MASKED"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer SUPABASE_SECRET_MASKED"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "https://oyktngpmaevmahrtmguw.supabase.co/storage/v1/object/sign/email-assets/ayuda/COMO%20DESBLOQUEAR%20VENTANAS%20EMERGENTES.pdf"
+      },
+      "position": [
+        816,
+        -192
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "a6ca2ba9-cc29-4680-8c84-3a2c02881b8f",
+      "name": "Construir URL firmada (PDF)",
+      "parameters": {
+        "jsCode": "const signedURL = $json.signedURL;\n\nif (!signedURL) {\n  throw new Error(\"No viene signedURL en la respuesta de Supabase\");\n}\n\n// Cambia este dominio por el tuyo real de Supabase\nconst SUPABASE_URL = \"https://oyktngpmaevmahrtmguw.supabase.co\";\n\nreturn [\n  {\n    pdfUrl: `${SUPABASE_URL}/storage/v1${signedURL}`,\n  },\n];"
+      },
+      "position": [
+        1120,
+        -192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "1d849079-2752-43cc-9c8a-a78075f1e7b6",
+      "name": "Descargar PDF (signed)",
+      "parameters": {
+        "options": {
+          "response": {
+            "response": {
+              "outputPropertyName": "pdf",
+              "responseFormat": "file"
+            }
+          }
+        },
+        "url": "={{$json.pdfUrl}}"
+      },
+      "position": [
+        1376,
+        -192
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "c5e331b9-c577-48ef-bd9c-f8e0f05dd0c3",
+      "name": "Merge Alumnos + PDF",
+      "parameters": {
+        "combineBy": "combineAll",
+        "mode": "combine",
+        "options": {}
+      },
+      "position": [
+        1936,
+        -176
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "f53e5fdd-3603-45af-b8f6-dcfc784218af",
+      "name": "Normalizar campos alumnos",
+      "parameters": {
+        "jsCode": "// Corrige BOM en el nombre de campo \"firstname\"\nfunction formatearNombre(s) {\n  if (!s) return \"\";\n  return String(s)\n    .replace(/^\\uFEFF/, \"\")      // quitar BOM\n    .trim()\n    .replace(/\\s+/g, \" \")\n    .toLowerCase()\n    .split(\" \")\n    .map(p => p ? p[0].toUpperCase() + p.slice(1) : \"\")\n    .join(\" \");\n}\n\nconst firstnameRaw = $json[\"﻿firstname\"] ?? $json.firstname ?? \"\";\nconst lastnameRaw  = $json.lastname ?? \"\";\n\nreturn {\n  ...$json,\n  firstname: formatearNombre(firstnameRaw),\n  lastname: formatearNombre(lastnameRaw),\n  nombre_completo: `${formatearNombre(firstnameRaw)} ${formatearNombre(lastnameRaw)}`.trim()\n};",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        1600,
+        16
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "9ea9269d-7a69-410f-86c7-32a8efd3cfe5",
+      "name": "Merge - Alumno + Ticket",
+      "parameters": {
+        "combineBy": "combineAll",
+        "mode": "combine",
+        "options": {}
+      },
+      "position": [
+        1824,
+        112
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "0a07c84c-6c57-4bd1-bb56-a9cbce72c358",
+      "name": "Respond to Webhook",
+      "parameters": {
+        "options": {}
+      },
+      "position": [
+        3296,
+        -176
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4
+    },
+    {
+      "executeOnce": true,
+      "id": "e8a36f60-4f13-425c-a33a-e1276bdf107b",
+      "name": "Preparar actualización ticket (Execute Once)",
+      "parameters": {
+        "jsCode": "const t = $items(\"Normalizar ticket + preparar storage path\")[0].json.ticket;\n\nreturn {\n  ticket_id: t.id,\n};"
+      },
+      "position": [
+        2752,
+        -176
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "89e5904d-d7a8-43db-a986-8da6a2ffb50f",
+      "name": "HTTP Request (PATCH Supabase)",
+      "parameters": {
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "welcome_email_status",
+              "value": "sent"
+            },
+            {
+              "name": "welcome_email_sent_at",
+              "value": "={{new Date().toISOString()}}"
+            }
+          ]
+        },
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "SUPABASE_SECRET_MASKED"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer SUPABASE_SECRET_MASKED"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "=https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/tickets?id=eq.{{$json.ticket_id}}"
+      },
+      "position": [
+        2960,
+        -176
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "6beecade-d0a7-4785-95e1-f87d055d3d9a",
+      "name": "Preparar respuesta",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "24291865-dc3d-4731-8ad2-47b1a564b352",
+              "name": "ticket_id",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        3136,
+        -176
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "f13c7fcb-7b5e-4b33-b30e-cb34a6be03da",
+      "name": "Code in JavaScript",
+      "parameters": {
+        "jsCode": "if (item.binary?.pdf?.fileName) {\n  let decoded = decodeURIComponent(item.binary.pdf.fileName);\n\n  const corrections = {\n    \"COMO\": \"CÓMO\",\n    \"MAS\": \"MÁS\",\n    \"ANIOS\": \"AÑOS\"\n  };\n\n  for (const [wrong, correct] of Object.entries(corrections)) {\n    const regex = new RegExp(`\\\\b${wrong}\\\\b`, \"g\");\n    decoded = decoded.replace(regex, correct);\n  }\n\n  item.binary.pdf.fileName = decoded;\n}\n\nreturn item;",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        2144,
+        -176
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "3afac5e9-7428-486c-acbc-09ab3610ed7e",
+      "name": "HTTP Request",
+      "parameters": {
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "ticket_id",
+              "value": "={{$items(\"HTTP Request - GET ticket Supabase\")[0].json.id}}"
+            },
+            {
+              "name": "workflow_run_id",
+              "value": "{{$execution.id}}"
+            },
+            {
+              "name": "step",
+              "value": "bienvenida"
+            },
+            {
+              "name": "provider",
+              "value": "smtp"
+            },
+            {
+              "name": "to_email",
+              "value": "={{ $('Merge - Alumno + Ticket').item.json.email }}"
+            },
+            {
+              "name": "subject",
+              "value": "={{ 'MAIL DE BIENVENIDA AL CURSO \"' + $('Code in JavaScript').first().json.ticket.curso_nombre + '\"' }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ $json.error ? \"ERROR\" : \"OK\" }}"
+            },
+            {
+              "name": "message_id",
+              "value": "={{$json.messageId || null}}"
+            },
+            {
+              "name": "response",
+              "value": "={{ JSON.stringify($json) }}"
+            },
+            {
+              "name": "error",
+              "value": "={{ $json.error || null }}"
+            }
+          ]
+        },
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "SUPABASE_SECRET_MASKED"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer SUPABASE_SECRET_MASKED"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "=keypair",
+        "url": "https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/ticket_email_logs"
+      },
+      "position": [
+        2528,
+        -176
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "body": {
+            "ticket_id": "a17a99dc-d4a2-4e5c-8af1-8c7936311795"
+          },
+          "executionMode": "production",
+          "headers": {
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, zstd",
+            "content-length": "52",
+            "content-type": "application/json",
+            "host": "n8n-n8n.c2cjix.easypanel.host",
+            "user-agent": "python-httpx/0.28.1",
+            "x-forwarded-for": "74.220.51.251",
+            "x-forwarded-host": "n8n-n8n.c2cjix.easypanel.host",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "be88d6f91c28",
+            "x-real-ip": "74.220.51.251"
+          },
+          "params": {},
+          "query": {},
+          "webhookUrl": "https://n8n-n8n.c2cjix.easypanel.host/webhook/alta-confirmada"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2026-02-27T08:03:43.160Z",
+      "projectId": "4uSls6g8LWC7Ie72",
+      "role": "workflow:owner",
+      "updatedAt": "2026-02-27T08:03:43.160Z",
+      "workflowId": "00rhy00KuogH0Y2o"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-21T22:12:23.467Z",
+  "versionId": "45c54975-4618-4ccd-acef-fa7f88132529"
+}
