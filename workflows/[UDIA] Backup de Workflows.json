@@ -790,7 +790,7 @@
       "name": "GitHub Edit",
       "parameters": {
         "commitMessage": "=[N8N Backup] {{$node[\"OneAtATime\"].json[\"name\"]}}.json ({{$json[\"github_status\"]}})",
-        "fileContent": "={{$node[\"isDiffOrNew\"].json[\"n8n_data_stringy\"]}}",
+        "fileContent": "={{$json[\"n8n_data_stringy\"]}}",
         "filePath": "={{$node[\"Variables\"].json[\"repo\"][\"path\"]}}{{$node[\"OneAtATime\"].json[\"name\"]}}.json",
         "operation": "edit",
         "owner": "={{$node[\"Variables\"].json[\"repo\"][\"owner\"]}}",
@@ -816,7 +816,7 @@
       "name": "GitHub Create",
       "parameters": {
         "commitMessage": "=[N8N Backup] {{$node[\"OneAtATime\"].json[\"name\"]}}.json ({{$json[\"github_status\"]}})",
-        "fileContent": "={{$json[\"n8n_data_string_sanitized\"]}}",
+        "fileContent": "={{$json[\"n8n_data_stringy\"]}}",
         "filePath": "={{$node[\"Variables\"].json[\"repo\"][\"path\"]}}{{$node[\"OneAtATime\"].json[\"name\"]}}.json",
         "owner": "={{$node[\"Variables\"].json[\"repo\"][\"owner\"]}}",
         "repository": "={{$node[\"Variables\"].json[\"repo\"][\"name\"]}}",
@@ -965,6 +965,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-03-27T18:44:58.556Z",
-  "versionId": "42fc9f77-50df-4a78-aa5d-16882f97113d"
+  "updatedAt": "2026-03-27T18:51:15.210Z",
+  "versionId": "dc98c23b-2179-49b3-ac44-9894755edd38"
 }
