@@ -1,0 +1,47 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2026-03-22T18:36:02.720Z",
+  "id": "TTp5acPooCfTq1Ac",
+  "isArchived": false,
+  "meta": null,
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "id": "ff556fa3-9b29-44ca-9306-12f11538a4a6",
+      "name": "When clicking ‘Execute workflow’",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "availableInMCP": false,
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Madrid"
+  },
+  "shared": [
+    {
+      "createdAt": "2026-03-22T18:36:02.725Z",
+      "projectId": "4uSls6g8LWC7Ie72",
+      "role": "workflow:owner",
+      "updatedAt": "2026-03-22T18:36:02.725Z",
+      "workflowId": "TTp5acPooCfTq1Ac"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-22T18:36:22.282Z",
+  "versionId": "14d2fa02-6315-442c-a002-ad117914c013"
+}
