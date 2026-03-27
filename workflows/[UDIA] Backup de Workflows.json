@@ -1,944 +1,654 @@
-{
-  "active": false,
-  "activeVersion": null,
-  "connections": {
-    "Code in JavaScript": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Get a file",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Get many workflows",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Edit Fields1": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Code in JavaScript",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Every 12 hours": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Variables",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Get a file": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "If1",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Get many workflows": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Loop Over Items",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "GitHub": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Merge",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "GitHub Create": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "OneAtATime",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "GitHub Edit": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "OneAtATime",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Edit Fields1",
-            "type": "main"
-          }
-        ],
-        [
-          {
-            "index": 0,
-            "node": "Replace Me",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "If1": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Edit a file",
-            "type": "main"
-          }
-        ],
-        [
-          {
-            "index": 0,
-            "node": "Create a file",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Loop Over Items": {
-      "main": [
-        [],
-        [
-          {
-            "index": 0,
-            "node": "If",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Merge": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "isDiffOrNew",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "On clicking 'execute'": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Variables",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "OneAtATime": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Fin",
-            "type": "main"
-          }
-        ],
-        [
-          {
-            "index": 0,
-            "node": "GitHub",
-            "type": "main"
-          },
-          {
-            "index": 1,
-            "node": "Merge",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Replace Me": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Loop Over Items",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Variables": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "n8n",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Webhook": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Edit Fields",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "different": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "GitHub Edit",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "github_status": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "same",
-            "type": "main"
-          }
-        ],
-        [
-          {
-            "index": 0,
-            "node": "different",
-            "type": "main"
-          }
-        ],
-        [
-          {
-            "index": 0,
-            "node": "new",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "isDiffOrNew": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "github_status",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "n8n": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "OneAtATime",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "new": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "GitHub Create",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "same": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "OneAtATime",
-            "type": "main"
-          }
-        ]
-      ]
-    }
-  },
-  "id": "0x3pOzOTWMcpyeCd",
-  "isArchived": false,
-  "name": "[UDIA] Backup de Workflows",
-  "nodes": [
-    {
-      "id": "5ad5720f-546b-4f19-b9ea-3823230feaa3",
-      "name": "On clicking 'execute'",
-      "parameters": {},
-      "position": [
-        -1536,
-        224
-      ],
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1
-    },
-    {
-      "alwaysOutputData": true,
-      "continueOnFail": true,
-      "credentials": {
-        "githubApi": {
-          "id": "yzUBO2dIc5zfsCWS",
-          "name": "GitHub account"
-        }
-      },
-      "id": "b80702d8-6c56-4c42-b01d-e52058eb1fdb",
-      "name": "GitHub",
-      "parameters": {
-        "additionalParameters": {},
-        "asBinaryProperty": false,
-        "filePath": "={{$node[\"Variables\"].json[\"repo\"][\"path\"]}}{{$json[\"name\"]}}.json",
-        "operation": "get",
-        "owner": "={{$node[\"Variables\"].json[\"repo\"][\"owner\"]}}",
-        "repository": "={{$node[\"Variables\"].json[\"repo\"][\"name\"]}}",
-        "resource": "file"
-      },
-      "position": [
-        -704,
-        240
-      ],
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "webhookId": "f9d95720-b15f-47a8-956f-3a3860a4c828"
-    },
-    {
-      "id": "118cb957-b326-4db4-802a-d79cf4fe124c",
-      "name": "github_status",
-      "parameters": {
-        "dataType": "string",
-        "rules": {
-          "rules": [
-            {
-              "value2": "same"
-            },
-            {
-              "output": 1,
-              "value2": "different"
-            },
-            {
-              "output": 2,
-              "value2": "new"
-            }
-          ]
-        },
-        "value1": "={{$json[\"github_status\"]}}"
-      },
-      "position": [
-        160,
-        288
-      ],
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 1
-    },
-    {
-      "id": "7d67bbd7-a1ee-4fda-91d6-1e748bc33dd0",
-      "name": "same",
-      "parameters": {},
-      "position": [
-        208,
-        0
-      ],
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1
-    },
-    {
-      "id": "e9c6972e-9f1f-4712-8ea2-5d5ced115da1",
-      "name": "different",
-      "parameters": {},
-      "position": [
-        352,
-        208
-      ],
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1
-    },
-    {
-      "id": "432e170b-f7c6-4612-8af4-0173dd99db97",
-      "name": "new",
-      "parameters": {},
-      "position": [
-        512,
-        560
-      ],
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1
-    },
-    {
-      "credentials": {
-        "githubApi": {
-          "id": "yzUBO2dIc5zfsCWS",
-          "name": "GitHub account"
-        }
-      },
-      "id": "fb679040-0a38-495a-8c77-b9bad4e711f1",
-      "name": "GitHub Edit",
-      "parameters": {
-        "commitMessage": "=[N8N Backup] {{$node[\"OneAtATime\"].json[\"name\"]}}.json ({{$json[\"github_status\"]}})",
-        "fileContent": "={{$json[\"n8n_data_stringy\"]}}",
-        "filePath": "={{$node[\"Variables\"].json[\"repo\"][\"path\"]}}{{$node[\"OneAtATime\"].json[\"name\"]}}.json",
-        "operation": "edit",
-        "owner": "={{$node[\"Variables\"].json[\"repo\"][\"owner\"]}}",
-        "repository": "={{$node[\"Variables\"].json[\"repo\"][\"name\"]}}",
-        "resource": "file"
-      },
-      "position": [
-        576,
-        320
-      ],
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "webhookId": "100728b0-e7cd-4fc2-9d05-376994806d68"
-    },
-    {
-      "credentials": {
-        "githubApi": {
-          "id": "yzUBO2dIc5zfsCWS",
-          "name": "GitHub account"
-        }
-      },
-      "id": "3e755cf1-79f2-4aa7-bb8d-9b69ef1560e9",
-      "name": "GitHub Create",
-      "parameters": {
-        "commitMessage": "=[N8N Backup] {{$node[\"OneAtATime\"].json[\"name\"]}}.json ({{$json[\"github_status\"]}})",
-        "fileContent": "={{$json[\"n8n_data_stringy\"]}}",
-        "filePath": "={{$node[\"Variables\"].json[\"repo\"][\"path\"]}}{{$node[\"OneAtATime\"].json[\"name\"]}}.json",
-        "owner": "={{$node[\"Variables\"].json[\"repo\"][\"owner\"]}}",
-        "repository": "={{$node[\"Variables\"].json[\"repo\"][\"name\"]}}",
-        "resource": "file"
-      },
-      "position": [
-        688,
-        560
-      ],
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "webhookId": "eae8ee9e-e6ec-4576-973d-1fafe31ea618"
-    },
-    {
-      "id": "20ab97c7-0ef3-42b3-be50-8b4124990dda",
-      "name": "Every 12 hours",
-      "parameters": {
-        "triggerTimes": {
-          "item": [
-            {
-              "mode": "everyX",
-              "value": 12
-            }
-          ]
-        }
-      },
-      "position": [
-        -1536,
-        480
-      ],
-      "type": "n8n-nodes-base.cron",
-      "typeVersion": 1
-    },
-    {
-      "credentials": {
-        "n8nApi": {
-          "id": "xR3FX992Oh3fjh71",
-          "name": "n8n account"
-        }
-      },
-      "id": "c3557028-171a-4de7-ba06-d8accfb3f50b",
-      "name": "n8n",
-      "parameters": {
-        "filters": {},
-        "requestOptions": {}
-      },
-      "position": [
-        -1168,
-        352
-      ],
-      "type": "n8n-nodes-base.n8n",
-      "typeVersion": 1
-    },
-    {
-      "id": "3d7c88f5-5471-466d-863c-01e300ad5df6",
-      "name": "isDiffOrNew",
-      "parameters": {
-        "jsCode": "function deepClone(obj) {\n  return JSON.parse(JSON.stringify(obj));\n}\n\nfunction sortObjectKeys(obj) {\n  if (Array.isArray(obj)) {\n    return obj.map(sortObjectKeys);\n  }\n\n  if (obj && typeof obj === 'object') {\n    const sorted = {};\n    Object.keys(obj).sort().forEach((key) => {\n      sorted[key] = sortObjectKeys(obj[key]);\n    });\n    return sorted;\n  }\n\n  return obj;\n}\n\nfunction removePaths(obj, paths) {\n  for (const path of paths) {\n    const parts = path.split('.');\n    let current = obj;\n\n    for (let i = 0; i < parts.length - 1; i++) {\n      if (!current || typeof current !== 'object') {\n        current = null;\n        break;\n      }\n      current = current[parts[i]];\n    }\n\n    if (current && typeof current === 'object') {\n      delete current[parts[parts.length - 1]];\n    }\n  }\n}\n\nfunction normalizeWorkflow(obj) {\n  const copy = deepClone(obj);\n\n  // Campos volátiles raíz\n  removePaths(copy, [\n    'updatedAt',\n    'createdAt',\n    'versionId',\n    'activeVersionId',\n    'triggerCount',\n    'shared',\n    'meta',\n    'staticData',\n  ]);\n\n  // Campos volátiles de activeVersion\n  if (copy.activeVersion && typeof copy.activeVersion === 'object') {\n    removePaths(copy, [\n      'activeVersion.updatedAt',\n      'activeVersion.createdAt',\n      'activeVersion.versionId',\n      'activeVersion.workflowId',\n      'activeVersion.name',\n      'activeVersion.description',\n      'activeVersion.authors',\n      'activeVersion.autosaved',\n    ]);\n  }\n\n  return sortObjectKeys(copy);\n}\n\nfunction sanitizeForGitHub(obj) {\n  let text = JSON.stringify(obj, null, 2);\n\n  // Apify\n  text = text.replace(/apify_api_[A-Za-z0-9]+/gi, 'APIFY_TOKEN_MASKED');\n  text = text.replace(/(\"APIFY_TOKEN_MASKED\"\\s*:\\s*)\"[^\"]*\"/gi, '$1\"APIFY_TOKEN_MASKED\"');\n\n  // Supabase\n  text = text.replace(/sb_secret_[A-Za-z0-9_\\-]+/g, 'SUPABASE_SECRET_MASKED');\n  text = text.replace(/(\"apikey\"\\s*:\\s*)\"[^\"]*\"/gi, '$1\"SUPABASE_SECRET_MASKED\"');\n  text = text.replace(/(\"Authorization\"\\s*:\\s*)\"Bearer [^\"]*\"/gi, '$1\"Bearer SUPABASE_SECRET_MASKED\"');\n\n  // Otros sensibles típicos\n  text = text.replace(\n    /(\"(accessToken|token|secret|clientSecret|service_role|serviceRoleKey|anonKey|apiKey|x-api-key|x_api_key)\"\\s*:\\s*)\"[^\"]*\"/gi,\n    '$1\"__REDACTED__\"'\n  );\n\n  // JWTs\n  text = text.replace(/\\beyJ[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\b/g, 'JWT_MASKED');\n\n  return text;\n}\n\nfunction parseGithubContent(content) {\n  if (!content || typeof content !== 'string') return null;\n\n  const decoded = Buffer.from(content, 'base64').toString('utf8').trim();\n  if (!decoded) return null;\n\n  try {\n    return JSON.parse(decoded);\n  } catch (e) {\n    return null;\n  }\n}\n\nconst items = $input.all();\nconst githubItem = items[0];\nconst workflowItem = items[1];\n\nif (!githubItem || !workflowItem) {\n  throw new Error('isDiffOrNew necesita 2 entradas: GitHub + workflow n8n');\n}\n\nconst githubJson = githubItem.json ?? {};\nconst n8nWorkflow = workflowItem.json ?? {};\n\n// Normalizamos ANTES de comparar y ANTES de guardar\nconst normalizedActual = normalizeWorkflow(n8nWorkflow);\nconst sanitizedActual = sanitizeForGitHub(normalizedActual);\n\n// Detectar si el archivo existe en GitHub\nconst fileExistsInGitHub =\n  Object.prototype.hasOwnProperty.call(githubJson, 'sha') ||\n  Object.prototype.hasOwnProperty.call(githubJson, 'content') ||\n  Object.prototype.hasOwnProperty.call(githubJson, 'path');\n\nif (fileExistsInGitHub) {\n  const origWorkflow = parseGithubContent(githubJson.content);\n\n  // Si existe pero está vacío o corrupto, lo tratamos como \"different\"\n  if (!origWorkflow) {\n    githubJson.github_status = 'different';\n    githubJson.content_decoded = null;\n    githubJson.n8n_data_stringy = sanitizedActual;\n    return items;\n  }\n\n  const normalizedOriginal = normalizeWorkflow(origWorkflow);\n  const sanitizedOriginal = sanitizeForGitHub(normalizedOriginal);\n\n  if (sanitizedOriginal === sanitizedActual) {\n    githubJson.github_status = 'same';\n    githubJson.content_decoded = normalizedOriginal;\n  } else {\n    githubJson.github_status = 'different';\n    githubJson.content_decoded = normalizedOriginal;\n    githubJson.n8n_data_stringy = sanitizedActual;\n  }\n} else {\n  githubJson.github_status = 'new';\n  githubJson.content_decoded = null;\n  githubJson.n8n_data_stringy = sanitizedActual;\n}\n\nreturn items;"
-      },
-      "position": [
-        -208,
-        368
-      ],
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 1
-    },
-    {
-      "id": "b96e9f02-bbe0-43b8-8112-7fd0ec2375e1",
-      "name": "Merge",
-      "parameters": {},
-      "position": [
-        -464,
-        352
-      ],
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 2
-    },
-    {
-      "id": "c465c581-ecde-4767-a762-0b2080449db3",
-      "name": "Variables",
-      "parameters": {
-        "options": {},
-        "values": {
-          "string": [
-            {
-              "name": "repo.owner",
-              "value": "adrischez00"
-            },
-            {
-              "name": "repo.name",
-              "value": "UDIA-N8N-Workflows"
-            },
-            {
-              "name": "repo.path",
-              "value": "workflows/"
-            }
-          ]
-        }
-      },
-      "position": [
-        -1360,
-        352
-      ],
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 1
-    },
-    {
-      "id": "82e9c294-7b1b-43be-9283-2585945220bf",
-      "name": "Fin",
-      "parameters": {},
-      "position": [
-        -816,
-        128
-      ],
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1
-    },
-    {
-      "id": "29264210-aead-46d5-86c9-94094e0d1b2e",
-      "name": "OneAtATime",
-      "parameters": {
-        "options": {}
-      },
-      "position": [
-        -960,
-        352
-      ],
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3
-    },
-    {
-      "id": "f754bcbf-b7ee-4764-a452-7a2d78540f39",
-      "name": "Webhook",
-      "parameters": {
-        "httpMethod": "POST",
-        "options": {},
-        "path": "94d55b2c-adb4-47ad-b8bd-e74e87a3aa4a"
-      },
-      "position": [
-        -1616,
-        1184
-      ],
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "webhookId": "94d55b2c-adb4-47ad-b8bd-e74e87a3aa4a"
-    },
-    {
-      "id": "8f1fb371-e442-4889-bad3-f0769eba4c17",
-      "name": "Edit Fields",
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "0566e6a1-804c-4679-a934-3ede3141425f",
-              "name": "body.nombreWorkflow",
-              "type": "string",
-              "value": "={{ $json.body.nombreWorkflow }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "position": [
-        -1408,
-        1184
-      ],
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4
-    },
-    {
-      "id": "557fe25a-cf6f-4c65-a12f-64aecad24b29",
-      "name": "Loop Over Items",
-      "parameters": {
-        "options": {}
-      },
-      "position": [
-        -992,
-        1184
-      ],
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3
-    },
-    {
-      "id": "ef254b87-7160-4f75-a26f-350c791f8957",
-      "name": "Replace Me",
-      "parameters": {},
-      "placeholder": true,
-      "position": [
-        -576,
-        1280
-      ],
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1
-    },
-    {
-      "id": "43604d4f-d555-48df-a19b-dc65aa0eb6f3",
-      "name": "If",
-      "parameters": {
-        "conditions": {
-          "combinator": "and",
-          "conditions": [
-            {
-              "id": "d13a5d3c-bf7d-452f-a40d-014af06d5963",
-              "leftValue": "={{ $('Edit Fields').item.json.body.nombreWorkflow }}",
-              "operator": {
-                "operation": "equals",
-                "type": "string"
-              },
-              "rightValue": "={{ $json.name }}"
-            }
-          ],
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          }
-        },
-        "options": {}
-      },
-      "position": [
-        -784,
-        1248
-      ],
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3
-    },
-    {
-      "credentials": {
-        "n8nApi": {
-          "id": "xR3FX992Oh3fjh71",
-          "name": "n8n account"
-        }
-      },
-      "id": "ad4fe329-eee0-4607-b1b4-17143544544b",
-      "name": "Get many workflows",
-      "parameters": {
-        "filters": {},
-        "requestOptions": {}
-      },
-      "position": [
-        -1200,
-        1184
-      ],
-      "type": "n8n-nodes-base.n8n",
-      "typeVersion": 1
-    },
-    {
-      "id": "2d400891-ef18-4bf3-8330-5df38d262864",
-      "name": "Edit Fields1",
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "39a3b6aa-c3bc-4a23-b832-3e81a4744ed1",
-              "name": "name",
-              "type": "string",
-              "value": "={{ $json.name }}"
-            },
-            {
-              "id": "9d80dc5d-39ae-4401-bb39-56905f070ba3",
-              "name": "id",
-              "type": "string",
-              "value": "={{ $json.id }}"
-            },
-            {
-              "id": "f2d73dc1-140c-4d95-af9a-5147a36a4251",
-              "name": "filePath",
-              "type": "string",
-              "value": "={{\"workflows/\" + $json.name + \".json\"}}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "position": [
-        -576,
-        1104
-      ],
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4
-    },
-    {
-      "credentials": {
-        "githubApi": {
-          "id": "yzUBO2dIc5zfsCWS",
-          "name": "GitHub account"
-        }
-      },
-      "id": "24709168-f52f-4f15-8f85-6109b815f7b7",
-      "name": "Get a file",
-      "parameters": {
-        "additionalParameters": {},
-        "asBinaryProperty": false,
-        "filePath": "={{ $json.filePath }}",
-        "operation": "get",
-        "owner": {
-          "__rl": true,
-          "mode": "name",
-          "value": "adrischez00"
-        },
-        "repository": {
-          "__rl": true,
-          "cachedResultName": "UDIA-N8N-Workflows",
-          "cachedResultUrl": "https://github.com/adrischez00/UDIA-N8N-Workflows",
-          "mode": "list",
-          "value": "UDIA-N8N-Workflows"
-        },
-        "resource": "file"
-      },
-      "position": [
-        -160,
-        1104
-      ],
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1.1,
-      "webhookId": "de0aaba4-3742-4106-bb5a-a7df0f87c746"
-    },
-    {
-      "id": "8855b347-47ee-4dfa-a4d6-9e364c2f4a7b",
-      "name": "If1",
-      "parameters": {
-        "conditions": {
-          "combinator": "and",
-          "conditions": [
-            {
-              "id": "39520bb3-b35c-47b9-8f0c-3affca49fbc2",
-              "leftValue": "={{ $json.sha }}",
-              "operator": {
-                "operation": "notEmpty",
-                "singleValue": true,
-                "type": "string"
-              },
-              "rightValue": "Not Found"
-            }
-          ],
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          }
-        },
-        "options": {}
-      },
-      "position": [
-        48,
-        1104
-      ],
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3
-    },
-    {
-      "credentials": {
-        "githubApi": {
-          "id": "yzUBO2dIc5zfsCWS",
-          "name": "GitHub account"
-        }
-      },
-      "id": "27838cc9-748b-465f-a733-3a379d7f4dd4",
-      "name": "Edit a file",
-      "parameters": {
-        "commitMessage": "=[N8N Backup] {{$json.name}}.json (manual update)",
-        "fileContent": "={{$json[\"n8n_data_stringy\"]}}",
-        "filePath": "={{$json.filePath}}",
-        "operation": "edit",
-        "owner": {
-          "__rl": true,
-          "mode": "name",
-          "value": "adrischez00"
-        },
-        "repository": {
-          "__rl": true,
-          "cachedResultName": "UDIA-N8N-Workflows",
-          "cachedResultUrl": "https://github.com/adrischez00/UDIA-N8N-Workflows",
-          "mode": "list",
-          "value": "UDIA-N8N-Workflows"
-        },
-        "resource": "file"
-      },
-      "position": [
-        256,
-        1008
-      ],
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1.1,
-      "webhookId": "60b22a40-f7cd-4bd5-8719-b6b2da11449e"
-    },
-    {
-      "credentials": {
-        "githubApi": {
-          "id": "yzUBO2dIc5zfsCWS",
-          "name": "GitHub account"
-        }
-      },
-      "id": "9f63ca9e-e208-4d07-8674-dab8d62459b5",
-      "name": "Create a file",
-      "parameters": {
-        "commitMessage": "=[N8N Backup] {{$json.name}} (manual create)",
-        "fileContent": "={{$json[\"n8n_data_stringy\"]}}",
-        "filePath": "={{$json.filePath}}",
-        "owner": {
-          "__rl": true,
-          "mode": "name",
-          "value": "adrischez00"
-        },
-        "repository": {
-          "__rl": true,
-          "cachedResultName": "UDIA-N8N-Workflows",
-          "cachedResultUrl": "https://github.com/adrischez00/UDIA-N8N-Workflows",
-          "mode": "list",
-          "value": "UDIA-N8N-Workflows"
-        },
-        "resource": "file"
-      },
-      "position": [
-        256,
-        1200
-      ],
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1.1,
-      "webhookId": "9eac61f7-c3c6-4c64-a872-1777349b16cf"
-    },
-    {
-      "id": "4d70ed25-6b13-4afb-a341-b2ef23017b3f",
-      "name": "Code in JavaScript",
-      "parameters": {
-        "jsCode": "function deepClone(obj) {\n  return JSON.parse(JSON.stringify(obj));\n}\n\nfunction removePaths(obj, paths) {\n  for (const path of paths) {\n    const parts = path.split('.');\n    let current = obj;\n\n    for (let i = 0; i < parts.length - 1; i++) {\n      if (!current || typeof current !== 'object') {\n        current = null;\n        break;\n      }\n      current = current[parts[i]];\n    }\n\n    if (current && typeof current === 'object') {\n      delete current[parts[parts.length - 1]];\n    }\n  }\n}\n\nfunction sortObjectKeys(obj) {\n  if (Array.isArray(obj)) return obj.map(sortObjectKeys);\n\n  if (obj && typeof obj === 'object') {\n    const sorted = {};\n    Object.keys(obj).sort().forEach((key) => {\n      sorted[key] = sortObjectKeys(obj[key]);\n    });\n    return sorted;\n  }\n\n  return obj;\n}\n\nfunction normalizeWorkflow(obj) {\n  const copy = deepClone(obj);\n\n  removePaths(copy, [\n    'updatedAt',\n    'createdAt',\n    'versionId',\n    'activeVersionId',\n    'triggerCount',\n    'shared',\n    'meta',\n    'staticData',\n  ]);\n\n  if (copy.activeVersion && typeof copy.activeVersion === 'object') {\n    removePaths(copy, [\n      'activeVersion.updatedAt',\n      'activeVersion.createdAt',\n      'activeVersion.versionId',\n      'activeVersion.workflowId',\n      'activeVersion.name',\n      'activeVersion.description',\n      'activeVersion.authors',\n      'activeVersion.autosaved',\n    ]);\n  }\n\n  return sortObjectKeys(copy);\n}\n\nfunction sanitizeForGitHub(obj) {\n  let text = JSON.stringify(obj, null, 2);\n\n  text = text.replace(/apify_api_[A-Za-z0-9]+/gi, 'APIFY_TOKEN_MASKED');\n  text = text.replace(/(\"APIFY_TOKEN_MASKED\"\\s*:\\s*)\"[^\"]*\"/gi, '$1\"APIFY_TOKEN_MASKED\"');\n\n  text = text.replace(/sb_secret_[A-Za-z0-9_\\-]+/g, 'SUPABASE_SECRET_MASKED');\n  text = text.replace(/(\"apikey\"\\s*:\\s*)\"[^\"]*\"/gi, '$1\"SUPABASE_SECRET_MASKED\"');\n  text = text.replace(/(\"Authorization\"\\s*:\\s*)\"Bearer [^\"]*\"/gi, '$1\"Bearer SUPABASE_SECRET_MASKED\"');\n\n  text = text.replace(\n    /(\"(accessToken|token|secret|clientSecret|service_role|serviceRoleKey|anonKey|apiKey|x-api-key|x_api_key)\"\\s*:\\s*)\"[^\"]*\"/gi,\n    '$1\"__REDACTED__\"'\n  );\n\n  text = text.replace(/\\beyJ[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\b/g, 'JWT_MASKED');\n\n  return text;\n}\n\n// ESTE ES EL WORKFLOW ORIGINAL ENTERO\nconst workflow = $json;\n\n// Normalizar + sanitizar\nconst normalized = normalizeWorkflow(workflow);\nconst n8n_data_stringy = sanitizeForGitHub(normalized);\n\n// Ruta del archivo\nconst filePath = \"workflows/\" + workflow.name + \".json\";\n\nreturn [\n  {\n    json: {\n      name: workflow.name,\n      id: workflow.id,\n      filePath,\n      workflow,              // <- guardamos el original entero\n      n8n_data_stringy       // <- y también el string final listo para GitHub\n    }\n  }\n];"
-      },
-      "position": [
-        -368,
-        1104
-      ],
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2
-    }
-  ],
-  "pinData": {
-    "Webhook": [
-      {
-        "json": {
-          "body": {
-            "nombreWorkflow": "[UDIA] Backup de Workflows",
-            "source": "web-form",
-            "submittedAt": "2026-03-27T21:15:15.438Z",
-            "workflowName": "[UDIA] Backup de Workflows"
-          },
-          "executionMode": "test",
-          "headers": {
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "es-ES,es;q=0.9,en;q=0.8",
-            "cache-control": "max-age=0",
-            "content-length": "146",
-            "content-type": "application/x-www-form-urlencoded",
-            "host": "n8n-n8n.c2cjix.easypanel.host",
-            "origin": "http://127.0.0.1:5500",
-            "priority": "u=0, i",
-            "referer": "http://127.0.0.1:5500/",
-            "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "sec-fetch-dest": "iframe",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "cross-site",
-            "sec-fetch-storage-access": "active",
-            "upgrade-insecure-requests": "1",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
-            "x-forwarded-for": "95.210.65.64",
-            "x-forwarded-host": "n8n-n8n.c2cjix.easypanel.host",
-            "x-forwarded-port": "443",
-            "x-forwarded-proto": "https",
-            "x-forwarded-server": "be88d6f91c28",
-            "x-real-ip": "95.210.65.64"
-          },
-          "params": {},
-          "query": {},
-          "webhookUrl": "https://n8n-n8n.c2cjix.easypanel.host/webhook-test/94d55b2c-adb4-47ad-b8bd-e74e87a3aa4a"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
-  "settings": {
-    "binaryMode": "separate",
-    "executionOrder": "v1"
-  },
-  "tags": []
-}
+ewogICJhY3RpdmUiOiBmYWxzZSwKICAiYWN0aXZlVmVyc2lvbiI6IG51bGws
+CiAgImNvbm5lY3Rpb25zIjogewogICAgIkNvZGUgaW4gSmF2YVNjcmlwdCI6
+IHsKICAgICAgIm1haW4iOiBbCiAgICAgICAgWwogICAgICAgICAgewogICAg
+ICAgICAgICAiaW5kZXgiOiAwLAogICAgICAgICAgICAibm9kZSI6ICJHZXQg
+YSBmaWxlIiwKICAgICAgICAgICAgInR5cGUiOiAibWFpbiIKICAgICAgICAg
+IH0KICAgICAgICBdCiAgICAgIF0KICAgIH0sCiAgICAiRWRpdCBGaWVsZHMi
+OiB7CiAgICAgICJtYWluIjogWwogICAgICAgIFsKICAgICAgICAgIHsKICAg
+ICAgICAgICAgImluZGV4IjogMCwKICAgICAgICAgICAgIm5vZGUiOiAiR2V0
+IG1hbnkgd29ya2Zsb3dzIiwKICAgICAgICAgICAgInR5cGUiOiAibWFpbiIK
+ICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIF0KICAgIH0sCiAgICAiRWRp
+dCBGaWVsZHMxIjogewogICAgICAibWFpbiI6IFsKICAgICAgICBbCiAgICAg
+ICAgICB7CiAgICAgICAgICAgICJpbmRleCI6IDAsCiAgICAgICAgICAgICJu
+b2RlIjogIkNvZGUgaW4gSmF2YVNjcmlwdCIsCiAgICAgICAgICAgICJ0eXBl
+IjogIm1haW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdCiAgICB9
+LAogICAgIkV2ZXJ5IDEyIGhvdXJzIjogewogICAgICAibWFpbiI6IFsKICAg
+ICAgICBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJpbmRleCI6IDAsCiAg
+ICAgICAgICAgICJub2RlIjogIlZhcmlhYmxlcyIsCiAgICAgICAgICAgICJ0
+eXBlIjogIm1haW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdCiAg
+ICB9LAogICAgIkdldCBhIGZpbGUiOiB7CiAgICAgICJtYWluIjogWwogICAg
+ICAgIFsKICAgICAgICAgIHsKICAgICAgICAgICAgImluZGV4IjogMCwKICAg
+ICAgICAgICAgIm5vZGUiOiAiSWYxIiwKICAgICAgICAgICAgInR5cGUiOiAi
+bWFpbiIKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIF0KICAgIH0sCiAg
+ICAiR2V0IG1hbnkgd29ya2Zsb3dzIjogewogICAgICAibWFpbiI6IFsKICAg
+ICAgICBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJpbmRleCI6IDAsCiAg
+ICAgICAgICAgICJub2RlIjogIkxvb3AgT3ZlciBJdGVtcyIsCiAgICAgICAg
+ICAgICJ0eXBlIjogIm1haW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAg
+ICBdCiAgICB9LAogICAgIkdpdEh1YiI6IHsKICAgICAgIm1haW4iOiBbCiAg
+ICAgICAgWwogICAgICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAwLAog
+ICAgICAgICAgICAibm9kZSI6ICJNZXJnZSIsCiAgICAgICAgICAgICJ0eXBl
+IjogIm1haW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdCiAgICB9
+LAogICAgIkdpdEh1YiBDcmVhdGUiOiB7CiAgICAgICJtYWluIjogWwogICAg
+ICAgIFsKICAgICAgICAgIHsKICAgICAgICAgICAgImluZGV4IjogMCwKICAg
+ICAgICAgICAgIm5vZGUiOiAiT25lQXRBVGltZSIsCiAgICAgICAgICAgICJ0
+eXBlIjogIm1haW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdCiAg
+ICB9LAogICAgIkdpdEh1YiBFZGl0IjogewogICAgICAibWFpbiI6IFsKICAg
+ICAgICBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJpbmRleCI6IDAsCiAg
+ICAgICAgICAgICJub2RlIjogIk9uZUF0QVRpbWUiLAogICAgICAgICAgICAi
+dHlwZSI6ICJtYWluIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAgXQog
+ICAgfSwKICAgICJJZiI6IHsKICAgICAgIm1haW4iOiBbCiAgICAgICAgWwog
+ICAgICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAwLAogICAgICAgICAg
+ICAibm9kZSI6ICJFZGl0IEZpZWxkczEiLAogICAgICAgICAgICAidHlwZSI6
+ICJtYWluIgogICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgWwogICAg
+ICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAwLAogICAgICAgICAgICAi
+bm9kZSI6ICJSZXBsYWNlIE1lIiwKICAgICAgICAgICAgInR5cGUiOiAibWFp
+biIKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIF0KICAgIH0sCiAgICAi
+SWYxIjogewogICAgICAibWFpbiI6IFsKICAgICAgICBbCiAgICAgICAgICB7
+CiAgICAgICAgICAgICJpbmRleCI6IDAsCiAgICAgICAgICAgICJub2RlIjog
+IkVkaXQgYSBmaWxlIiwKICAgICAgICAgICAgInR5cGUiOiAibWFpbiIKICAg
+ICAgICAgIH0KICAgICAgICBdLAogICAgICAgIFsKICAgICAgICAgIHsKICAg
+ICAgICAgICAgImluZGV4IjogMCwKICAgICAgICAgICAgIm5vZGUiOiAiQ3Jl
+YXRlIGEgZmlsZSIsCiAgICAgICAgICAgICJ0eXBlIjogIm1haW4iCiAgICAg
+ICAgICB9CiAgICAgICAgXQogICAgICBdCiAgICB9LAogICAgIkxvb3AgT3Zl
+ciBJdGVtcyI6IHsKICAgICAgIm1haW4iOiBbCiAgICAgICAgW10sCiAgICAg
+ICAgWwogICAgICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAwLAogICAg
+ICAgICAgICAibm9kZSI6ICJJZiIsCiAgICAgICAgICAgICJ0eXBlIjogIm1h
+aW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdCiAgICB9LAogICAg
+Ik1lcmdlIjogewogICAgICAibWFpbiI6IFsKICAgICAgICBbCiAgICAgICAg
+ICB7CiAgICAgICAgICAgICJpbmRleCI6IDAsCiAgICAgICAgICAgICJub2Rl
+IjogImlzRGlmZk9yTmV3IiwKICAgICAgICAgICAgInR5cGUiOiAibWFpbiIK
+ICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIF0KICAgIH0sCiAgICAiT24g
+Y2xpY2tpbmcgJ2V4ZWN1dGUnIjogewogICAgICAibWFpbiI6IFsKICAgICAg
+ICBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJpbmRleCI6IDAsCiAgICAg
+ICAgICAgICJub2RlIjogIlZhcmlhYmxlcyIsCiAgICAgICAgICAgICJ0eXBl
+IjogIm1haW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdCiAgICB9
+LAogICAgIk9uZUF0QVRpbWUiOiB7CiAgICAgICJtYWluIjogWwogICAgICAg
+IFsKICAgICAgICAgIHsKICAgICAgICAgICAgImluZGV4IjogMCwKICAgICAg
+ICAgICAgIm5vZGUiOiAiRmluIiwKICAgICAgICAgICAgInR5cGUiOiAibWFp
+biIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgIFsKICAgICAgICAg
+IHsKICAgICAgICAgICAgImluZGV4IjogMCwKICAgICAgICAgICAgIm5vZGUi
+OiAiR2l0SHViIiwKICAgICAgICAgICAgInR5cGUiOiAibWFpbiIKICAgICAg
+ICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICJpbmRleCI6IDEsCiAg
+ICAgICAgICAgICJub2RlIjogIk1lcmdlIiwKICAgICAgICAgICAgInR5cGUi
+OiAibWFpbiIKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIF0KICAgIH0s
+CiAgICAiUmVwbGFjZSBNZSI6IHsKICAgICAgIm1haW4iOiBbCiAgICAgICAg
+WwogICAgICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAwLAogICAgICAg
+ICAgICAibm9kZSI6ICJMb29wIE92ZXIgSXRlbXMiLAogICAgICAgICAgICAi
+dHlwZSI6ICJtYWluIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAgXQog
+ICAgfSwKICAgICJWYXJpYWJsZXMiOiB7CiAgICAgICJtYWluIjogWwogICAg
+ICAgIFsKICAgICAgICAgIHsKICAgICAgICAgICAgImluZGV4IjogMCwKICAg
+ICAgICAgICAgIm5vZGUiOiAibjhuIiwKICAgICAgICAgICAgInR5cGUiOiAi
+bWFpbiIKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIF0KICAgIH0sCiAg
+ICAiV2ViaG9vayI6IHsKICAgICAgIm1haW4iOiBbCiAgICAgICAgWwogICAg
+ICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAwLAogICAgICAgICAgICAi
+bm9kZSI6ICJFZGl0IEZpZWxkcyIsCiAgICAgICAgICAgICJ0eXBlIjogIm1h
+aW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdCiAgICB9LAogICAg
+ImRpZmZlcmVudCI6IHsKICAgICAgIm1haW4iOiBbCiAgICAgICAgWwogICAg
+ICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAwLAogICAgICAgICAgICAi
+bm9kZSI6ICJHaXRIdWIgRWRpdCIsCiAgICAgICAgICAgICJ0eXBlIjogIm1h
+aW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdCiAgICB9LAogICAg
+ImdpdGh1Yl9zdGF0dXMiOiB7CiAgICAgICJtYWluIjogWwogICAgICAgIFsK
+ICAgICAgICAgIHsKICAgICAgICAgICAgImluZGV4IjogMCwKICAgICAgICAg
+ICAgIm5vZGUiOiAic2FtZSIsCiAgICAgICAgICAgICJ0eXBlIjogIm1haW4i
+CiAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICBbCiAgICAgICAgICB7
+CiAgICAgICAgICAgICJpbmRleCI6IDAsCiAgICAgICAgICAgICJub2RlIjog
+ImRpZmZlcmVudCIsCiAgICAgICAgICAgICJ0eXBlIjogIm1haW4iCiAgICAg
+ICAgICB9CiAgICAgICAgXSwKICAgICAgICBbCiAgICAgICAgICB7CiAgICAg
+ICAgICAgICJpbmRleCI6IDAsCiAgICAgICAgICAgICJub2RlIjogIm5ldyIs
+CiAgICAgICAgICAgICJ0eXBlIjogIm1haW4iCiAgICAgICAgICB9CiAgICAg
+ICAgXQogICAgICBdCiAgICB9LAogICAgImlzRGlmZk9yTmV3IjogewogICAg
+ICAibWFpbiI6IFsKICAgICAgICBbCiAgICAgICAgICB7CiAgICAgICAgICAg
+ICJpbmRleCI6IDAsCiAgICAgICAgICAgICJub2RlIjogImdpdGh1Yl9zdGF0
+dXMiLAogICAgICAgICAgICAidHlwZSI6ICJtYWluIgogICAgICAgICAgfQog
+ICAgICAgIF0KICAgICAgXQogICAgfSwKICAgICJuOG4iOiB7CiAgICAgICJt
+YWluIjogWwogICAgICAgIFsKICAgICAgICAgIHsKICAgICAgICAgICAgImlu
+ZGV4IjogMCwKICAgICAgICAgICAgIm5vZGUiOiAiT25lQXRBVGltZSIsCiAg
+ICAgICAgICAgICJ0eXBlIjogIm1haW4iCiAgICAgICAgICB9CiAgICAgICAg
+XQogICAgICBdCiAgICB9LAogICAgIm5ldyI6IHsKICAgICAgIm1haW4iOiBb
+CiAgICAgICAgWwogICAgICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAw
+LAogICAgICAgICAgICAibm9kZSI6ICJHaXRIdWIgQ3JlYXRlIiwKICAgICAg
+ICAgICAgInR5cGUiOiAibWFpbiIKICAgICAgICAgIH0KICAgICAgICBdCiAg
+ICAgIF0KICAgIH0sCiAgICAic2FtZSI6IHsKICAgICAgIm1haW4iOiBbCiAg
+ICAgICAgWwogICAgICAgICAgewogICAgICAgICAgICAiaW5kZXgiOiAwLAog
+ICAgICAgICAgICAibm9kZSI6ICJPbmVBdEFUaW1lIiwKICAgICAgICAgICAg
+InR5cGUiOiAibWFpbiIKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIF0K
+ICAgIH0KICB9LAogICJpZCI6ICIweDNwT3pPVFdNY3B5ZUNkIiwKICAiaXNB
+cmNoaXZlZCI6IGZhbHNlLAogICJuYW1lIjogIltVRElBXSBCYWNrdXAgZGUg
+V29ya2Zsb3dzIiwKICAibm9kZXMiOiBbCiAgICB7CiAgICAgICJpZCI6ICI1
+YWQ1NzIwZi01NDZiLTRmMTktYjllYS0zODIzMjMwZmVhYTMiLAogICAgICAi
+bmFtZSI6ICJPbiBjbGlja2luZyAnZXhlY3V0ZSciLAogICAgICAicGFyYW1l
+dGVycyI6IHt9LAogICAgICAicG9zaXRpb24iOiBbCiAgICAgICAgLTE1MzYs
+CiAgICAgICAgMjI0CiAgICAgIF0sCiAgICAgICJ0eXBlIjogIm44bi1ub2Rl
+cy1iYXNlLm1hbnVhbFRyaWdnZXIiLAogICAgICAidHlwZVZlcnNpb24iOiAx
+CiAgICB9LAogICAgewogICAgICAiYWx3YXlzT3V0cHV0RGF0YSI6IHRydWUs
+CiAgICAgICJjb250aW51ZU9uRmFpbCI6IHRydWUsCiAgICAgICJjcmVkZW50
+aWFscyI6IHsKICAgICAgICAiZ2l0aHViQXBpIjogewogICAgICAgICAgImlk
+IjogInl6VUJPMmRJYzV6ZnNDV1MiLAogICAgICAgICAgIm5hbWUiOiAiR2l0
+SHViIGFjY291bnQiCiAgICAgICAgfQogICAgICB9LAogICAgICAiaWQiOiAi
+YjgwNzAyZDgtNmM1Ni00YzQyLWIwMWQtZTUyMDU4ZWIxZmRiIiwKICAgICAg
+Im5hbWUiOiAiR2l0SHViIiwKICAgICAgInBhcmFtZXRlcnMiOiB7CiAgICAg
+ICAgImFkZGl0aW9uYWxQYXJhbWV0ZXJzIjoge30sCiAgICAgICAgImFzQmlu
+YXJ5UHJvcGVydHkiOiBmYWxzZSwKICAgICAgICAiZmlsZVBhdGgiOiAiPXt7
+JG5vZGVbXCJWYXJpYWJsZXNcIl0uanNvbltcInJlcG9cIl1bXCJwYXRoXCJd
+fX17eyRqc29uW1wibmFtZVwiXX19Lmpzb24iLAogICAgICAgICJvcGVyYXRp
+b24iOiAiZ2V0IiwKICAgICAgICAib3duZXIiOiAiPXt7JG5vZGVbXCJWYXJp
+YWJsZXNcIl0uanNvbltcInJlcG9cIl1bXCJvd25lclwiXX19IiwKICAgICAg
+ICAicmVwb3NpdG9yeSI6ICI9e3skbm9kZVtcIlZhcmlhYmxlc1wiXS5qc29u
+W1wicmVwb1wiXVtcIm5hbWVcIl19fSIsCiAgICAgICAgInJlc291cmNlIjog
+ImZpbGUiCiAgICAgIH0sCiAgICAgICJwb3NpdGlvbiI6IFsKICAgICAgICAt
+NzA0LAogICAgICAgIDI0MAogICAgICBdLAogICAgICAidHlwZSI6ICJuOG4t
+bm9kZXMtYmFzZS5naXRodWIiLAogICAgICAidHlwZVZlcnNpb24iOiAxLAog
+ICAgICAid2ViaG9va0lkIjogImY5ZDk1NzIwLWIxNWYtNDdhOC05NTZmLTNh
+Mzg2MGE0YzgyOCIKICAgIH0sCiAgICB7CiAgICAgICJpZCI6ICIxMThjYjk1
+Ny1iMzI2LTRkYjQtODAyYS1kNzljZjRmZTEyNGMiLAogICAgICAibmFtZSI6
+ICJnaXRodWJfc3RhdHVzIiwKICAgICAgInBhcmFtZXRlcnMiOiB7CiAgICAg
+ICAgImRhdGFUeXBlIjogInN0cmluZyIsCiAgICAgICAgInJ1bGVzIjogewog
+ICAgICAgICAgInJ1bGVzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAg
+ICAgInZhbHVlMiI6ICJzYW1lIgogICAgICAgICAgICB9LAogICAgICAgICAg
+ICB7CiAgICAgICAgICAgICAgIm91dHB1dCI6IDEsCiAgICAgICAgICAgICAg
+InZhbHVlMiI6ICJkaWZmZXJlbnQiCiAgICAgICAgICAgIH0sCiAgICAgICAg
+ICAgIHsKICAgICAgICAgICAgICAib3V0cHV0IjogMiwKICAgICAgICAgICAg
+ICAidmFsdWUyIjogIm5ldyIKICAgICAgICAgICAgfQogICAgICAgICAgXQog
+ICAgICAgIH0sCiAgICAgICAgInZhbHVlMSI6ICI9e3skanNvbltcImdpdGh1
+Yl9zdGF0dXNcIl19fSIKICAgICAgfSwKICAgICAgInBvc2l0aW9uIjogWwog
+ICAgICAgIDE2MCwKICAgICAgICAyODgKICAgICAgXSwKICAgICAgInR5cGUi
+OiAibjhuLW5vZGVzLWJhc2Uuc3dpdGNoIiwKICAgICAgInR5cGVWZXJzaW9u
+IjogMQogICAgfSwKICAgIHsKICAgICAgImlkIjogIjdkNjdiYmQ3LWExZWUt
+NGZkYS05MWQ2LTFlNzQ4YmMzM2RkMCIsCiAgICAgICJuYW1lIjogInNhbWUi
+LAogICAgICAicGFyYW1ldGVycyI6IHt9LAogICAgICAicG9zaXRpb24iOiBb
+CiAgICAgICAgMjA4LAogICAgICAgIDAKICAgICAgXSwKICAgICAgInR5cGUi
+OiAibjhuLW5vZGVzLWJhc2Uubm9PcCIsCiAgICAgICJ0eXBlVmVyc2lvbiI6
+IDEKICAgIH0sCiAgICB7CiAgICAgICJpZCI6ICJlOWM2OTcyZS05ZjFmLTQ3
+MTItOGVhMi01ZDVjZWQxMTVkYTEiLAogICAgICAibmFtZSI6ICJkaWZmZXJl
+bnQiLAogICAgICAicGFyYW1ldGVycyI6IHt9LAogICAgICAicG9zaXRpb24i
+OiBbCiAgICAgICAgMzUyLAogICAgICAgIDIwOAogICAgICBdLAogICAgICAi
+dHlwZSI6ICJuOG4tbm9kZXMtYmFzZS5ub09wIiwKICAgICAgInR5cGVWZXJz
+aW9uIjogMQogICAgfSwKICAgIHsKICAgICAgImlkIjogIjQzMmUxNzBiLWY3
+YzYtNDYxMi04YWY0LTAxNzNkZDk5ZGI5NyIsCiAgICAgICJuYW1lIjogIm5l
+dyIsCiAgICAgICJwYXJhbWV0ZXJzIjoge30sCiAgICAgICJwb3NpdGlvbiI6
+IFsKICAgICAgICA1MTIsCiAgICAgICAgNTYwCiAgICAgIF0sCiAgICAgICJ0
+eXBlIjogIm44bi1ub2Rlcy1iYXNlLm5vT3AiLAogICAgICAidHlwZVZlcnNp
+b24iOiAxCiAgICB9LAogICAgewogICAgICAiY3JlZGVudGlhbHMiOiB7CiAg
+ICAgICAgImdpdGh1YkFwaSI6IHsKICAgICAgICAgICJpZCI6ICJ5elVCTzJk
+SWM1emZzQ1dTIiwKICAgICAgICAgICJuYW1lIjogIkdpdEh1YiBhY2NvdW50
+IgogICAgICAgIH0KICAgICAgfSwKICAgICAgImlkIjogImZiNjc5MDQwLTBh
+MzgtNDk1YS04Yzc3LWI5YmFkNGU3MTFmMSIsCiAgICAgICJuYW1lIjogIkdp
+dEh1YiBFZGl0IiwKICAgICAgInBhcmFtZXRlcnMiOiB7CiAgICAgICAgImNv
+bW1pdE1lc3NhZ2UiOiAiPVtOOE4gQmFja3VwXSB7eyRub2RlW1wiT25lQXRB
+VGltZVwiXS5qc29uW1wibmFtZVwiXX19Lmpzb24gKHt7JGpzb25bXCJnaXRo
+dWJfc3RhdHVzXCJdfX0pIiwKICAgICAgICAiZmlsZUNvbnRlbnQiOiAiPXt7
+JGpzb25bXCJuOG5fZGF0YV9zdHJpbmd5XCJdfX0iLAogICAgICAgICJmaWxl
+UGF0aCI6ICI9e3skbm9kZVtcIlZhcmlhYmxlc1wiXS5qc29uW1wicmVwb1wi
+XVtcInBhdGhcIl19fXt7JG5vZGVbXCJPbmVBdEFUaW1lXCJdLmpzb25bXCJu
+YW1lXCJdfX0uanNvbiIsCiAgICAgICAgIm9wZXJhdGlvbiI6ICJlZGl0IiwK
+ICAgICAgICAib3duZXIiOiAiPXt7JG5vZGVbXCJWYXJpYWJsZXNcIl0uanNv
+bltcInJlcG9cIl1bXCJvd25lclwiXX19IiwKICAgICAgICAicmVwb3NpdG9y
+eSI6ICI9e3skbm9kZVtcIlZhcmlhYmxlc1wiXS5qc29uW1wicmVwb1wiXVtc
+Im5hbWVcIl19fSIsCiAgICAgICAgInJlc291cmNlIjogImZpbGUiCiAgICAg
+IH0sCiAgICAgICJwb3NpdGlvbiI6IFsKICAgICAgICA1NzYsCiAgICAgICAg
+MzIwCiAgICAgIF0sCiAgICAgICJ0eXBlIjogIm44bi1ub2Rlcy1iYXNlLmdp
+dGh1YiIsCiAgICAgICJ0eXBlVmVyc2lvbiI6IDEsCiAgICAgICJ3ZWJob29r
+SWQiOiAiMTAwNzI4YjAtZTdjZC00ZmMyLTlkMDUtMzc2OTk0ODA2ZDY4Igog
+ICAgfSwKICAgIHsKICAgICAgImNyZWRlbnRpYWxzIjogewogICAgICAgICJn
+aXRodWJBcGkiOiB7CiAgICAgICAgICAiaWQiOiAieXpVQk8yZEljNXpmc0NX
+UyIsCiAgICAgICAgICAibmFtZSI6ICJHaXRIdWIgYWNjb3VudCIKICAgICAg
+ICB9CiAgICAgIH0sCiAgICAgICJpZCI6ICIzZTc1NWNmMS03OWYyLTRhYTct
+YmI4ZC05YjY5ZWYxNTYwZTkiLAogICAgICAibmFtZSI6ICJHaXRIdWIgQ3Jl
+YXRlIiwKICAgICAgInBhcmFtZXRlcnMiOiB7CiAgICAgICAgImNvbW1pdE1l
+c3NhZ2UiOiAiPVtOOE4gQmFja3VwXSB7eyRub2RlW1wiT25lQXRBVGltZVwi
+XS5qc29uW1wibmFtZVwiXX19Lmpzb24gKHt7JGpzb25bXCJnaXRodWJfc3Rh
+dHVzXCJdfX0pIiwKICAgICAgICAiZmlsZUNvbnRlbnQiOiAiPXt7JGpzb25b
+XCJuOG5fZGF0YV9zdHJpbmd5XCJdfX0iLAogICAgICAgICJmaWxlUGF0aCI6
+ICI9e3skbm9kZVtcIlZhcmlhYmxlc1wiXS5qc29uW1wicmVwb1wiXVtcInBh
+dGhcIl19fXt7JG5vZGVbXCJPbmVBdEFUaW1lXCJdLmpzb25bXCJuYW1lXCJd
+fX0uanNvbiIsCiAgICAgICAgIm93bmVyIjogIj17eyRub2RlW1wiVmFyaWFi
+bGVzXCJdLmpzb25bXCJyZXBvXCJdW1wib3duZXJcIl19fSIsCiAgICAgICAg
+InJlcG9zaXRvcnkiOiAiPXt7JG5vZGVbXCJWYXJpYWJsZXNcIl0uanNvbltc
+InJlcG9cIl1bXCJuYW1lXCJdfX0iLAogICAgICAgICJyZXNvdXJjZSI6ICJm
+aWxlIgogICAgICB9LAogICAgICAicG9zaXRpb24iOiBbCiAgICAgICAgNjg4
+LAogICAgICAgIDU2MAogICAgICBdLAogICAgICAidHlwZSI6ICJuOG4tbm9k
+ZXMtYmFzZS5naXRodWIiLAogICAgICAidHlwZVZlcnNpb24iOiAxLAogICAg
+ICAid2ViaG9va0lkIjogImVhZThlZTllLWU2ZWMtNDU3Ni05NzNkLTFmYWZl
+MzFlYTYxOCIKICAgIH0sCiAgICB7CiAgICAgICJpZCI6ICIyMGFiOTdjNy0w
+ZWYzLTQyYjMtYmU1MC04YjQxMjQ5OTBkZGEiLAogICAgICAibmFtZSI6ICJF
+dmVyeSAxMiBob3VycyIsCiAgICAgICJwYXJhbWV0ZXJzIjogewogICAgICAg
+ICJ0cmlnZ2VyVGltZXMiOiB7CiAgICAgICAgICAiaXRlbSI6IFsKICAgICAg
+ICAgICAgewogICAgICAgICAgICAgICJtb2RlIjogImV2ZXJ5WCIsCiAgICAg
+ICAgICAgICAgInZhbHVlIjogMTIKICAgICAgICAgICAgfQogICAgICAgICAg
+XQogICAgICAgIH0KICAgICAgfSwKICAgICAgInBvc2l0aW9uIjogWwogICAg
+ICAgIC0xNTM2LAogICAgICAgIDQ4MAogICAgICBdLAogICAgICAidHlwZSI6
+ICJuOG4tbm9kZXMtYmFzZS5jcm9uIiwKICAgICAgInR5cGVWZXJzaW9uIjog
+MQogICAgfSwKICAgIHsKICAgICAgImNyZWRlbnRpYWxzIjogewogICAgICAg
+ICJuOG5BcGkiOiB7CiAgICAgICAgICAiaWQiOiAieFIzRlg5OTJPaDNmamg3
+MSIsCiAgICAgICAgICAibmFtZSI6ICJuOG4gYWNjb3VudCIKICAgICAgICB9
+CiAgICAgIH0sCiAgICAgICJpZCI6ICJjMzU1NzAyOC0xNzFhLTRkZTctYmEw
+Ni1kOGFjY2ZiM2Y1MGIiLAogICAgICAibmFtZSI6ICJuOG4iLAogICAgICAi
+cGFyYW1ldGVycyI6IHsKICAgICAgICAiZmlsdGVycyI6IHt9LAogICAgICAg
+ICJyZXF1ZXN0T3B0aW9ucyI6IHt9CiAgICAgIH0sCiAgICAgICJwb3NpdGlv
+biI6IFsKICAgICAgICAtMTE2OCwKICAgICAgICAzNTIKICAgICAgXSwKICAg
+ICAgInR5cGUiOiAibjhuLW5vZGVzLWJhc2UubjhuIiwKICAgICAgInR5cGVW
+ZXJzaW9uIjogMQogICAgfSwKICAgIHsKICAgICAgImlkIjogIjNkN2M4OGY1
+LTU0NzEtNDY2ZC04NjNjLTAxZTMwMGFkNWRmNiIsCiAgICAgICJuYW1lIjog
+ImlzRGlmZk9yTmV3IiwKICAgICAgInBhcmFtZXRlcnMiOiB7CiAgICAgICAg
+ImpzQ29kZSI6ICJmdW5jdGlvbiBkZWVwQ2xvbmUob2JqKSB7XG4gIHJldHVy
+biBKU09OLnBhcnNlKEpTT04uc3RyaW5naWZ5KG9iaikpO1xufVxuXG5mdW5j
+dGlvbiBzb3J0T2JqZWN0S2V5cyhvYmopIHtcbiAgaWYgKEFycmF5LmlzQXJy
+YXkob2JqKSkge1xuICAgIHJldHVybiBvYmoubWFwKHNvcnRPYmplY3RLZXlz
+KTtcbiAgfVxuXG4gIGlmIChvYmogJiYgdHlwZW9mIG9iaiA9PT0gJ29iamVj
+dCcpIHtcbiAgICBjb25zdCBzb3J0ZWQgPSB7fTtcbiAgICBPYmplY3Qua2V5
+cyhvYmopLnNvcnQoKS5mb3JFYWNoKChrZXkpID0+IHtcbiAgICAgIHNvcnRl
+ZFtrZXldID0gc29ydE9iamVjdEtleXMob2JqW2tleV0pO1xuICAgIH0pO1xu
+ICAgIHJldHVybiBzb3J0ZWQ7XG4gIH1cblxuICByZXR1cm4gb2JqO1xufVxu
+XG5mdW5jdGlvbiByZW1vdmVQYXRocyhvYmosIHBhdGhzKSB7XG4gIGZvciAo
+Y29uc3QgcGF0aCBvZiBwYXRocykge1xuICAgIGNvbnN0IHBhcnRzID0gcGF0
+aC5zcGxpdCgnLicpO1xuICAgIGxldCBjdXJyZW50ID0gb2JqO1xuXG4gICAg
+Zm9yIChsZXQgaSA9IDA7IGkgPCBwYXJ0cy5sZW5ndGggLSAxOyBpKyspIHtc
+biAgICAgIGlmICghY3VycmVudCB8fCB0eXBlb2YgY3VycmVudCAhPT0gJ29i
+amVjdCcpIHtcbiAgICAgICAgY3VycmVudCA9IG51bGw7XG4gICAgICAgIGJy
+ZWFrO1xuICAgICAgfVxuICAgICAgY3VycmVudCA9IGN1cnJlbnRbcGFydHNb
+aV1dO1xuICAgIH1cblxuICAgIGlmIChjdXJyZW50ICYmIHR5cGVvZiBjdXJy
+ZW50ID09PSAnb2JqZWN0Jykge1xuICAgICAgZGVsZXRlIGN1cnJlbnRbcGFy
+dHNbcGFydHMubGVuZ3RoIC0gMV1dO1xuICAgIH1cbiAgfVxufVxuXG5mdW5j
+dGlvbiBub3JtYWxpemVXb3JrZmxvdyhvYmopIHtcbiAgY29uc3QgY29weSA9
+IGRlZXBDbG9uZShvYmopO1xuXG4gIC8vIENhbXBvcyB2b2zDoXRpbGVzIHJh
+w616XG4gIHJlbW92ZVBhdGhzKGNvcHksIFtcbiAgICAndXBkYXRlZEF0Jyxc
+biAgICAnY3JlYXRlZEF0JyxcbiAgICAndmVyc2lvbklkJyxcbiAgICAnYWN0
+aXZlVmVyc2lvbklkJyxcbiAgICAndHJpZ2dlckNvdW50JyxcbiAgICAnc2hh
+cmVkJyxcbiAgICAnbWV0YScsXG4gICAgJ3N0YXRpY0RhdGEnLFxuICBdKTtc
+blxuICAvLyBDYW1wb3Mgdm9sw6F0aWxlcyBkZSBhY3RpdmVWZXJzaW9uXG4g
+IGlmIChjb3B5LmFjdGl2ZVZlcnNpb24gJiYgdHlwZW9mIGNvcHkuYWN0aXZl
+VmVyc2lvbiA9PT0gJ29iamVjdCcpIHtcbiAgICByZW1vdmVQYXRocyhjb3B5
+LCBbXG4gICAgICAnYWN0aXZlVmVyc2lvbi51cGRhdGVkQXQnLFxuICAgICAg
+J2FjdGl2ZVZlcnNpb24uY3JlYXRlZEF0JyxcbiAgICAgICdhY3RpdmVWZXJz
+aW9uLnZlcnNpb25JZCcsXG4gICAgICAnYWN0aXZlVmVyc2lvbi53b3JrZmxv
+d0lkJyxcbiAgICAgICdhY3RpdmVWZXJzaW9uLm5hbWUnLFxuICAgICAgJ2Fj
+dGl2ZVZlcnNpb24uZGVzY3JpcHRpb24nLFxuICAgICAgJ2FjdGl2ZVZlcnNp
+b24uYXV0aG9ycycsXG4gICAgICAnYWN0aXZlVmVyc2lvbi5hdXRvc2F2ZWQn
+LFxuICAgIF0pO1xuICB9XG5cbiAgcmV0dXJuIHNvcnRPYmplY3RLZXlzKGNv
+cHkpO1xufVxuXG5mdW5jdGlvbiBzYW5pdGl6ZUZvckdpdEh1YihvYmopIHtc
+biAgbGV0IHRleHQgPSBKU09OLnN0cmluZ2lmeShvYmosIG51bGwsIDIpO1xu
+XG4gIC8vIEFwaWZ5XG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoL2FwaWZ5X2Fw
+aV9bQS1aYS16MC05XSsvZ2ksICdBUElGWV9UT0tFTl9NQVNLRUQnKTtcbiAg
+dGV4dCA9IHRleHQucmVwbGFjZSgvKFwiQVBJRllfVE9LRU5fTUFTS0VEXCJc
+XHMqOlxccyopXCJbXlwiXSpcIi9naSwgJyQxXCJBUElGWV9UT0tFTl9NQVNL
+RURcIicpO1xuXG4gIC8vIFN1cGFiYXNlXG4gIHRleHQgPSB0ZXh0LnJlcGxh
+Y2UoL3NiX3NlY3JldF9bQS1aYS16MC05X1xcLV0rL2csICdTVVBBQkFTRV9T
+RUNSRVRfTUFTS0VEJyk7XG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoLyhcImFw
+aWtleVwiXFxzKjpcXHMqKVwiW15cIl0qXCIvZ2ksICckMVwiU1VQQUJBU0Vf
+U0VDUkVUX01BU0tFRFwiJyk7XG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoLyhc
+IkF1dGhvcml6YXRpb25cIlxccyo6XFxzKilcIkJlYXJlciBbXlwiXSpcIi9n
+aSwgJyQxXCJCZWFyZXIgU1VQQUJBU0VfU0VDUkVUX01BU0tFRFwiJyk7XG5c
+biAgLy8gT3Ryb3Mgc2Vuc2libGVzIHTDrXBpY29zXG4gIHRleHQgPSB0ZXh0
+LnJlcGxhY2UoXG4gICAgLyhcIihhY2Nlc3NUb2tlbnx0b2tlbnxzZWNyZXR8
+Y2xpZW50U2VjcmV0fHNlcnZpY2Vfcm9sZXxzZXJ2aWNlUm9sZUtleXxhbm9u
+S2V5fGFwaUtleXx4LWFwaS1rZXl8eF9hcGlfa2V5KVwiXFxzKjpcXHMqKVwi
+W15cIl0qXCIvZ2ksXG4gICAgJyQxXCJfX1JFREFDVEVEX19cIidcbiAgKTtc
+blxuICAvLyBKV1RzXG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoL1xcYmV5SltB
+LVphLXowLTlfXFwtXStcXC5bQS1aYS16MC05X1xcLV0rXFwuW0EtWmEtejAt
+OV9cXC1dK1xcYi9nLCAnSldUX01BU0tFRCcpO1xuXG4gIHJldHVybiB0ZXh0
+O1xufVxuXG5mdW5jdGlvbiBwYXJzZUdpdGh1YkNvbnRlbnQoY29udGVudCkg
+e1xuICBpZiAoIWNvbnRlbnQgfHwgdHlwZW9mIGNvbnRlbnQgIT09ICdzdHJp
+bmcnKSByZXR1cm4gbnVsbDtcblxuICBjb25zdCBkZWNvZGVkID0gQnVmZmVy
+LmZyb20oY29udGVudCwgJ2Jhc2U2NCcpLnRvU3RyaW5nKCd1dGY4JykudHJp
+bSgpO1xuICBpZiAoIWRlY29kZWQpIHJldHVybiBudWxsO1xuXG4gIHRyeSB7
+XG4gICAgcmV0dXJuIEpTT04ucGFyc2UoZGVjb2RlZCk7XG4gIH0gY2F0Y2gg
+KGUpIHtcbiAgICByZXR1cm4gbnVsbDtcbiAgfVxufVxuXG5jb25zdCBpdGVt
+cyA9ICRpbnB1dC5hbGwoKTtcbmNvbnN0IGdpdGh1Ykl0ZW0gPSBpdGVtc1sw
+XTtcbmNvbnN0IHdvcmtmbG93SXRlbSA9IGl0ZW1zWzFdO1xuXG5pZiAoIWdp
+dGh1Ykl0ZW0gfHwgIXdvcmtmbG93SXRlbSkge1xuICB0aHJvdyBuZXcgRXJy
+b3IoJ2lzRGlmZk9yTmV3IG5lY2VzaXRhIDIgZW50cmFkYXM6IEdpdEh1YiAr
+IHdvcmtmbG93IG44bicpO1xufVxuXG5jb25zdCBnaXRodWJKc29uID0gZ2l0
+aHViSXRlbS5qc29uID8/IHt9O1xuY29uc3QgbjhuV29ya2Zsb3cgPSB3b3Jr
+Zmxvd0l0ZW0uanNvbiA/PyB7fTtcblxuLy8gTm9ybWFsaXphbW9zIEFOVEVT
+IGRlIGNvbXBhcmFyIHkgQU5URVMgZGUgZ3VhcmRhclxuY29uc3Qgbm9ybWFs
+aXplZEFjdHVhbCA9IG5vcm1hbGl6ZVdvcmtmbG93KG44bldvcmtmbG93KTtc
+bmNvbnN0IHNhbml0aXplZEFjdHVhbCA9IHNhbml0aXplRm9yR2l0SHViKG5v
+cm1hbGl6ZWRBY3R1YWwpO1xuXG4vLyBEZXRlY3RhciBzaSBlbCBhcmNoaXZv
+IGV4aXN0ZSBlbiBHaXRIdWJcbmNvbnN0IGZpbGVFeGlzdHNJbkdpdEh1YiA9
+XG4gIE9iamVjdC5wcm90b3R5cGUuaGFzT3duUHJvcGVydHkuY2FsbChnaXRo
+dWJKc29uLCAnc2hhJykgfHxcbiAgT2JqZWN0LnByb3RvdHlwZS5oYXNPd25Q
+cm9wZXJ0eS5jYWxsKGdpdGh1Ykpzb24sICdjb250ZW50JykgfHxcbiAgT2Jq
+ZWN0LnByb3RvdHlwZS5oYXNPd25Qcm9wZXJ0eS5jYWxsKGdpdGh1Ykpzb24s
+ICdwYXRoJyk7XG5cbmlmIChmaWxlRXhpc3RzSW5HaXRIdWIpIHtcbiAgY29u
+c3Qgb3JpZ1dvcmtmbG93ID0gcGFyc2VHaXRodWJDb250ZW50KGdpdGh1Ykpz
+b24uY29udGVudCk7XG5cbiAgLy8gU2kgZXhpc3RlIHBlcm8gZXN0w6EgdmFj
+w61vIG8gY29ycnVwdG8sIGxvIHRyYXRhbW9zIGNvbW8gXCJkaWZmZXJlbnRc
+IlxuICBpZiAoIW9yaWdXb3JrZmxvdykge1xuICAgIGdpdGh1Ykpzb24uZ2l0
+aHViX3N0YXR1cyA9ICdkaWZmZXJlbnQnO1xuICAgIGdpdGh1Ykpzb24uY29u
+dGVudF9kZWNvZGVkID0gbnVsbDtcbiAgICBnaXRodWJKc29uLm44bl9kYXRh
+X3N0cmluZ3kgPSBzYW5pdGl6ZWRBY3R1YWw7XG4gICAgcmV0dXJuIGl0ZW1z
+O1xuICB9XG5cbiAgY29uc3Qgbm9ybWFsaXplZE9yaWdpbmFsID0gbm9ybWFs
+aXplV29ya2Zsb3cob3JpZ1dvcmtmbG93KTtcbiAgY29uc3Qgc2FuaXRpemVk
+T3JpZ2luYWwgPSBzYW5pdGl6ZUZvckdpdEh1Yihub3JtYWxpemVkT3JpZ2lu
+YWwpO1xuXG4gIGlmIChzYW5pdGl6ZWRPcmlnaW5hbCA9PT0gc2FuaXRpemVk
+QWN0dWFsKSB7XG4gICAgZ2l0aHViSnNvbi5naXRodWJfc3RhdHVzID0gJ3Nh
+bWUnO1xuICAgIGdpdGh1Ykpzb24uY29udGVudF9kZWNvZGVkID0gbm9ybWFs
+aXplZE9yaWdpbmFsO1xuICB9IGVsc2Uge1xuICAgIGdpdGh1Ykpzb24uZ2l0
+aHViX3N0YXR1cyA9ICdkaWZmZXJlbnQnO1xuICAgIGdpdGh1Ykpzb24uY29u
+dGVudF9kZWNvZGVkID0gbm9ybWFsaXplZE9yaWdpbmFsO1xuICAgIGdpdGh1
+Ykpzb24ubjhuX2RhdGFfc3RyaW5neSA9IHNhbml0aXplZEFjdHVhbDtcbiAg
+fVxufSBlbHNlIHtcbiAgZ2l0aHViSnNvbi5naXRodWJfc3RhdHVzID0gJ25l
+dyc7XG4gIGdpdGh1Ykpzb24uY29udGVudF9kZWNvZGVkID0gbnVsbDtcbiAg
+Z2l0aHViSnNvbi5uOG5fZGF0YV9zdHJpbmd5ID0gc2FuaXRpemVkQWN0dWFs
+O1xufVxuXG5yZXR1cm4gaXRlbXM7IgogICAgICB9LAogICAgICAicG9zaXRp
+b24iOiBbCiAgICAgICAgLTIwOCwKICAgICAgICAzNjgKICAgICAgXSwKICAg
+ICAgInR5cGUiOiAibjhuLW5vZGVzLWJhc2UuY29kZSIsCiAgICAgICJ0eXBl
+VmVyc2lvbiI6IDEKICAgIH0sCiAgICB7CiAgICAgICJpZCI6ICJiOTZlOWYw
+Mi1iYmUwLTQzYjgtODExMi03ZmQwZWMyMzc1ZTEiLAogICAgICAibmFtZSI6
+ICJNZXJnZSIsCiAgICAgICJwYXJhbWV0ZXJzIjoge30sCiAgICAgICJwb3Np
+dGlvbiI6IFsKICAgICAgICAtNDY0LAogICAgICAgIDM1MgogICAgICBdLAog
+ICAgICAidHlwZSI6ICJuOG4tbm9kZXMtYmFzZS5tZXJnZSIsCiAgICAgICJ0
+eXBlVmVyc2lvbiI6IDIKICAgIH0sCiAgICB7CiAgICAgICJpZCI6ICJjNDY1
+YzU4MS1lY2RlLTQ3NjctYTc2Mi0wYjIwODA0NDlkYjMiLAogICAgICAibmFt
+ZSI6ICJWYXJpYWJsZXMiLAogICAgICAicGFyYW1ldGVycyI6IHsKICAgICAg
+ICAib3B0aW9ucyI6IHt9LAogICAgICAgICJ2YWx1ZXMiOiB7CiAgICAgICAg
+ICAic3RyaW5nIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm5h
+bWUiOiAicmVwby5vd25lciIsCiAgICAgICAgICAgICAgInZhbHVlIjogImFk
+cmlzY2hlejAwIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAg
+ICAgICAgICAgIm5hbWUiOiAicmVwby5uYW1lIiwKICAgICAgICAgICAgICAi
+dmFsdWUiOiAiVURJQS1OOE4tV29ya2Zsb3dzIgogICAgICAgICAgICB9LAog
+ICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm5hbWUiOiAicmVwby5wYXRo
+IiwKICAgICAgICAgICAgICAidmFsdWUiOiAid29ya2Zsb3dzLyIKICAgICAg
+ICAgICAgfQogICAgICAgICAgXQogICAgICAgIH0KICAgICAgfSwKICAgICAg
+InBvc2l0aW9uIjogWwogICAgICAgIC0xMzYwLAogICAgICAgIDM1MgogICAg
+ICBdLAogICAgICAidHlwZSI6ICJuOG4tbm9kZXMtYmFzZS5zZXQiLAogICAg
+ICAidHlwZVZlcnNpb24iOiAxCiAgICB9LAogICAgewogICAgICAiaWQiOiAi
+ODJlOWMyOTQtN2IxYi00M2JlLTkyODMtMjU4NTk0NTIyMGJmIiwKICAgICAg
+Im5hbWUiOiAiRmluIiwKICAgICAgInBhcmFtZXRlcnMiOiB7fSwKICAgICAg
+InBvc2l0aW9uIjogWwogICAgICAgIC04MTYsCiAgICAgICAgMTI4CiAgICAg
+IF0sCiAgICAgICJ0eXBlIjogIm44bi1ub2Rlcy1iYXNlLm5vT3AiLAogICAg
+ICAidHlwZVZlcnNpb24iOiAxCiAgICB9LAogICAgewogICAgICAiaWQiOiAi
+MjkyNjQyMTAtYWVhZC00NmQ1LTg2YzktOTQwOTRlMGQxYjJlIiwKICAgICAg
+Im5hbWUiOiAiT25lQXRBVGltZSIsCiAgICAgICJwYXJhbWV0ZXJzIjogewog
+ICAgICAgICJvcHRpb25zIjoge30KICAgICAgfSwKICAgICAgInBvc2l0aW9u
+IjogWwogICAgICAgIC05NjAsCiAgICAgICAgMzUyCiAgICAgIF0sCiAgICAg
+ICJ0eXBlIjogIm44bi1ub2Rlcy1iYXNlLnNwbGl0SW5CYXRjaGVzIiwKICAg
+ICAgInR5cGVWZXJzaW9uIjogMwogICAgfSwKICAgIHsKICAgICAgImlkIjog
+ImY3NTRiY2JmLWI3ZWUtNDc2NC1hNDUyLTdhMmQ3ODU0MGYzOSIsCiAgICAg
+ICJuYW1lIjogIldlYmhvb2siLAogICAgICAicGFyYW1ldGVycyI6IHsKICAg
+ICAgICAiaHR0cE1ldGhvZCI6ICJQT1NUIiwKICAgICAgICAib3B0aW9ucyI6
+IHt9LAogICAgICAgICJwYXRoIjogIjk0ZDU1YjJjLWFkYjQtNDdhZC1iOGJk
+LWU3NGU4N2EzYWE0YSIKICAgICAgfSwKICAgICAgInBvc2l0aW9uIjogWwog
+ICAgICAgIC0xNjE2LAogICAgICAgIDExODQKICAgICAgXSwKICAgICAgInR5
+cGUiOiAibjhuLW5vZGVzLWJhc2Uud2ViaG9vayIsCiAgICAgICJ0eXBlVmVy
+c2lvbiI6IDIuMSwKICAgICAgIndlYmhvb2tJZCI6ICI5NGQ1NWIyYy1hZGI0
+LTQ3YWQtYjhiZC1lNzRlODdhM2FhNGEiCiAgICB9LAogICAgewogICAgICAi
+aWQiOiAiOGYxZmIzNzEtZTQ0Mi00ODg5LWJhZDMtZjA3NjllYmE0YzE3IiwK
+ICAgICAgIm5hbWUiOiAiRWRpdCBGaWVsZHMiLAogICAgICAicGFyYW1ldGVy
+cyI6IHsKICAgICAgICAiYXNzaWdubWVudHMiOiB7CiAgICAgICAgICAiYXNz
+aWdubWVudHMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQi
+OiAiMDU2NmU2YTEtODA0Yy00Njc5LWE5MzQtM2VkZTMxNDE0MjVmIiwKICAg
+ICAgICAgICAgICAibmFtZSI6ICJib2R5Lm5vbWJyZVdvcmtmbG93IiwKICAg
+ICAgICAgICAgICAidHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgICAgICJ2
+YWx1ZSI6ICI9e3sgJGpzb24uYm9keS5ub21icmVXb3JrZmxvdyB9fSIKICAg
+ICAgICAgICAgfQogICAgICAgICAgXQogICAgICAgIH0sCiAgICAgICAgIm9w
+dGlvbnMiOiB7fQogICAgICB9LAogICAgICAicG9zaXRpb24iOiBbCiAgICAg
+ICAgLTE0MDgsCiAgICAgICAgMTE4NAogICAgICBdLAogICAgICAidHlwZSI6
+ICJuOG4tbm9kZXMtYmFzZS5zZXQiLAogICAgICAidHlwZVZlcnNpb24iOiAz
+LjQKICAgIH0sCiAgICB7CiAgICAgICJpZCI6ICI1NTdmZTI1YS1jZjZmLTRj
+NjUtYTEyZi02NGFlY2FkMjRiMjkiLAogICAgICAibmFtZSI6ICJMb29wIE92
+ZXIgSXRlbXMiLAogICAgICAicGFyYW1ldGVycyI6IHsKICAgICAgICAib3B0
+aW9ucyI6IHt9CiAgICAgIH0sCiAgICAgICJwb3NpdGlvbiI6IFsKICAgICAg
+ICAtOTkyLAogICAgICAgIDExODQKICAgICAgXSwKICAgICAgInR5cGUiOiAi
+bjhuLW5vZGVzLWJhc2Uuc3BsaXRJbkJhdGNoZXMiLAogICAgICAidHlwZVZl
+cnNpb24iOiAzCiAgICB9LAogICAgewogICAgICAiaWQiOiAiZWYyNTRiODct
+NzE2MC00Zjc1LWEyNmYtMzUwYzc5MWY4OTU3IiwKICAgICAgIm5hbWUiOiAi
+UmVwbGFjZSBNZSIsCiAgICAgICJwYXJhbWV0ZXJzIjoge30sCiAgICAgICJw
+bGFjZWhvbGRlciI6IHRydWUsCiAgICAgICJwb3NpdGlvbiI6IFsKICAgICAg
+ICAtNTc2LAogICAgICAgIDEyODAKICAgICAgXSwKICAgICAgInR5cGUiOiAi
+bjhuLW5vZGVzLWJhc2Uubm9PcCIsCiAgICAgICJ0eXBlVmVyc2lvbiI6IDEK
+ICAgIH0sCiAgICB7CiAgICAgICJpZCI6ICI0MzYwNGQ0Zi1kNTU1LTQ4ZGYt
+YTE5Yi1kYzY1YWEwZWI2ZjMiLAogICAgICAibmFtZSI6ICJJZiIsCiAgICAg
+ICJwYXJhbWV0ZXJzIjogewogICAgICAgICJjb25kaXRpb25zIjogewogICAg
+ICAgICAgImNvbWJpbmF0b3IiOiAiYW5kIiwKICAgICAgICAgICJjb25kaXRp
+b25zIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgImlkIjogImQx
+M2E1ZDNjLWJmN2QtNDUyZi1hNDBkLTAxNGFmMDZkNTk2MyIsCiAgICAgICAg
+ICAgICAgImxlZnRWYWx1ZSI6ICI9e3sgJCgnRWRpdCBGaWVsZHMnKS5pdGVt
+Lmpzb24uYm9keS5ub21icmVXb3JrZmxvdyB9fSIsCiAgICAgICAgICAgICAg
+Im9wZXJhdG9yIjogewogICAgICAgICAgICAgICAgIm9wZXJhdGlvbiI6ICJl
+cXVhbHMiLAogICAgICAgICAgICAgICAgInR5cGUiOiAic3RyaW5nIgogICAg
+ICAgICAgICAgIH0sCiAgICAgICAgICAgICAgInJpZ2h0VmFsdWUiOiAiPXt7
+ICRqc29uLm5hbWUgfX0iCiAgICAgICAgICAgIH0KICAgICAgICAgIF0sCiAg
+ICAgICAgICAib3B0aW9ucyI6IHsKICAgICAgICAgICAgImNhc2VTZW5zaXRp
+dmUiOiB0cnVlLAogICAgICAgICAgICAibGVmdFZhbHVlIjogIiIsCiAgICAg
+ICAgICAgICJ0eXBlVmFsaWRhdGlvbiI6ICJzdHJpY3QiLAogICAgICAgICAg
+ICAidmVyc2lvbiI6IDMKICAgICAgICAgIH0KICAgICAgICB9LAogICAgICAg
+ICJvcHRpb25zIjoge30KICAgICAgfSwKICAgICAgInBvc2l0aW9uIjogWwog
+ICAgICAgIC03ODQsCiAgICAgICAgMTI0OAogICAgICBdLAogICAgICAidHlw
+ZSI6ICJuOG4tbm9kZXMtYmFzZS5pZiIsCiAgICAgICJ0eXBlVmVyc2lvbiI6
+IDIuMwogICAgfSwKICAgIHsKICAgICAgImNyZWRlbnRpYWxzIjogewogICAg
+ICAgICJuOG5BcGkiOiB7CiAgICAgICAgICAiaWQiOiAieFIzRlg5OTJPaDNm
+amg3MSIsCiAgICAgICAgICAibmFtZSI6ICJuOG4gYWNjb3VudCIKICAgICAg
+ICB9CiAgICAgIH0sCiAgICAgICJpZCI6ICJhZDRmZTMyOS1lZWUwLTQ2MDct
+YjFiNC0xNzE0MzU0NDU0NGIiLAogICAgICAibmFtZSI6ICJHZXQgbWFueSB3
+b3JrZmxvd3MiLAogICAgICAicGFyYW1ldGVycyI6IHsKICAgICAgICAiZmls
+dGVycyI6IHt9LAogICAgICAgICJyZXF1ZXN0T3B0aW9ucyI6IHt9CiAgICAg
+IH0sCiAgICAgICJwb3NpdGlvbiI6IFsKICAgICAgICAtMTIwMCwKICAgICAg
+ICAxMTg0CiAgICAgIF0sCiAgICAgICJ0eXBlIjogIm44bi1ub2Rlcy1iYXNl
+Lm44biIsCiAgICAgICJ0eXBlVmVyc2lvbiI6IDEKICAgIH0sCiAgICB7CiAg
+ICAgICJpZCI6ICIyZDQwMDg5MS1lZjE4LTRiZjMtODMzMC01ZGYzOGQyNjI4
+NjQiLAogICAgICAibmFtZSI6ICJFZGl0IEZpZWxkczEiLAogICAgICAicGFy
+YW1ldGVycyI6IHsKICAgICAgICAiYXNzaWdubWVudHMiOiB7CiAgICAgICAg
+ICAiYXNzaWdubWVudHMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAg
+ICAiaWQiOiAiMzlhM2I2YWEtYzNiYy00YTIzLWI4MzItM2U4MWE0NzQ0ZWQx
+IiwKICAgICAgICAgICAgICAibmFtZSI6ICJuYW1lIiwKICAgICAgICAgICAg
+ICAidHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgICAgICJ2YWx1ZSI6ICI9
+e3sgJGpzb24ubmFtZSB9fSIKICAgICAgICAgICAgfSwKICAgICAgICAgICAg
+ewogICAgICAgICAgICAgICJpZCI6ICI5ZDgwZGM1ZC0zOWFlLTQ0MDEtYmIz
+OS01NjkwNWYwNzBiYTMiLAogICAgICAgICAgICAgICJuYW1lIjogImlkIiwK
+ICAgICAgICAgICAgICAidHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgICAg
+ICJ2YWx1ZSI6ICI9e3sgJGpzb24uaWQgfX0iCiAgICAgICAgICAgIH0sCiAg
+ICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiZjJkNzNkYzEtMTQw
+Yy00ZDk1LWFmOWEtNTE0N2EzNmE0MjUxIiwKICAgICAgICAgICAgICAibmFt
+ZSI6ICJmaWxlUGF0aCIsCiAgICAgICAgICAgICAgInR5cGUiOiAic3RyaW5n
+IiwKICAgICAgICAgICAgICAidmFsdWUiOiAiPXt7XCJ3b3JrZmxvd3MvXCIg
+KyAkanNvbi5uYW1lICsgXCIuanNvblwifX0iCiAgICAgICAgICAgIH0KICAg
+ICAgICAgIF0KICAgICAgICB9LAogICAgICAgICJvcHRpb25zIjoge30KICAg
+ICAgfSwKICAgICAgInBvc2l0aW9uIjogWwogICAgICAgIC01NzYsCiAgICAg
+ICAgMTEwNAogICAgICBdLAogICAgICAidHlwZSI6ICJuOG4tbm9kZXMtYmFz
+ZS5zZXQiLAogICAgICAidHlwZVZlcnNpb24iOiAzLjQKICAgIH0sCiAgICB7
+CiAgICAgICJjcmVkZW50aWFscyI6IHsKICAgICAgICAiZ2l0aHViQXBpIjog
+ewogICAgICAgICAgImlkIjogInl6VUJPMmRJYzV6ZnNDV1MiLAogICAgICAg
+ICAgIm5hbWUiOiAiR2l0SHViIGFjY291bnQiCiAgICAgICAgfQogICAgICB9
+LAogICAgICAiaWQiOiAiMjQ3MDkxNjgtZjUyZi00ZjE1LThmODUtNjEwOWI4
+MTVmN2I3IiwKICAgICAgIm5hbWUiOiAiR2V0IGEgZmlsZSIsCiAgICAgICJw
+YXJhbWV0ZXJzIjogewogICAgICAgICJhZGRpdGlvbmFsUGFyYW1ldGVycyI6
+IHt9LAogICAgICAgICJhc0JpbmFyeVByb3BlcnR5IjogZmFsc2UsCiAgICAg
+ICAgImZpbGVQYXRoIjogIj17eyAkanNvbi5maWxlUGF0aCB9fSIsCiAgICAg
+ICAgIm9wZXJhdGlvbiI6ICJnZXQiLAogICAgICAgICJvd25lciI6IHsKICAg
+ICAgICAgICJfX3JsIjogdHJ1ZSwKICAgICAgICAgICJtb2RlIjogIm5hbWUi
+LAogICAgICAgICAgInZhbHVlIjogImFkcmlzY2hlejAwIgogICAgICAgIH0s
+CiAgICAgICAgInJlcG9zaXRvcnkiOiB7CiAgICAgICAgICAiX19ybCI6IHRy
+dWUsCiAgICAgICAgICAiY2FjaGVkUmVzdWx0TmFtZSI6ICJVRElBLU44Ti1X
+b3JrZmxvd3MiLAogICAgICAgICAgImNhY2hlZFJlc3VsdFVybCI6ICJodHRw
+czovL2dpdGh1Yi5jb20vYWRyaXNjaGV6MDAvVURJQS1OOE4tV29ya2Zsb3dz
+IiwKICAgICAgICAgICJtb2RlIjogImxpc3QiLAogICAgICAgICAgInZhbHVl
+IjogIlVESUEtTjhOLVdvcmtmbG93cyIKICAgICAgICB9LAogICAgICAgICJy
+ZXNvdXJjZSI6ICJmaWxlIgogICAgICB9LAogICAgICAicG9zaXRpb24iOiBb
+CiAgICAgICAgLTE2MCwKICAgICAgICAxMTA0CiAgICAgIF0sCiAgICAgICJ0
+eXBlIjogIm44bi1ub2Rlcy1iYXNlLmdpdGh1YiIsCiAgICAgICJ0eXBlVmVy
+c2lvbiI6IDEuMSwKICAgICAgIndlYmhvb2tJZCI6ICJkZTBhYWJhNC0zNzQy
+LTQxMDYtYmI1YS1hN2RmMGY4N2M3NDYiCiAgICB9LAogICAgewogICAgICAi
+aWQiOiAiODg1NWIzNDctNDdlZS00ZGZhLWE0ZDYtOWUzNjRjMmY0YTdiIiwK
+ICAgICAgIm5hbWUiOiAiSWYxIiwKICAgICAgInBhcmFtZXRlcnMiOiB7CiAg
+ICAgICAgImNvbmRpdGlvbnMiOiB7CiAgICAgICAgICAiY29tYmluYXRvciI6
+ICJhbmQiLAogICAgICAgICAgImNvbmRpdGlvbnMiOiBbCiAgICAgICAgICAg
+IHsKICAgICAgICAgICAgICAiaWQiOiAiMzk1MjBiYjMtYjM1Yy00N2I5LThm
+MGMtM2FmZmNhNDlmYmMyIiwKICAgICAgICAgICAgICAibGVmdFZhbHVlIjog
+Ij17eyAkanNvbi5zaGEgfX0iLAogICAgICAgICAgICAgICJvcGVyYXRvciI6
+IHsKICAgICAgICAgICAgICAgICJvcGVyYXRpb24iOiAibm90RW1wdHkiLAog
+ICAgICAgICAgICAgICAgInNpbmdsZVZhbHVlIjogdHJ1ZSwKICAgICAgICAg
+ICAgICAgICJ0eXBlIjogInN0cmluZyIKICAgICAgICAgICAgICB9LAogICAg
+ICAgICAgICAgICJyaWdodFZhbHVlIjogIk5vdCBGb3VuZCIKICAgICAgICAg
+ICAgfQogICAgICAgICAgXSwKICAgICAgICAgICJvcHRpb25zIjogewogICAg
+ICAgICAgICAiY2FzZVNlbnNpdGl2ZSI6IHRydWUsCiAgICAgICAgICAgICJs
+ZWZ0VmFsdWUiOiAiIiwKICAgICAgICAgICAgInR5cGVWYWxpZGF0aW9uIjog
+InN0cmljdCIsCiAgICAgICAgICAgICJ2ZXJzaW9uIjogMwogICAgICAgICAg
+fQogICAgICAgIH0sCiAgICAgICAgIm9wdGlvbnMiOiB7fQogICAgICB9LAog
+ICAgICAicG9zaXRpb24iOiBbCiAgICAgICAgNDgsCiAgICAgICAgMTEwNAog
+ICAgICBdLAogICAgICAidHlwZSI6ICJuOG4tbm9kZXMtYmFzZS5pZiIsCiAg
+ICAgICJ0eXBlVmVyc2lvbiI6IDIuMwogICAgfSwKICAgIHsKICAgICAgImNy
+ZWRlbnRpYWxzIjogewogICAgICAgICJnaXRodWJBcGkiOiB7CiAgICAgICAg
+ICAiaWQiOiAieXpVQk8yZEljNXpmc0NXUyIsCiAgICAgICAgICAibmFtZSI6
+ICJHaXRIdWIgYWNjb3VudCIKICAgICAgICB9CiAgICAgIH0sCiAgICAgICJp
+ZCI6ICIyNzgzOGNjOS03NDhiLTQ2NWYtYTczMy0zYTM3OWQ3ZjRkZDQiLAog
+ICAgICAibmFtZSI6ICJFZGl0IGEgZmlsZSIsCiAgICAgICJwYXJhbWV0ZXJz
+IjogewogICAgICAgICJjb21taXRNZXNzYWdlIjogIj1bTjhOIEJhY2t1cF0g
+e3skanNvbi5uYW1lfX0uanNvbiAobWFudWFsIHVwZGF0ZSkiLAogICAgICAg
+ICJmaWxlQ29udGVudCI6ICI9e3skanNvbltcIm44bl9kYXRhX3N0cmluZ3lc
+Il19fSIsCiAgICAgICAgImZpbGVQYXRoIjogIj17eyRqc29uLmZpbGVQYXRo
+fX0iLAogICAgICAgICJvcGVyYXRpb24iOiAiZWRpdCIsCiAgICAgICAgIm93
+bmVyIjogewogICAgICAgICAgIl9fcmwiOiB0cnVlLAogICAgICAgICAgIm1v
+ZGUiOiAibmFtZSIsCiAgICAgICAgICAidmFsdWUiOiAiYWRyaXNjaGV6MDAi
+CiAgICAgICAgfSwKICAgICAgICAicmVwb3NpdG9yeSI6IHsKICAgICAgICAg
+ICJfX3JsIjogdHJ1ZSwKICAgICAgICAgICJjYWNoZWRSZXN1bHROYW1lIjog
+IlVESUEtTjhOLVdvcmtmbG93cyIsCiAgICAgICAgICAiY2FjaGVkUmVzdWx0
+VXJsIjogImh0dHBzOi8vZ2l0aHViLmNvbS9hZHJpc2NoZXowMC9VRElBLU44
+Ti1Xb3JrZmxvd3MiLAogICAgICAgICAgIm1vZGUiOiAibGlzdCIsCiAgICAg
+ICAgICAidmFsdWUiOiAiVURJQS1OOE4tV29ya2Zsb3dzIgogICAgICAgIH0s
+CiAgICAgICAgInJlc291cmNlIjogImZpbGUiCiAgICAgIH0sCiAgICAgICJw
+b3NpdGlvbiI6IFsKICAgICAgICAyNTYsCiAgICAgICAgMTAwOAogICAgICBd
+LAogICAgICAidHlwZSI6ICJuOG4tbm9kZXMtYmFzZS5naXRodWIiLAogICAg
+ICAidHlwZVZlcnNpb24iOiAxLjEsCiAgICAgICJ3ZWJob29rSWQiOiAiNjBi
+MjJhNDAtZjdjZC00YmQ1LTg3MTktYjZiMmRhMTE0NDllIgogICAgfSwKICAg
+IHsKICAgICAgImNyZWRlbnRpYWxzIjogewogICAgICAgICJnaXRodWJBcGki
+OiB7CiAgICAgICAgICAiaWQiOiAieXpVQk8yZEljNXpmc0NXUyIsCiAgICAg
+ICAgICAibmFtZSI6ICJHaXRIdWIgYWNjb3VudCIKICAgICAgICB9CiAgICAg
+IH0sCiAgICAgICJpZCI6ICI5ZjYzY2E5ZS1lMjA4LTRkMDctODY3NC1kYWI4
+ZDYyNDU5YjUiLAogICAgICAibmFtZSI6ICJDcmVhdGUgYSBmaWxlIiwKICAg
+ICAgInBhcmFtZXRlcnMiOiB7CiAgICAgICAgImNvbW1pdE1lc3NhZ2UiOiAi
+PVtOOE4gQmFja3VwXSB7eyRqc29uLm5hbWV9fSAobWFudWFsIGNyZWF0ZSki
+LAogICAgICAgICJmaWxlQ29udGVudCI6ICI9e3skanNvbltcIm44bl9kYXRh
+X3N0cmluZ3lcIl19fSIsCiAgICAgICAgImZpbGVQYXRoIjogIj17eyRqc29u
+LmZpbGVQYXRofX0iLAogICAgICAgICJvd25lciI6IHsKICAgICAgICAgICJf
+X3JsIjogdHJ1ZSwKICAgICAgICAgICJtb2RlIjogIm5hbWUiLAogICAgICAg
+ICAgInZhbHVlIjogImFkcmlzY2hlejAwIgogICAgICAgIH0sCiAgICAgICAg
+InJlcG9zaXRvcnkiOiB7CiAgICAgICAgICAiX19ybCI6IHRydWUsCiAgICAg
+ICAgICAiY2FjaGVkUmVzdWx0TmFtZSI6ICJVRElBLU44Ti1Xb3JrZmxvd3Mi
+LAogICAgICAgICAgImNhY2hlZFJlc3VsdFVybCI6ICJodHRwczovL2dpdGh1
+Yi5jb20vYWRyaXNjaGV6MDAvVURJQS1OOE4tV29ya2Zsb3dzIiwKICAgICAg
+ICAgICJtb2RlIjogImxpc3QiLAogICAgICAgICAgInZhbHVlIjogIlVESUEt
+TjhOLVdvcmtmbG93cyIKICAgICAgICB9LAogICAgICAgICJyZXNvdXJjZSI6
+ICJmaWxlIgogICAgICB9LAogICAgICAicG9zaXRpb24iOiBbCiAgICAgICAg
+MjU2LAogICAgICAgIDEyMDAKICAgICAgXSwKICAgICAgInR5cGUiOiAibjhu
+LW5vZGVzLWJhc2UuZ2l0aHViIiwKICAgICAgInR5cGVWZXJzaW9uIjogMS4x
+LAogICAgICAid2ViaG9va0lkIjogIjllYWM2MWY3LWMzYzYtNGM2NC1hODcy
+LTE3NzczNDliMTZjZiIKICAgIH0sCiAgICB7CiAgICAgICJpZCI6ICI0ZDcw
+ZWQyNS02YjEzLTRhZmItYTM0MS1iMmVmMjMwMTdiM2YiLAogICAgICAibmFt
+ZSI6ICJDb2RlIGluIEphdmFTY3JpcHQiLAogICAgICAicGFyYW1ldGVycyI6
+IHsKICAgICAgICAianNDb2RlIjogImZ1bmN0aW9uIGRlZXBDbG9uZShvYmop
+IHtcbiAgcmV0dXJuIEpTT04ucGFyc2UoSlNPTi5zdHJpbmdpZnkob2JqKSk7
+XG59XG5cbmZ1bmN0aW9uIHJlbW92ZVBhdGhzKG9iaiwgcGF0aHMpIHtcbiAg
+Zm9yIChjb25zdCBwYXRoIG9mIHBhdGhzKSB7XG4gICAgY29uc3QgcGFydHMg
+PSBwYXRoLnNwbGl0KCcuJyk7XG4gICAgbGV0IGN1cnJlbnQgPSBvYmo7XG5c
+biAgICBmb3IgKGxldCBpID0gMDsgaSA8IHBhcnRzLmxlbmd0aCAtIDE7IGkr
+Kykge1xuICAgICAgaWYgKCFjdXJyZW50IHx8IHR5cGVvZiBjdXJyZW50ICE9
+PSAnb2JqZWN0Jykge1xuICAgICAgICBjdXJyZW50ID0gbnVsbDtcbiAgICAg
+ICAgYnJlYWs7XG4gICAgICB9XG4gICAgICBjdXJyZW50ID0gY3VycmVudFtw
+YXJ0c1tpXV07XG4gICAgfVxuXG4gICAgaWYgKGN1cnJlbnQgJiYgdHlwZW9m
+IGN1cnJlbnQgPT09ICdvYmplY3QnKSB7XG4gICAgICBkZWxldGUgY3VycmVu
+dFtwYXJ0c1twYXJ0cy5sZW5ndGggLSAxXV07XG4gICAgfVxuICB9XG59XG5c
+bmZ1bmN0aW9uIHNvcnRPYmplY3RLZXlzKG9iaikge1xuICBpZiAoQXJyYXku
+aXNBcnJheShvYmopKSByZXR1cm4gb2JqLm1hcChzb3J0T2JqZWN0S2V5cyk7
+XG5cbiAgaWYgKG9iaiAmJiB0eXBlb2Ygb2JqID09PSAnb2JqZWN0Jykge1xu
+ICAgIGNvbnN0IHNvcnRlZCA9IHt9O1xuICAgIE9iamVjdC5rZXlzKG9iaiku
+c29ydCgpLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgc29ydGVkW2tleV0g
+PSBzb3J0T2JqZWN0S2V5cyhvYmpba2V5XSk7XG4gICAgfSk7XG4gICAgcmV0
+dXJuIHNvcnRlZDtcbiAgfVxuXG4gIHJldHVybiBvYmo7XG59XG5cbmZ1bmN0
+aW9uIG5vcm1hbGl6ZVdvcmtmbG93KG9iaikge1xuICBjb25zdCBjb3B5ID0g
+ZGVlcENsb25lKG9iaik7XG5cbiAgcmVtb3ZlUGF0aHMoY29weSwgW1xuICAg
+ICd1cGRhdGVkQXQnLFxuICAgICdjcmVhdGVkQXQnLFxuICAgICd2ZXJzaW9u
+SWQnLFxuICAgICdhY3RpdmVWZXJzaW9uSWQnLFxuICAgICd0cmlnZ2VyQ291
+bnQnLFxuICAgICdzaGFyZWQnLFxuICAgICdtZXRhJyxcbiAgICAnc3RhdGlj
+RGF0YScsXG4gIF0pO1xuXG4gIGlmIChjb3B5LmFjdGl2ZVZlcnNpb24gJiYg
+dHlwZW9mIGNvcHkuYWN0aXZlVmVyc2lvbiA9PT0gJ29iamVjdCcpIHtcbiAg
+ICByZW1vdmVQYXRocyhjb3B5LCBbXG4gICAgICAnYWN0aXZlVmVyc2lvbi51
+cGRhdGVkQXQnLFxuICAgICAgJ2FjdGl2ZVZlcnNpb24uY3JlYXRlZEF0Jyxc
+biAgICAgICdhY3RpdmVWZXJzaW9uLnZlcnNpb25JZCcsXG4gICAgICAnYWN0
+aXZlVmVyc2lvbi53b3JrZmxvd0lkJyxcbiAgICAgICdhY3RpdmVWZXJzaW9u
+Lm5hbWUnLFxuICAgICAgJ2FjdGl2ZVZlcnNpb24uZGVzY3JpcHRpb24nLFxu
+ICAgICAgJ2FjdGl2ZVZlcnNpb24uYXV0aG9ycycsXG4gICAgICAnYWN0aXZl
+VmVyc2lvbi5hdXRvc2F2ZWQnLFxuICAgIF0pO1xuICB9XG5cbiAgcmV0dXJu
+IHNvcnRPYmplY3RLZXlzKGNvcHkpO1xufVxuXG5mdW5jdGlvbiBzYW5pdGl6
+ZUZvckdpdEh1YihvYmopIHtcbiAgbGV0IHRleHQgPSBKU09OLnN0cmluZ2lm
+eShvYmosIG51bGwsIDIpO1xuXG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoL2Fw
+aWZ5X2FwaV9bQS1aYS16MC05XSsvZ2ksICdBUElGWV9UT0tFTl9NQVNLRUQn
+KTtcbiAgdGV4dCA9IHRleHQucmVwbGFjZSgvKFwiQVBJRllfVE9LRU5fTUFT
+S0VEXCJcXHMqOlxccyopXCJbXlwiXSpcIi9naSwgJyQxXCJBUElGWV9UT0tF
+Tl9NQVNLRURcIicpO1xuXG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoL3NiX3Nl
+Y3JldF9bQS1aYS16MC05X1xcLV0rL2csICdTVVBBQkFTRV9TRUNSRVRfTUFT
+S0VEJyk7XG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoLyhcImFwaWtleVwiXFxz
+KjpcXHMqKVwiW15cIl0qXCIvZ2ksICckMVwiU1VQQUJBU0VfU0VDUkVUX01B
+U0tFRFwiJyk7XG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoLyhcIkF1dGhvcml6
+YXRpb25cIlxccyo6XFxzKilcIkJlYXJlciBbXlwiXSpcIi9naSwgJyQxXCJC
+ZWFyZXIgU1VQQUJBU0VfU0VDUkVUX01BU0tFRFwiJyk7XG5cbiAgdGV4dCA9
+IHRleHQucmVwbGFjZShcbiAgICAvKFwiKGFjY2Vzc1Rva2VufHRva2VufHNl
+Y3JldHxjbGllbnRTZWNyZXR8c2VydmljZV9yb2xlfHNlcnZpY2VSb2xlS2V5
+fGFub25LZXl8YXBpS2V5fHgtYXBpLWtleXx4X2FwaV9rZXkpXCJcXHMqOlxc
+cyopXCJbXlwiXSpcIi9naSxcbiAgICAnJDFcIl9fUkVEQUNURURfX1wiJ1xu
+ICApO1xuXG4gIHRleHQgPSB0ZXh0LnJlcGxhY2UoL1xcYmV5SltBLVphLXow
+LTlfXFwtXStcXC5bQS1aYS16MC05X1xcLV0rXFwuW0EtWmEtejAtOV9cXC1d
+K1xcYi9nLCAnSldUX01BU0tFRCcpO1xuXG4gIHJldHVybiB0ZXh0O1xufVxu
+XG4vLyBFU1RFIEVTIEVMIFdPUktGTE9XIE9SSUdJTkFMIEVOVEVST1xuY29u
+c3Qgd29ya2Zsb3cgPSAkanNvbjtcblxuLy8gTm9ybWFsaXphciArIHNhbml0
+aXphclxuY29uc3Qgbm9ybWFsaXplZCA9IG5vcm1hbGl6ZVdvcmtmbG93KHdv
+cmtmbG93KTtcbmNvbnN0IG44bl9kYXRhX3N0cmluZ3kgPSBzYW5pdGl6ZUZv
+ckdpdEh1Yihub3JtYWxpemVkKTtcblxuLy8gUnV0YSBkZWwgYXJjaGl2b1xu
+Y29uc3QgZmlsZVBhdGggPSBcIndvcmtmbG93cy9cIiArIHdvcmtmbG93Lm5h
+bWUgKyBcIi5qc29uXCI7XG5cbnJldHVybiBbXG4gIHtcbiAgICBqc29uOiB7
+XG4gICAgICBuYW1lOiB3b3JrZmxvdy5uYW1lLFxuICAgICAgaWQ6IHdvcmtm
+bG93LmlkLFxuICAgICAgZmlsZVBhdGgsXG4gICAgICB3b3JrZmxvdywgICAg
+ICAgICAgICAgIC8vIDwtIGd1YXJkYW1vcyBlbCBvcmlnaW5hbCBlbnRlcm9c
+biAgICAgIG44bl9kYXRhX3N0cmluZ3kgICAgICAgLy8gPC0geSB0YW1iacOp
+biBlbCBzdHJpbmcgZmluYWwgbGlzdG8gcGFyYSBHaXRIdWJcbiAgICB9XG4g
+IH1cbl07IgogICAgICB9LAogICAgICAicG9zaXRpb24iOiBbCiAgICAgICAg
+LTM2OCwKICAgICAgICAxMTA0CiAgICAgIF0sCiAgICAgICJ0eXBlIjogIm44
+bi1ub2Rlcy1iYXNlLmNvZGUiLAogICAgICAidHlwZVZlcnNpb24iOiAyCiAg
+ICB9CiAgXSwKICAicGluRGF0YSI6IHsKICAgICJXZWJob29rIjogWwogICAg
+ICB7CiAgICAgICAgImpzb24iOiB7CiAgICAgICAgICAiYm9keSI6IHsKICAg
+ICAgICAgICAgIm5vbWJyZVdvcmtmbG93IjogIltVRElBXSBCYWNrdXAgZGUg
+V29ya2Zsb3dzIiwKICAgICAgICAgICAgInNvdXJjZSI6ICJ3ZWItZm9ybSIs
+CiAgICAgICAgICAgICJzdWJtaXR0ZWRBdCI6ICIyMDI2LTAzLTI3VDIxOjE1
+OjE1LjQzOFoiLAogICAgICAgICAgICAid29ya2Zsb3dOYW1lIjogIltVRElB
+XSBCYWNrdXAgZGUgV29ya2Zsb3dzIgogICAgICAgICAgfSwKICAgICAgICAg
+ICJleGVjdXRpb25Nb2RlIjogInRlc3QiLAogICAgICAgICAgImhlYWRlcnMi
+OiB7CiAgICAgICAgICAgICJhY2NlcHQiOiAidGV4dC9odG1sLGFwcGxpY2F0
+aW9uL3hodG1sK3htbCxhcHBsaWNhdGlvbi94bWw7cT0wLjksaW1hZ2UvYXZp
+ZixpbWFnZS93ZWJwLGltYWdlL2FwbmcsKi8qO3E9MC44LGFwcGxpY2F0aW9u
+L3NpZ25lZC1leGNoYW5nZTt2PWIzO3E9MC43IiwKICAgICAgICAgICAgImFj
+Y2VwdC1lbmNvZGluZyI6ICJnemlwLCBkZWZsYXRlLCBiciwgenN0ZCIsCiAg
+ICAgICAgICAgICJhY2NlcHQtbGFuZ3VhZ2UiOiAiZXMtRVMsZXM7cT0wLjks
+ZW47cT0wLjgiLAogICAgICAgICAgICAiY2FjaGUtY29udHJvbCI6ICJtYXgt
+YWdlPTAiLAogICAgICAgICAgICAiY29udGVudC1sZW5ndGgiOiAiMTQ2IiwK
+ICAgICAgICAgICAgImNvbnRlbnQtdHlwZSI6ICJhcHBsaWNhdGlvbi94LXd3
+dy1mb3JtLXVybGVuY29kZWQiLAogICAgICAgICAgICAiaG9zdCI6ICJuOG4t
+bjhuLmMyY2ppeC5lYXN5cGFuZWwuaG9zdCIsCiAgICAgICAgICAgICJvcmln
+aW4iOiAiaHR0cDovLzEyNy4wLjAuMTo1NTAwIiwKICAgICAgICAgICAgInBy
+aW9yaXR5IjogInU9MCwgaSIsCiAgICAgICAgICAgICJyZWZlcmVyIjogImh0
+dHA6Ly8xMjcuMC4wLjE6NTUwMC8iLAogICAgICAgICAgICAic2VjLWNoLXVh
+IjogIlwiQ2hyb21pdW1cIjt2PVwiMTQ2XCIsIFwiTm90LUEuQnJhbmRcIjt2
+PVwiMjRcIiwgXCJHb29nbGUgQ2hyb21lXCI7dj1cIjE0NlwiIiwKICAgICAg
+ICAgICAgInNlYy1jaC11YS1tb2JpbGUiOiAiPzAiLAogICAgICAgICAgICAi
+c2VjLWNoLXVhLXBsYXRmb3JtIjogIlwiV2luZG93c1wiIiwKICAgICAgICAg
+ICAgInNlYy1mZXRjaC1kZXN0IjogImlmcmFtZSIsCiAgICAgICAgICAgICJz
+ZWMtZmV0Y2gtbW9kZSI6ICJuYXZpZ2F0ZSIsCiAgICAgICAgICAgICJzZWMt
+ZmV0Y2gtc2l0ZSI6ICJjcm9zcy1zaXRlIiwKICAgICAgICAgICAgInNlYy1m
+ZXRjaC1zdG9yYWdlLWFjY2VzcyI6ICJhY3RpdmUiLAogICAgICAgICAgICAi
+dXBncmFkZS1pbnNlY3VyZS1yZXF1ZXN0cyI6ICIxIiwKICAgICAgICAgICAg
+InVzZXItYWdlbnQiOiAiTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsg
+V2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBH
+ZWNrbykgQ2hyb21lLzE0Ni4wLjAuMCBTYWZhcmkvNTM3LjM2IiwKICAgICAg
+ICAgICAgIngtZm9yd2FyZGVkLWZvciI6ICI5NS4yMTAuNjUuNjQiLAogICAg
+ICAgICAgICAieC1mb3J3YXJkZWQtaG9zdCI6ICJuOG4tbjhuLmMyY2ppeC5l
+YXN5cGFuZWwuaG9zdCIsCiAgICAgICAgICAgICJ4LWZvcndhcmRlZC1wb3J0
+IjogIjQ0MyIsCiAgICAgICAgICAgICJ4LWZvcndhcmRlZC1wcm90byI6ICJo
+dHRwcyIsCiAgICAgICAgICAgICJ4LWZvcndhcmRlZC1zZXJ2ZXIiOiAiYmU4
+OGQ2ZjkxYzI4IiwKICAgICAgICAgICAgIngtcmVhbC1pcCI6ICI5NS4yMTAu
+NjUuNjQiCiAgICAgICAgICB9LAogICAgICAgICAgInBhcmFtcyI6IHt9LAog
+ICAgICAgICAgInF1ZXJ5Ijoge30sCiAgICAgICAgICAid2ViaG9va1VybCI6
+ICJodHRwczovL244bi1uOG4uYzJjaml4LmVhc3lwYW5lbC5ob3N0L3dlYmhv
+b2stdGVzdC85NGQ1NWIyYy1hZGI0LTQ3YWQtYjhiZC1lNzRlODdhM2FhNGEi
+CiAgICAgICAgfSwKICAgICAgICAicGFpcmVkSXRlbSI6IHsKICAgICAgICAg
+ICJpdGVtIjogMAogICAgICAgIH0KICAgICAgfQogICAgXQogIH0sCiAgInNl
+dHRpbmdzIjogewogICAgImJpbmFyeU1vZGUiOiAic2VwYXJhdGUiLAogICAg
+ImV4ZWN1dGlvbk9yZGVyIjogInYxIgogIH0sCiAgInRhZ3MiOiBbXQp9
