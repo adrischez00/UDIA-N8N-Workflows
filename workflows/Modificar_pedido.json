@@ -1,57 +1,443 @@
 {
   "active": true,
+  "activeVersion": {
+    "authors": "system migration",
+    "autosaved": false,
+    "connections": {
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Respond to Webhook",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Buscar_pedido_modificar": {
+        "ai_tool": [
+          [
+            {
+              "index": 0,
+              "node": "AI Agent",
+              "type": "ai_tool"
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "AI Agent",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Modificar_pedido": {
+        "ai_tool": [
+          [
+            {
+              "index": 0,
+              "node": "AI Agent",
+              "type": "ai_tool"
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "index": 0,
+              "node": "AI Agent",
+              "type": "ai_languageModel"
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Edit Fields",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Switch",
+              "type": "main"
+            }
+          ]
+        ]
+      }
+    },
+    "createdAt": "2025-12-07T00:37:51.230Z",
+    "description": null,
+    "name": null,
+    "nodes": [
+      {
+        "id": "a366454d-d1c4-44b8-b4c5-0b88db2ad0da",
+        "name": "Switch",
+        "parameters": {
+          "options": {},
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "combinator": "and",
+                  "conditions": [
+                    {
+                      "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa",
+                      "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
+                      "operator": {
+                        "operation": "exists",
+                        "singleValue": true,
+                        "type": "string"
+                      },
+                      "rightValue": ""
+                    }
+                  ],
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  }
+                },
+                "outputKey": "Modificar_pedido",
+                "renameOutput": true
+              }
+            ]
+          }
+        },
+        "position": [
+          -16,
+          16
+        ],
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.3
+      },
+      {
+        "id": "023a3bc8-3819-445f-9d70-2610a53bc26a",
+        "name": "Edit Fields",
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "ec03870a-5897-452d-9d55-a0fe08736901",
+                "name": "Hora_recogida",
+                "type": "string",
+                "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_recogida }}"
+              },
+              {
+                "id": "c2290d0f-2ea5-4f9a-af91-eef4d603e2cc",
+                "name": "Nombre",
+                "type": "string",
+                "value": "={{ $json.body.message.toolCalls[0].function.arguments.Nombre }}"
+              },
+              {
+                "id": "52a70b92-e1b3-4dee-b730-c7f4ed231fc3",
+                "name": "Anadir_a_pedido",
+                "type": "string",
+                "value": "={{ $json.body.message.toolCalls[0].function.arguments.Anadir_a_pedido }}"
+              },
+              {
+                "id": "726ec2fa-4004-48b8-8dfa-33cf72d470b7",
+                "name": "Quitar_de_pedido",
+                "type": "string",
+                "value": "={{ $json.body.message.toolCalls[0].function.arguments.Quitar_de_pedido }}"
+              },
+              {
+                "id": "552dfe9f-c803-4f3b-ba6d-5bc14d6f37f7",
+                "name": "Cambiar_pedido",
+                "type": "string",
+                "value": "={{ $json.body.message.toolCalls[0].function.arguments.Cambiar_pedido }}"
+              },
+              {
+                "id": "31c43eff-5756-4a1e-ba2a-318febf32fe7",
+                "name": "Hora_recogida_nueva",
+                "type": "string",
+                "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_recogida_nueva }}"
+              },
+              {
+                "id": "dfbdb6af-7312-4500-adc5-8e69a30b098c",
+                "name": "Metodo_Pago",
+                "type": "string",
+                "value": "={{ $json.body.message.toolCalls[0].function.arguments.Metodo_Pago }}"
+              },
+              {
+                "id": "de4d40a8-8244-412c-8201-6d25809bb0db",
+                "name": "Notas",
+                "type": "string",
+                "value": "={{ $json.body.message.toolCalls[0].function.arguments.Notas }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "position": [
+          192,
+          16
+        ],
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4
+      },
+      {
+        "id": "ec389eb3-b31a-4c6e-92bc-357d844b7880",
+        "name": "AI Agent",
+        "parameters": {
+          "options": {
+            "systemMessage": "=\nTu tarea es actuar como un asistente que gestiona pedidos de un restaurante para recogida en local.\n\nDebes:\n\t1.\tEncontrar el pedido del cliente con la herramienta Buscar_registro_pedidoa_modificar.\n\t2.\tModificar el pedido existente según lo que quiera cambiar el cliente usando la herramienta Modificar_pedido.\n\t3.\tRespetar la lógica de capacidad por hora y cambios de hora (swap) usando la herramienta comprobar_disponibilidad_pedidos cuando sea necesario.\n\t4.\tActualizar correctamente todos los campos relevantes del pedido, incluyendo siempre el campo Metodo_Pago cuando esté disponible en la entrada.\n\n⸻\n\n1. Carta de productos y precios\n\nUsa esta carta para interpretar y calcular el precio total del pedido a partir de los productos del cliente:\n\n🍔 Hamburguesas\n\t•\tHamburguesa Clásica – 6.50 €\n\t•\tHamburguesa Doble – 8.90 €\n\t•\tHamburguesa Vegetariana – 7.00 €\n\t•\tHamburguesa BBQ Bacon – 9.50 €\n\t•\tHamburguesa Pollo Crispy – 7.80 €\n\n🍟 Guarniciones\n\t•\tPapas Fritas – 2.50 €\n\t•\tPapas Gajo – 3.00 €\n\t•\tAros de Cebolla – 3.00 €\n\t•\tNuggets de Pollo (6 uds) – 4.20 €\n\t•\tPalitos de Queso (4 uds) – 4.00 €\n\t•\tPatatas – 2.00 €\n\n🥤 Bebidas\n\t•\tRefresco Lata (Coca-Cola, Fanta, etc.) – 1.80 €\n\t•\tAgua Mineral (500ml) – 1.20 €\n\t•\tCerveza (botella 33cl) – 2.50 €\n\t•\tTé frío / Nestea – 2.00 €\n\n🍰 Postres\n\t•\tBrownie de Chocolate – 3.50 €\n\t•\tTarta de Queso – 3.80 €\n\t•\tHelado (vasito) – 2.50 €\n\n🧂 Extras / Salsas\n\t•\tSalsa Barbacoa – 0.50 €\n\t•\tSalsa Ajo / Yogur – 0.50 €\n\t•\tSalsa Picante – 0.50 €\n\t•\tExtra de Queso – 1.00 €\n\t•\tExtra de Bacon – 1.20 €\n\nReglas de personalización de productos\n\t•\tA todas las hamburguesas se les pueden quitar ingredientes o salsas.\n\t•\tA todas las papas se les puede poner o quitar salsa.\n\nSi el cliente pide cosas como:\n\t•\t“hamburguesa sin salsa”, “sin cebolla”, “con salsa extra”\n\t•\t“papas sin salsa”, “papas con salsa picante”, etc.\n\nDebes añadir esa información claramente en el texto del Pedido (Notas o descripción del pedido).\n\n⸻\n\n2. Lógica de intercambio de hora de recogida (swap)\n\n🎯 Objetivo\n\nPermitir que un cliente cambie la hora de recogida de su pedido solo si hay disponibilidad, sin crear duplicados ni romper la capacidad por franja horaria.\n\n🔍 Lógica del sistema\n\t1.\tCuando el cliente quiera cambiar la hora de recogida, usa la herramienta comprobar_disponibilidad_pedidos para comprobar la Hora_recogida_nueva.\n\t2.\tSi hay espacio en la nueva hora:\n\t•\tSe realiza un intercambio limpio (swap):\n\t•\tEl pedido del cliente se reasigna a la nueva hora (Hora_recogida) manteniendo:\n\t•\tnombre\n\t•\tteléfono\n\t•\tproductos\n\t•\tmétodo de pago\n\t•\tnotas\n\t•\tdemás datos asociados.\n\t•\tLa hora antigua del pedido queda libre y pasa a estar disponible para futuros pedidos.\n\t3.\tRegla crítica:\n❌ No cambies simplemente la hora en el mismo registro si eso rompe la lógica de capacidad.\n✔️ Haz el movimiento de datos al registro que represente la nueva hora y libera la hora anterior.\n\n🧩 Ejemplo\n\nEl cliente tiene un pedido a las 21:30 y quiere cambiarlo a las 22:00:\n\t•\tSi a las 22:00 hay menos pedidos que el máximo permitido:\n\t•\tEl pedido se mueve a la fila/hora 22:00 con los mismos datos.\n\t•\tLa hora 21:30 vuelve a estar libre.\n\t•\tSi no hay disponibilidad, ofrece otras horas cercanas que sí tengan hueco.\n\n⸻\n\n3. Reglas sobre cambios de Método de Pago (Metodo_Pago)\n\nEl cliente puede querer cambiar el Método de Pago (por ejemplo, de efectivo a tarjeta o al revés).\n\nREGLA GENERAL MUY IMPORTANTE (NO ROMPER NUNCA):\n\t1.\tSi el campo Metodo_Pago aparece en la entrada del JSON (por ejemplo \"Metodo_Pago\": \"Efectivo\" o \"Metodo_Pago\": \"Tarjeta\"):\n\t•\tSIEMPRE debes incluir Metodo_Pago en la salida para la herramienta Modificar_pedido.\n\t•\tNo debes decidir si actualizarlo o no:\n👉 Si viene en la entrada, se envía a Modificar_pedido sin excepción.\n\t•\tNo lo ignores nunca aunque el usuario no diga explícitamente “quiero cambiar el método de pago”.\n\t2.\tSi el cliente explica en lenguaje natural que quiere cambiar de método de pago (por ejemplo, “antes era en efectivo pero ahora quiero pagar con tarjeta”):\n\t•\tAjusta el valor de Metodo_Pago en función de esa petición.\n\t•\tY, otra vez, envíalo SIEMPRE a Modificar_pedido.\n\t3.\tEl valor de Metodo_Pago presente en el JSON de entrada tiene prioridad absoluta sobre cualquier inferencia que pudieras hacer.\n\t•\tNo inventes métodos de pago nuevos.\n\t•\tUsa exactamente los valores que existan en el sistema (por ejemplo: \"Efectivo\", \"Tarjeta\" u otros que se usen internamente).\n\n⸻\n\n4. Uso de las herramientas\n\n4.1. Buscar_registro_pedidoa_modificar\n\t•\tÚsala para encontrar el pedido del cliente a partir de los datos que se te proporcionen (nombre, teléfono, hora, etc.).\n\t•\tAsegúrate de identificar correctamente el pedido concreto que el cliente quiere modificar.\n\n4.2. Modificar_pedido\n\t•\tÚsala para aplicar los cambios solicitados por el cliente:\n\t•\tCambios en los productos (añadir, quitar, cambiar).\n\t•\tCambios en la hora de recogida (siguiendo la lógica de disponibilidad y swap).\n\t•\tCambios en el método de pago.\n\t•\tCambios en notas o detalles del pedido.\n\t•\tEn la llamada a Modificar_pedido, debes:\n\t•\tIncluir todos los campos que quieras asegurar (Hora_recogida, Productos, Notas, etc.).\n\t•\tIncluir SIEMPRE Metodo_Pago cuando venga en el JSON de entrada, aunque no haya cambiado respecto al valor anterior.\n\n⸻\n\n5. Cómo debe hablar el agente al cliente\n\nCuando expliques al cliente lo que estás haciendo, usa lenguaje natural y claro:\n\t•\tSi no hay disponibilidad para la nueva hora:\n\t•\tIndica que no hay hueco.\n\t•\tOfrece horas alternativas disponibles (las más cercanas posibles).\n\t•\tSi sí hay disponibilidad:\n\t•\tConfirma que vas a mover el pedido a la nueva hora.\n\t•\tIndica que se mantienen sus productos, notas y método de pago (a menos que él pida cambiarlos).\n\nEjemplo de respuesta al cliente:\n\t•\t“He encontrado tu pedido de las 21:30.\nHay hueco a las 22:00, así que voy a mover tu pedido a esa hora manteniendo tus productos y cambiando el método de pago a tarjeta, como has pedido.”"
+          },
+          "promptType": "define",
+          "text": "=Hora_Recogida:{{ $json.Hora_recogida }}\nNotas: {{ $json.Notas }}\nAnadir_a_pedido:{{ $json.Anadir_a_pedido }}\nQuitar_de_pedido:{{ $json.Quitar_de_pedido }}\nMetodo_Pago:{{ $json.Metodo_Pago }}\nCambiar_pedido:{{ $json.Cambiar_pedido }}\nHora_recogida_nueva:{{ $json.Hora_recogida_nueva }}\nNombre:{{ $json.Nombre }}"
+        },
+        "position": [
+          368,
+          16
+        ],
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3
+      },
+      {
+        "credentials": {
+          "openAiApi": {
+            "id": "UUb7LT0t44WTS54p",
+            "name": "OpenAi account"
+          }
+        },
+        "id": "58c8ba16-1c9a-4915-a164-5ae919e31fa9",
+        "name": "OpenAI Chat Model",
+        "parameters": {
+          "builtInTools": {},
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4.1-mini"
+          },
+          "options": {}
+        },
+        "position": [
+          288,
+          176
+        ],
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3
+      },
+      {
+        "id": "01e404f6-399f-456b-8ff9-8fc0f0ccb422",
+        "name": "Respond to Webhook",
+        "parameters": {
+          "options": {
+            "responseCode": 200
+          },
+          "respondWith": "json",
+          "responseBody": "={{ JSON.stringify({\n  results: [\n    {\n      toolCallId: $node[\"Webhook\"].json.body.message.toolCallList[0].id,\n      result: $json.output,\n    },\n  ],\n}) }}\n"
+        },
+        "position": [
+          672,
+          16
+        ],
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4
+      },
+      {
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "xo9Z42x9DIHItt7m",
+            "name": "Airtable Personal Access Token account"
+          }
+        },
+        "id": "5e083f4e-4f7f-46a6-ad15-295f46f36894",
+        "name": "Modificar_pedido",
+        "parameters": {
+          "base": {
+            "__rl": true,
+            "cachedResultName": "reservas_restaurante_profesional.csv",
+            "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu",
+            "mode": "list",
+            "value": "appwsWKteRjGM6oKu"
+          },
+          "columns": {
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false,
+            "mappingMode": "defineBelow",
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "defaultMatch": true,
+                "display": true,
+                "displayName": "id",
+                "id": "id",
+                "readOnly": true,
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Hora_recogida",
+                "id": "Hora_recogida",
+                "readOnly": false,
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Nombre",
+                "id": "Nombre",
+                "readOnly": false,
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Telefono",
+                "id": "Telefono",
+                "readOnly": false,
+                "removed": false,
+                "required": false,
+                "type": "number"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Pedido",
+                "id": "Pedido",
+                "readOnly": false,
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Precio_Total",
+                "id": "Precio_Total",
+                "readOnly": false,
+                "removed": false,
+                "required": false,
+                "type": "number"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Metodo_Pago",
+                "id": "Metodo_Pago",
+                "readOnly": false,
+                "removed": false,
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "value": {
+              "Hora_recogida": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Hora_recogida', ``, 'string') }}",
+              "Metodo_Pago": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Metodo_Pago', ``, 'string') }}",
+              "Nombre": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Nombre', ``, 'string') }}",
+              "Pedido": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Pedido', ``, 'string') }}",
+              "Precio_Total": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Precio_Total', ``, 'number') }}",
+              "Telefono": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefono', ``, 'number') }}",
+              "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'string') }}"
+            }
+          },
+          "operation": "update",
+          "options": {
+            "typecast": true
+          },
+          "table": {
+            "__rl": true,
+            "cachedResultName": "Pedidos",
+            "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu/tblxR9aVECNLh7SBh",
+            "mode": "list",
+            "value": "tblxR9aVECNLh7SBh"
+          }
+        },
+        "position": [
+          624,
+          208
+        ],
+        "type": "n8n-nodes-base.airtableTool",
+        "typeVersion": 2.1
+      },
+      {
+        "id": "97c6baa6-a823-476d-9085-b40ec632c339",
+        "name": "Buscar_pedido_modificar",
+        "parameters": {
+          "description": "Llama a esta herramienta para buscar el pedido a modificar",
+          "workflowId": {
+            "__rl": true,
+            "cachedResultName": "Verificar_Horas_Disponibles",
+            "cachedResultUrl": "/workflow/uCBzDkAIRP6wbKZ6",
+            "mode": "list",
+            "value": "uCBzDkAIRP6wbKZ6"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {}
+          }
+        },
+        "position": [
+          464,
+          208
+        ],
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 2.2
+      },
+      {
+        "id": "97fbcafe-a80e-46e4-aa0c-ee813826f6ea",
+        "name": "Webhook",
+        "parameters": {
+          "httpMethod": "POST",
+          "options": {},
+          "path": "ddfa43a4-0dc3-44c7-8ea9-5b9cb8a98e76",
+          "responseMode": "responseNode"
+        },
+        "position": [
+          -208,
+          16
+        ],
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "webhookId": "ddfa43a4-0dc3-44c7-8ea9-5b9cb8a98e76"
+      }
+    ],
+    "updatedAt": "2025-12-07T00:37:51.230Z",
+    "versionId": "597a37e4-8778-4398-b513-0606d051d925",
+    "workflowId": "YP7HWB2iVMjKqQga"
+  },
+  "activeVersionId": "597a37e4-8778-4398-b513-0606d051d925",
   "connections": {
-    "Switch": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "AI Agent": {
       "main": [
         [
           {
+            "index": 0,
             "node": "Respond to Webhook",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Modificar_pedido": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
+            "type": "main"
           }
         ]
       ]
@@ -60,9 +446,53 @@
       "ai_tool": [
         [
           {
+            "index": 0,
             "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Modificar_pedido": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_languageModel"
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Edit Fields",
+            "type": "main"
           }
         ]
       ]
@@ -71,9 +501,9 @@
       "main": [
         [
           {
+            "index": 0,
             "node": "Switch",
-            "type": "main",
-            "index": 0
+            "type": "main"
           }
         ]
       ]
@@ -86,341 +516,341 @@
   "name": "Modificar_pedido",
   "nodes": [
     {
+      "id": "a366454d-d1c4-44b8-b4c5-0b88db2ad0da",
+      "name": "Switch",
       "parameters": {
+        "options": {},
         "rules": {
           "values": [
             {
               "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa",
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
+                    "operator": {
+                      "operation": "exists",
+                      "singleValue": true,
+                      "type": "string"
+                    },
+                    "rightValue": ""
+                  }
+                ],
                 "options": {
                   "caseSensitive": true,
                   "leftValue": "",
                   "typeValidation": "strict",
                   "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.body.message.toolCalls[0].function.name }}",
-                    "rightValue": "",
-                    "operator": {
-                      "type": "string",
-                      "operation": "exists",
-                      "singleValue": true
-                    },
-                    "id": "27b9fea2-816a-4465-8ed9-82c93c76dafa"
-                  }
-                ],
-                "combinator": "and"
+                }
               },
-              "renameOutput": true,
-              "outputKey": "Modificar_pedido"
+              "outputKey": "Modificar_pedido",
+              "renameOutput": true
             }
           ]
-        },
-        "options": {}
+        }
       },
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3.3,
       "position": [
         -16,
         16
       ],
-      "id": "a366454d-d1c4-44b8-b4c5-0b88db2ad0da",
-      "name": "Switch"
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3
     },
     {
+      "id": "023a3bc8-3819-445f-9d70-2610a53bc26a",
+      "name": "Edit Fields",
       "parameters": {
         "assignments": {
           "assignments": [
             {
               "id": "ec03870a-5897-452d-9d55-a0fe08736901",
               "name": "Hora_recogida",
-              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_recogida }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_recogida }}"
             },
             {
               "id": "c2290d0f-2ea5-4f9a-af91-eef4d603e2cc",
               "name": "Nombre",
-              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Nombre }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Nombre }}"
             },
             {
               "id": "52a70b92-e1b3-4dee-b730-c7f4ed231fc3",
               "name": "Anadir_a_pedido",
-              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Anadir_a_pedido }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Anadir_a_pedido }}"
             },
             {
               "id": "726ec2fa-4004-48b8-8dfa-33cf72d470b7",
               "name": "Quitar_de_pedido",
-              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Quitar_de_pedido }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Quitar_de_pedido }}"
             },
             {
               "id": "552dfe9f-c803-4f3b-ba6d-5bc14d6f37f7",
               "name": "Cambiar_pedido",
-              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Cambiar_pedido }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Cambiar_pedido }}"
             },
             {
               "id": "31c43eff-5756-4a1e-ba2a-318febf32fe7",
               "name": "Hora_recogida_nueva",
-              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_recogida_nueva }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Hora_recogida_nueva }}"
             },
             {
               "id": "dfbdb6af-7312-4500-adc5-8e69a30b098c",
               "name": "Metodo_Pago",
-              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Metodo_Pago }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Metodo_Pago }}"
             },
             {
               "id": "de4d40a8-8244-412c-8201-6d25809bb0db",
               "name": "Notas",
-              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Notas }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.Notas }}"
             }
           ]
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
       "position": [
         192,
         16
       ],
-      "id": "023a3bc8-3819-445f-9d70-2610a53bc26a",
-      "name": "Edit Fields"
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
     },
     {
+      "id": "ec389eb3-b31a-4c6e-92bc-357d844b7880",
+      "name": "AI Agent",
       "parameters": {
-        "promptType": "define",
-        "text": "=Hora_Recogida:{{ $json.Hora_recogida }}\nNotas: {{ $json.Notas }}\nAnadir_a_pedido:{{ $json.Anadir_a_pedido }}\nQuitar_de_pedido:{{ $json.Quitar_de_pedido }}\nMetodo_Pago:{{ $json.Metodo_Pago }}\nCambiar_pedido:{{ $json.Cambiar_pedido }}\nHora_recogida_nueva:{{ $json.Hora_recogida_nueva }}\nNombre:{{ $json.Nombre }}",
         "options": {
           "systemMessage": "=\nTu tarea es actuar como un asistente que gestiona pedidos de un restaurante para recogida en local.\n\nDebes:\n\t1.\tEncontrar el pedido del cliente con la herramienta Buscar_registro_pedidoa_modificar.\n\t2.\tModificar el pedido existente según lo que quiera cambiar el cliente usando la herramienta Modificar_pedido.\n\t3.\tRespetar la lógica de capacidad por hora y cambios de hora (swap) usando la herramienta comprobar_disponibilidad_pedidos cuando sea necesario.\n\t4.\tActualizar correctamente todos los campos relevantes del pedido, incluyendo siempre el campo Metodo_Pago cuando esté disponible en la entrada.\n\n⸻\n\n1. Carta de productos y precios\n\nUsa esta carta para interpretar y calcular el precio total del pedido a partir de los productos del cliente:\n\n🍔 Hamburguesas\n\t•\tHamburguesa Clásica – 6.50 €\n\t•\tHamburguesa Doble – 8.90 €\n\t•\tHamburguesa Vegetariana – 7.00 €\n\t•\tHamburguesa BBQ Bacon – 9.50 €\n\t•\tHamburguesa Pollo Crispy – 7.80 €\n\n🍟 Guarniciones\n\t•\tPapas Fritas – 2.50 €\n\t•\tPapas Gajo – 3.00 €\n\t•\tAros de Cebolla – 3.00 €\n\t•\tNuggets de Pollo (6 uds) – 4.20 €\n\t•\tPalitos de Queso (4 uds) – 4.00 €\n\t•\tPatatas – 2.00 €\n\n🥤 Bebidas\n\t•\tRefresco Lata (Coca-Cola, Fanta, etc.) – 1.80 €\n\t•\tAgua Mineral (500ml) – 1.20 €\n\t•\tCerveza (botella 33cl) – 2.50 €\n\t•\tTé frío / Nestea – 2.00 €\n\n🍰 Postres\n\t•\tBrownie de Chocolate – 3.50 €\n\t•\tTarta de Queso – 3.80 €\n\t•\tHelado (vasito) – 2.50 €\n\n🧂 Extras / Salsas\n\t•\tSalsa Barbacoa – 0.50 €\n\t•\tSalsa Ajo / Yogur – 0.50 €\n\t•\tSalsa Picante – 0.50 €\n\t•\tExtra de Queso – 1.00 €\n\t•\tExtra de Bacon – 1.20 €\n\nReglas de personalización de productos\n\t•\tA todas las hamburguesas se les pueden quitar ingredientes o salsas.\n\t•\tA todas las papas se les puede poner o quitar salsa.\n\nSi el cliente pide cosas como:\n\t•\t“hamburguesa sin salsa”, “sin cebolla”, “con salsa extra”\n\t•\t“papas sin salsa”, “papas con salsa picante”, etc.\n\nDebes añadir esa información claramente en el texto del Pedido (Notas o descripción del pedido).\n\n⸻\n\n2. Lógica de intercambio de hora de recogida (swap)\n\n🎯 Objetivo\n\nPermitir que un cliente cambie la hora de recogida de su pedido solo si hay disponibilidad, sin crear duplicados ni romper la capacidad por franja horaria.\n\n🔍 Lógica del sistema\n\t1.\tCuando el cliente quiera cambiar la hora de recogida, usa la herramienta comprobar_disponibilidad_pedidos para comprobar la Hora_recogida_nueva.\n\t2.\tSi hay espacio en la nueva hora:\n\t•\tSe realiza un intercambio limpio (swap):\n\t•\tEl pedido del cliente se reasigna a la nueva hora (Hora_recogida) manteniendo:\n\t•\tnombre\n\t•\tteléfono\n\t•\tproductos\n\t•\tmétodo de pago\n\t•\tnotas\n\t•\tdemás datos asociados.\n\t•\tLa hora antigua del pedido queda libre y pasa a estar disponible para futuros pedidos.\n\t3.\tRegla crítica:\n❌ No cambies simplemente la hora en el mismo registro si eso rompe la lógica de capacidad.\n✔️ Haz el movimiento de datos al registro que represente la nueva hora y libera la hora anterior.\n\n🧩 Ejemplo\n\nEl cliente tiene un pedido a las 21:30 y quiere cambiarlo a las 22:00:\n\t•\tSi a las 22:00 hay menos pedidos que el máximo permitido:\n\t•\tEl pedido se mueve a la fila/hora 22:00 con los mismos datos.\n\t•\tLa hora 21:30 vuelve a estar libre.\n\t•\tSi no hay disponibilidad, ofrece otras horas cercanas que sí tengan hueco.\n\n⸻\n\n3. Reglas sobre cambios de Método de Pago (Metodo_Pago)\n\nEl cliente puede querer cambiar el Método de Pago (por ejemplo, de efectivo a tarjeta o al revés).\n\nREGLA GENERAL MUY IMPORTANTE (NO ROMPER NUNCA):\n\t1.\tSi el campo Metodo_Pago aparece en la entrada del JSON (por ejemplo \"Metodo_Pago\": \"Efectivo\" o \"Metodo_Pago\": \"Tarjeta\"):\n\t•\tSIEMPRE debes incluir Metodo_Pago en la salida para la herramienta Modificar_pedido.\n\t•\tNo debes decidir si actualizarlo o no:\n👉 Si viene en la entrada, se envía a Modificar_pedido sin excepción.\n\t•\tNo lo ignores nunca aunque el usuario no diga explícitamente “quiero cambiar el método de pago”.\n\t2.\tSi el cliente explica en lenguaje natural que quiere cambiar de método de pago (por ejemplo, “antes era en efectivo pero ahora quiero pagar con tarjeta”):\n\t•\tAjusta el valor de Metodo_Pago en función de esa petición.\n\t•\tY, otra vez, envíalo SIEMPRE a Modificar_pedido.\n\t3.\tEl valor de Metodo_Pago presente en el JSON de entrada tiene prioridad absoluta sobre cualquier inferencia que pudieras hacer.\n\t•\tNo inventes métodos de pago nuevos.\n\t•\tUsa exactamente los valores que existan en el sistema (por ejemplo: \"Efectivo\", \"Tarjeta\" u otros que se usen internamente).\n\n⸻\n\n4. Uso de las herramientas\n\n4.1. Buscar_registro_pedidoa_modificar\n\t•\tÚsala para encontrar el pedido del cliente a partir de los datos que se te proporcionen (nombre, teléfono, hora, etc.).\n\t•\tAsegúrate de identificar correctamente el pedido concreto que el cliente quiere modificar.\n\n4.2. Modificar_pedido\n\t•\tÚsala para aplicar los cambios solicitados por el cliente:\n\t•\tCambios en los productos (añadir, quitar, cambiar).\n\t•\tCambios en la hora de recogida (siguiendo la lógica de disponibilidad y swap).\n\t•\tCambios en el método de pago.\n\t•\tCambios en notas o detalles del pedido.\n\t•\tEn la llamada a Modificar_pedido, debes:\n\t•\tIncluir todos los campos que quieras asegurar (Hora_recogida, Productos, Notas, etc.).\n\t•\tIncluir SIEMPRE Metodo_Pago cuando venga en el JSON de entrada, aunque no haya cambiado respecto al valor anterior.\n\n⸻\n\n5. Cómo debe hablar el agente al cliente\n\nCuando expliques al cliente lo que estás haciendo, usa lenguaje natural y claro:\n\t•\tSi no hay disponibilidad para la nueva hora:\n\t•\tIndica que no hay hueco.\n\t•\tOfrece horas alternativas disponibles (las más cercanas posibles).\n\t•\tSi sí hay disponibilidad:\n\t•\tConfirma que vas a mover el pedido a la nueva hora.\n\t•\tIndica que se mantienen sus productos, notas y método de pago (a menos que él pida cambiarlos).\n\nEjemplo de respuesta al cliente:\n\t•\t“He encontrado tu pedido de las 21:30.\nHay hueco a las 22:00, así que voy a mover tu pedido a esa hora manteniendo tus productos y cambiando el método de pago a tarjeta, como has pedido.”"
-        }
+        },
+        "promptType": "define",
+        "text": "=Hora_Recogida:{{ $json.Hora_recogida }}\nNotas: {{ $json.Notas }}\nAnadir_a_pedido:{{ $json.Anadir_a_pedido }}\nQuitar_de_pedido:{{ $json.Quitar_de_pedido }}\nMetodo_Pago:{{ $json.Metodo_Pago }}\nCambiar_pedido:{{ $json.Cambiar_pedido }}\nHora_recogida_nueva:{{ $json.Hora_recogida_nueva }}\nNombre:{{ $json.Nombre }}"
       },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3,
       "position": [
         368,
         16
       ],
-      "id": "ec389eb3-b31a-4c6e-92bc-357d844b7880",
-      "name": "AI Agent"
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3
     },
     {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "mode": "list",
-          "value": "gpt-4.1-mini"
-        },
-        "builtInTools": {},
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.3,
-      "position": [
-        288,
-        176
-      ],
-      "id": "58c8ba16-1c9a-4915-a164-5ae919e31fa9",
-      "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
           "id": "UUb7LT0t44WTS54p",
           "name": "OpenAi account"
         }
-      }
+      },
+      "id": "58c8ba16-1c9a-4915-a164-5ae919e31fa9",
+      "name": "OpenAI Chat Model",
+      "parameters": {
+        "builtInTools": {},
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "position": [
+        288,
+        176
+      ],
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3
     },
     {
+      "id": "01e404f6-399f-456b-8ff9-8fc0f0ccb422",
+      "name": "Respond to Webhook",
       "parameters": {
-        "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({\n  results: [\n    {\n      toolCallId: $node[\"Webhook\"].json.body.message.toolCallList[0].id,\n      result: $json.output,\n    },\n  ],\n}) }}\n",
         "options": {
           "responseCode": 200
-        }
+        },
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({\n  results: [\n    {\n      toolCallId: $node[\"Webhook\"].json.body.message.toolCallList[0].id,\n      result: $json.output,\n    },\n  ],\n}) }}\n"
       },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.4,
       "position": [
         672,
         16
       ],
-      "id": "01e404f6-399f-456b-8ff9-8fc0f0ccb422",
-      "name": "Respond to Webhook"
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4
     },
     {
-      "parameters": {
-        "operation": "update",
-        "base": {
-          "__rl": true,
-          "value": "appwsWKteRjGM6oKu",
-          "mode": "list",
-          "cachedResultName": "reservas_restaurante_profesional.csv",
-          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblxR9aVECNLh7SBh",
-          "mode": "list",
-          "cachedResultName": "Pedidos",
-          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu/tblxR9aVECNLh7SBh"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Hora_recogida": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Hora_recogida', ``, 'string') }}",
-            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'string') }}",
-            "Nombre": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Nombre', ``, 'string') }}",
-            "Telefono": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefono', ``, 'number') }}",
-            "Pedido": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Pedido', ``, 'string') }}",
-            "Precio_Total": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Precio_Total', ``, 'number') }}",
-            "Metodo_Pago": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Metodo_Pago', ``, 'string') }}"
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": [
-            {
-              "id": "id",
-              "displayName": "id",
-              "required": false,
-              "defaultMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": true,
-              "removed": false
-            },
-            {
-              "id": "Hora_recogida",
-              "displayName": "Hora_recogida",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Nombre",
-              "displayName": "Nombre",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Telefono",
-              "displayName": "Telefono",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Pedido",
-              "displayName": "Pedido",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Precio_Total",
-              "displayName": "Precio_Total",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "number",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Metodo_Pago",
-              "displayName": "Metodo_Pago",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {
-          "typecast": true
-        }
-      },
-      "type": "n8n-nodes-base.airtableTool",
-      "typeVersion": 2.1,
-      "position": [
-        624,
-        208
-      ],
-      "id": "5e083f4e-4f7f-46a6-ad15-295f46f36894",
-      "name": "Modificar_pedido",
       "credentials": {
         "airtableTokenApi": {
           "id": "xo9Z42x9DIHItt7m",
           "name": "Airtable Personal Access Token account"
         }
-      }
+      },
+      "id": "5e083f4e-4f7f-46a6-ad15-295f46f36894",
+      "name": "Modificar_pedido",
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "cachedResultName": "reservas_restaurante_profesional.csv",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu",
+          "mode": "list",
+          "value": "appwsWKteRjGM6oKu"
+        },
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "defaultMatch": true,
+              "display": true,
+              "displayName": "id",
+              "id": "id",
+              "readOnly": true,
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Hora_recogida",
+              "id": "Hora_recogida",
+              "readOnly": false,
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Nombre",
+              "id": "Nombre",
+              "readOnly": false,
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Telefono",
+              "id": "Telefono",
+              "readOnly": false,
+              "removed": false,
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Pedido",
+              "id": "Pedido",
+              "readOnly": false,
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Precio_Total",
+              "id": "Precio_Total",
+              "readOnly": false,
+              "removed": false,
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Metodo_Pago",
+              "id": "Metodo_Pago",
+              "readOnly": false,
+              "removed": false,
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "Hora_recogida": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Hora_recogida', ``, 'string') }}",
+            "Metodo_Pago": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Metodo_Pago', ``, 'string') }}",
+            "Nombre": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Nombre', ``, 'string') }}",
+            "Pedido": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Pedido', ``, 'string') }}",
+            "Precio_Total": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Precio_Total', ``, 'number') }}",
+            "Telefono": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefono', ``, 'number') }}",
+            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'string') }}"
+          }
+        },
+        "operation": "update",
+        "options": {
+          "typecast": true
+        },
+        "table": {
+          "__rl": true,
+          "cachedResultName": "Pedidos",
+          "cachedResultUrl": "https://airtable.com/appwsWKteRjGM6oKu/tblxR9aVECNLh7SBh",
+          "mode": "list",
+          "value": "tblxR9aVECNLh7SBh"
+        }
+      },
+      "position": [
+        624,
+        208
+      ],
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1
     },
     {
+      "id": "97c6baa6-a823-476d-9085-b40ec632c339",
+      "name": "Buscar_pedido_modificar",
       "parameters": {
         "description": "Llama a esta herramienta para buscar el pedido a modificar",
         "workflowId": {
           "__rl": true,
-          "value": "uCBzDkAIRP6wbKZ6",
-          "mode": "list",
+          "cachedResultName": "Verificar_Horas_Disponibles",
           "cachedResultUrl": "/workflow/uCBzDkAIRP6wbKZ6",
-          "cachedResultName": "Verificar_Horas_Disponibles"
+          "mode": "list",
+          "value": "uCBzDkAIRP6wbKZ6"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
           "value": {}
         }
       },
-      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-      "typeVersion": 2.2,
       "position": [
         464,
         208
       ],
-      "id": "97c6baa6-a823-476d-9085-b40ec632c339",
-      "name": "Buscar_pedido_modificar"
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
     },
     {
+      "id": "97fbcafe-a80e-46e4-aa0c-ee813826f6ea",
+      "name": "Webhook",
       "parameters": {
         "httpMethod": "POST",
+        "options": {},
         "path": "ddfa43a4-0dc3-44c7-8ea9-5b9cb8a98e76",
-        "responseMode": "responseNode",
-        "options": {}
+        "responseMode": "responseNode"
       },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
       "position": [
         -208,
         16
       ],
-      "id": "97fbcafe-a80e-46e4-aa0c-ee813826f6ea",
-      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
       "webhookId": "ddfa43a4-0dc3-44c7-8ea9-5b9cb8a98e76"
     }
   ],
@@ -430,11 +860,11 @@
   },
   "shared": [
     {
-      "updatedAt": "2025-11-22T04:06:14.981Z",
       "createdAt": "2025-11-22T04:06:14.981Z",
+      "projectId": "4uSls6g8LWC7Ie72",
       "role": "workflow:owner",
-      "workflowId": "YP7HWB2iVMjKqQga",
-      "projectId": "4uSls6g8LWC7Ie72"
+      "updatedAt": "2025-11-22T04:06:14.981Z",
+      "workflowId": "YP7HWB2iVMjKqQga"
     }
   ],
   "staticData": null,
