@@ -1,8 +1,6 @@
 {
   "active": true,
   "activeVersion": {
-    "authors": "Adrián Sánchez",
-    "autosaved": true,
     "connections": {
       "Code in JavaScript": {
         "main": [
@@ -196,9 +194,6 @@
         ]
       }
     },
-    "createdAt": "2026-03-27T18:34:48.201Z",
-    "description": "",
-    "name": "Version e4ec3cd0",
     "nodes": [
       {
         "id": "5ad5720f-546b-4f19-b9ea-3823230feaa3",
@@ -482,12 +477,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2
       }
-    ],
-    "updatedAt": "2026-03-27T18:36:13.000Z",
-    "versionId": "e4ec3cd0-26f3-4e38-b10e-3a91b784f13f",
-    "workflowId": "0x3pOzOTWMcpyeCd"
+    ]
   },
-  "activeVersionId": "e4ec3cd0-26f3-4e38-b10e-3a91b784f13f",
   "connections": {
     "Every 12 hours": {
       "main": [
@@ -670,12 +661,8 @@
       ]
     }
   },
-  "createdAt": "2025-12-03T23:29:28.593Z",
   "id": "0x3pOzOTWMcpyeCd",
   "isArchived": false,
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
   "name": "[UDIA] Backup de Workflows",
   "nodes": [
     {
@@ -874,7 +861,7 @@
       "id": "3d7c88f5-5471-466d-863c-01e300ad5df6",
       "name": "isDiffOrNew",
       "parameters": {
-        "jsCode": "// Helper: ordena claves de un objeto de forma estable\nfunction sortObjectKeys(obj) {\n  if (Array.isArray(obj)) {\n    return obj.map(sortObjectKeys);\n  }\n\n  if (obj && typeof obj === 'object') {\n    const sorted = {};\n    Object.keys(obj).sort().forEach((key) => {\n      sorted[key] = sortObjectKeys(obj[key]);\n    });\n    return sorted;\n  }\n\n  return obj;\n}\n\n// Helper: limpia posibles secretos antes de subir a GitHub\nfunction sanitizeForGitHub(obj) {\n  let text = JSON.stringify(obj, null, 2);\n\n  // Apify\n  text = text.replace(/apify_api_[A-Za-z0-9]+/gi, 'APIFY_TOKEN_MASKED');\n  text = text.replace(/(\"APIFY_TOKEN_MASKED\"\\s*:\\s*)\"[^\"]*\"/g, '$1\"APIFY_TOKEN_MASKED\"');\n\n  // Supabase\n  text = text.replace(/sb_secret_[A-Za-z0-9_\\-]+/g, 'SUPABASE_SECRET_MASKED');\n  text = text.replace(/(\"apikey\"\\s*:\\s*)\"[^\"]*\"/gi, '$1\"SUPABASE_SECRET_MASKED\"');\n  text = text.replace(/(\"Authorization\"\\s*:\\s*)\"Bearer [^\"]*\"/gi, '$1\"Bearer SUPABASE_SECRET_MASKED\"');\n\n  // Otros campos sensibles típicos\n  text = text.replace(\n    /(\"(accessToken|token|secret|clientSecret|service_role|serviceRoleKey|anonKey|apiKey|x-api-key|x_api_key)\"\\s*:\\s*)\"[^\"]*\"/gi,\n    '$1\"__REDACTED__\"'\n  );\n\n  // JWTs\n  text = text.replace(/\\beyJ[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\b/g, 'JWT_MASKED');\n\n  return text;\n}\n\n// Helper: intenta decodificar/parsing del contenido de GitHub\nfunction parseGithubContent(content) {\n  if (!content || typeof content !== 'string') return null;\n\n  const decoded = Buffer.from(content, 'base64').toString('utf8').trim();\n  if (!decoded) return null;\n\n  try {\n    return JSON.parse(decoded);\n  } catch (e) {\n    return null;\n  }\n}\n\nconst items = $input.all();\nconst githubItem = items[0];\nconst workflowItem = items[1];\n\nif (!githubItem || !workflowItem) {\n  throw new Error('isDiffOrNew necesita 2 entradas: GitHub + workflow n8n');\n}\n\nconst githubJson = githubItem.json ?? {};\nconst n8nWorkflow = workflowItem.json ?? {};\nconst orderedActual = sortObjectKeys(n8nWorkflow);\n\n// OJO: esta será la versión saneada del workflow actual\nconst sanitizedActual = sanitizeForGitHub(orderedActual);\n\n// CASO 1: el archivo existe en GitHub\nconst fileExistsInGitHub =\n  Object.prototype.hasOwnProperty.call(githubJson, 'sha') ||\n  Object.prototype.hasOwnProperty.call(githubJson, 'content') ||\n  Object.prototype.hasOwnProperty.call(githubJson, 'path');\n\nif (fileExistsInGitHub) {\n  const origWorkflow = parseGithubContent(githubJson.content);\n\n  // Si existe pero está vacío/corrupto => different\n  if (!origWorkflow) {\n    githubJson.github_status = 'different';\n    githubJson.content_decoded = null;\n    githubJson.n8n_data_stringy = sanitizedActual;\n    return items;\n  }\n\n  const orderedOriginal = sortObjectKeys(origWorkflow);\n\n  // IMPORTANTE:\n  // también saneamos el original antes de comparar\n  const sanitizedOriginal = sanitizeForGitHub(orderedOriginal);\n\n  if (sanitizedOriginal === sanitizedActual) {\n    githubJson.github_status = 'same';\n    githubJson.content_decoded = orderedOriginal;\n  } else {\n    githubJson.github_status = 'different';\n    githubJson.content_decoded = orderedOriginal;\n    githubJson.n8n_data_stringy = sanitizedActual;\n  }\n} else {\n  // CASO 2: archivo no existe en GitHub\n  githubJson.github_status = 'new';\n  githubJson.content_decoded = null;\n  githubJson.n8n_data_stringy = sanitizedActual;\n}\n\nreturn items;"
+        "jsCode": "function deepClone(obj) {\n  return JSON.parse(JSON.stringify(obj));\n}\n\nfunction sortObjectKeys(obj) {\n  if (Array.isArray(obj)) {\n    return obj.map(sortObjectKeys);\n  }\n\n  if (obj && typeof obj === 'object') {\n    const sorted = {};\n    Object.keys(obj).sort().forEach((key) => {\n      sorted[key] = sortObjectKeys(obj[key]);\n    });\n    return sorted;\n  }\n\n  return obj;\n}\n\nfunction removePaths(obj, paths) {\n  for (const path of paths) {\n    const parts = path.split('.');\n    let current = obj;\n\n    for (let i = 0; i < parts.length - 1; i++) {\n      if (!current || typeof current !== 'object') {\n        current = null;\n        break;\n      }\n      current = current[parts[i]];\n    }\n\n    if (current && typeof current === 'object') {\n      delete current[parts[parts.length - 1]];\n    }\n  }\n}\n\nfunction normalizeWorkflow(obj) {\n  const copy = deepClone(obj);\n\n  // Campos volátiles raíz\n  removePaths(copy, [\n    'updatedAt',\n    'createdAt',\n    'versionId',\n    'activeVersionId',\n    'triggerCount',\n    'shared',\n    'meta',\n    'staticData',\n  ]);\n\n  // Campos volátiles de activeVersion\n  if (copy.activeVersion && typeof copy.activeVersion === 'object') {\n    removePaths(copy, [\n      'activeVersion.updatedAt',\n      'activeVersion.createdAt',\n      'activeVersion.versionId',\n      'activeVersion.workflowId',\n      'activeVersion.name',\n      'activeVersion.description',\n      'activeVersion.authors',\n      'activeVersion.autosaved',\n    ]);\n  }\n\n  return sortObjectKeys(copy);\n}\n\nfunction sanitizeForGitHub(obj) {\n  let text = JSON.stringify(obj, null, 2);\n\n  // Apify\n  text = text.replace(/apify_api_[A-Za-z0-9]+/gi, 'APIFY_TOKEN_MASKED');\n  text = text.replace(/(\"APIFY_TOKEN_MASKED\"\\s*:\\s*)\"[^\"]*\"/gi, '$1\"APIFY_TOKEN_MASKED\"');\n\n  // Supabase\n  text = text.replace(/sb_secret_[A-Za-z0-9_\\-]+/g, 'SUPABASE_SECRET_MASKED');\n  text = text.replace(/(\"apikey\"\\s*:\\s*)\"[^\"]*\"/gi, '$1\"SUPABASE_SECRET_MASKED\"');\n  text = text.replace(/(\"Authorization\"\\s*:\\s*)\"Bearer [^\"]*\"/gi, '$1\"Bearer SUPABASE_SECRET_MASKED\"');\n\n  // Otros sensibles típicos\n  text = text.replace(\n    /(\"(accessToken|token|secret|clientSecret|service_role|serviceRoleKey|anonKey|apiKey|x-api-key|x_api_key)\"\\s*:\\s*)\"[^\"]*\"/gi,\n    '$1\"__REDACTED__\"'\n  );\n\n  // JWTs\n  text = text.replace(/\\beyJ[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\b/g, 'JWT_MASKED');\n\n  return text;\n}\n\nfunction parseGithubContent(content) {\n  if (!content || typeof content !== 'string') return null;\n\n  const decoded = Buffer.from(content, 'base64').toString('utf8').trim();\n  if (!decoded) return null;\n\n  try {\n    return JSON.parse(decoded);\n  } catch (e) {\n    return null;\n  }\n}\n\nconst items = $input.all();\nconst githubItem = items[0];\nconst workflowItem = items[1];\n\nif (!githubItem || !workflowItem) {\n  throw new Error('isDiffOrNew necesita 2 entradas: GitHub + workflow n8n');\n}\n\nconst githubJson = githubItem.json ?? {};\nconst n8nWorkflow = workflowItem.json ?? {};\n\n// Normalizamos ANTES de comparar y ANTES de guardar\nconst normalizedActual = normalizeWorkflow(n8nWorkflow);\nconst sanitizedActual = sanitizeForGitHub(normalizedActual);\n\n// Detectar si el archivo existe en GitHub\nconst fileExistsInGitHub =\n  Object.prototype.hasOwnProperty.call(githubJson, 'sha') ||\n  Object.prototype.hasOwnProperty.call(githubJson, 'content') ||\n  Object.prototype.hasOwnProperty.call(githubJson, 'path');\n\nif (fileExistsInGitHub) {\n  const origWorkflow = parseGithubContent(githubJson.content);\n\n  // Si existe pero está vacío o corrupto, lo tratamos como \"different\"\n  if (!origWorkflow) {\n    githubJson.github_status = 'different';\n    githubJson.content_decoded = null;\n    githubJson.n8n_data_stringy = sanitizedActual;\n    return items;\n  }\n\n  const normalizedOriginal = normalizeWorkflow(origWorkflow);\n  const sanitizedOriginal = sanitizeForGitHub(normalizedOriginal);\n\n  if (sanitizedOriginal === sanitizedActual) {\n    githubJson.github_status = 'same';\n    githubJson.content_decoded = normalizedOriginal;\n  } else {\n    githubJson.github_status = 'different';\n    githubJson.content_decoded = normalizedOriginal;\n    githubJson.n8n_data_stringy = sanitizedActual;\n  }\n} else {\n  githubJson.github_status = 'new';\n  githubJson.content_decoded = null;\n  githubJson.n8n_data_stringy = sanitizedActual;\n}\n\nreturn items;"
       },
       "position": [
         -192,
@@ -953,18 +940,5 @@
     "binaryMode": "separate",
     "executionOrder": "v1"
   },
-  "shared": [
-    {
-      "createdAt": "2025-12-03T23:29:28.598Z",
-      "projectId": "4uSls6g8LWC7Ie72",
-      "role": "workflow:owner",
-      "updatedAt": "2025-12-03T23:29:28.598Z",
-      "workflowId": "0x3pOzOTWMcpyeCd"
-    }
-  ],
-  "staticData": null,
-  "tags": [],
-  "triggerCount": 1,
-  "updatedAt": "2026-03-27T18:51:15.210Z",
-  "versionId": "dc98c23b-2179-49b3-ac44-9894755edd38"
+  "tags": []
 }
