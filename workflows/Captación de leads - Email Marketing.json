@@ -1,24 +1,48 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
-    "When clicking ‘Execute workflow’": {
+    "Append or update row in sheet": {
       "main": [
         [
           {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
+            "index": 0,
+            "node": "Replace Me1",
+            "type": "main"
           }
         ]
       ]
     },
-    "HTTP Request": {
+    "Append row in sheet": {
       "main": [
         [
           {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
+            "index": 0,
+            "node": "Loop Over Items1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send a message",
+            "type": "main"
           }
         ]
       ]
@@ -27,9 +51,60 @@
       "main": [
         [
           {
+            "index": 0,
             "node": "If1",
-            "type": "main",
-            "index": 0
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraer Correos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Edit Fields",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Basic LLM Chain1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Append or update row in sheet",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Append row in sheet",
+            "type": "main"
           }
         ]
       ]
@@ -39,104 +114,9 @@
         [],
         [
           {
+            "index": 0,
             "node": "Obtener HTML",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Replace Me1": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If1": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Extraer Correos": {
-      "main": [
-        [
-          {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Basic LLM Chain1": {
-      "main": [
-        [
-          {
-            "node": "Code",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model3": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Basic LLM Chain1",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send a message": {
-      "main": [
-        [
-          {
-            "node": "Append or update row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Append or update row in sheet": {
-      "main": [
-        [
-          {
-            "node": "Replace Me1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "Basic LLM Chain1",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Append or update row in sheet",
-            "type": "main",
-            "index": 0
+            "type": "main"
           }
         ]
       ]
@@ -145,38 +125,60 @@
       "main": [
         [
           {
+            "index": 0,
             "node": "Extraer Correos",
-            "type": "main",
-            "index": 0
+            "type": "main"
           }
         ],
         [
           {
+            "index": 0,
             "node": "Extraer Correos",
-            "type": "main",
-            "index": 0
+            "type": "main"
           }
         ]
       ]
     },
-    "Code": {
-      "main": [
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
         [
           {
-            "node": "Send a message",
-            "type": "main",
-            "index": 0
+            "index": 0,
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel"
           }
         ]
       ]
     },
-    "Append row in sheet": {
+    "Replace Me1": {
       "main": [
         [
           {
+            "index": 0,
             "node": "Loop Over Items1",
-            "type": "main",
-            "index": 0
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Append or update row in sheet",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request",
+            "type": "main"
           }
         ]
       ]
@@ -191,21 +193,20 @@
   "name": "Captación de leads - Email Marketing",
   "nodes": [
     {
+      "id": "44d9a7d1-fa2c-42e7-8cd6-882ef66134be",
+      "name": "When clicking ‘Execute workflow’",
       "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
       "position": [
         -2016,
         208
       ],
-      "id": "44d9a7d1-fa2c-42e7-8cd6-882ef66134be",
-      "name": "When clicking ‘Execute workflow’"
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
     },
     {
+      "id": "97f08f51-5b57-4d93-9431-d3e3ac257fd4",
+      "name": "HTTP Request",
       "parameters": {
-        "method": "POST",
-        "url": "https://api.apify.com/v2/acts/nwua9Gu5YrADL7ZDj/run-sync-get-dataset-items",
-        "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
@@ -218,158 +219,160 @@
             }
           ]
         },
-        "sendBody": true,
-        "specifyBody": "json",
         "jsonBody": "{\n    \"includeWebResults\": false,\n    \"language\": \"es\",\n    \"locationQuery\": \"Madrid, ES\",\n    \"maxCrawledPlacesPerSearch\": 50,\n    \"maxImages\": 0,\n    \"maximumLeadsEnrichmentRecords\": 0,\n    \"scrapeContacts\": false,\n    \"scrapeDirectories\": false,\n    \"scrapeImageAuthors\": false,\n    \"scrapePlaceDetailPage\": false,\n    \"scrapeReviewsPersonalData\": true,\n    \"scrapeTableReservationProvider\": false,\n    \"searchStringsArray\": [\n        \"restaurante\"\n    ],\n    \"skipClosedPlaces\": false\n}",
+        "method": "POST",
         "options": {
           "redirect": {
             "redirect": {}
           }
-        }
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.apify.com/v2/acts/nwua9Gu5YrADL7ZDj/run-sync-get-dataset-items"
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
       "position": [
         -1792,
         208
       ],
-      "id": "97f08f51-5b57-4d93-9431-d3e3ac257fd4",
-      "name": "HTTP Request"
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
     },
     {
+      "id": "7e44bd5c-f645-41ef-93ad-a3de4137ebab",
+      "name": "Edit Fields",
       "parameters": {
         "assignments": {
           "assignments": [
             {
               "id": "6a281f4d-a8ab-46ba-b30c-803e6abd5def",
               "name": "title",
-              "value": "={{ $json.title }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.title }}"
             },
             {
               "id": "73d47726-b16e-44a7-9449-fc1a1670b8c4",
               "name": "address",
-              "value": "={{ $json.address }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.address }}"
             },
             {
               "id": "aee8122c-c602-4e33-b271-197c927d0df3",
               "name": "city",
-              "value": "={{ $json.city }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.city }}"
             },
             {
               "id": "fa157d89-82fe-47e2-bd2d-7d94e8e9d64d",
               "name": "postalCode",
-              "value": "={{ $json.postalCode }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.postalCode }}"
             },
             {
               "id": "534adfb4-c187-4d44-a907-7868106c0c3f",
               "name": "website",
-              "value": "={{ $json.website }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.website }}"
             },
             {
               "id": "ff3fba33-78b7-496d-a6d9-07e88592708c",
               "name": "phone",
-              "value": "={{ $json.phone }}",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $json.phone }}"
             },
             {
               "id": "90de7de3-0fc7-49af-898a-d3cacf34ab39",
               "name": "totalScore",
-              "value": "={{ $json.totalScore }}",
-              "type": "number"
+              "type": "number",
+              "value": "={{ $json.totalScore }}"
             }
           ]
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
       "position": [
         -1568,
         208
       ],
-      "id": "7e44bd5c-f645-41ef-93ad-a3de4137ebab",
-      "name": "Edit Fields"
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
     },
     {
+      "id": "f7d5ce8c-441f-4d74-b27f-d8ba9bfcfde4",
+      "name": "Loop Over Items1",
       "parameters": {
         "options": {}
       },
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
       "position": [
         -896,
         208
       ],
-      "id": "f7d5ce8c-441f-4d74-b27f-d8ba9bfcfde4",
-      "name": "Loop Over Items1"
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
+      "id": "4cc0e282-8cca-48e2-8043-22b0766849e6",
       "name": "Replace Me1",
-      "typeVersion": 1,
+      "parameters": {},
       "position": [
         1024,
         208
       ],
-      "id": "4cc0e282-8cca-48e2-8043-22b0766849e6"
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1
     },
     {
+      "id": "2206f918-314b-4adf-b10b-2c3e2ef5f080",
+      "name": "If1",
       "parameters": {
         "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "ee3b8b4d-b9f0-49cf-b68b-564cb9c816f4",
+              "leftValue": "={{ $json.website }}",
+              "operator": {
+                "operation": "exists",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
           "options": {
             "caseSensitive": true,
             "leftValue": "",
             "typeValidation": "strict",
             "version": 2
-          },
-          "conditions": [
-            {
-              "id": "ee3b8b4d-b9f0-49cf-b68b-564cb9c816f4",
-              "leftValue": "={{ $json.website }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "exists",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
+          }
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
       "position": [
         -1344,
         208
       ],
-      "id": "2206f918-314b-4adf-b10b-2c3e2ef5f080",
-      "name": "If1"
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
     },
     {
+      "id": "cd231921-d7db-4fca-b067-7982202af95a",
+      "name": "Extraer Correos",
       "parameters": {
         "functionCode": "const html = $json.data || '';\n\n// Expresión regular para correos electrónicos\nconst matches = html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/g);\n\nreturn [{\n  json: {\n    url: $json.url || 'URL no encontrada',\n    email: matches ? [...new Set(matches)] : ['No encontrado']\n  }\n}];\n"
       },
-      "id": "cd231921-d7db-4fca-b067-7982202af95a",
-      "name": "Extraer Correos",
-      "type": "n8n-nodes-base.function",
-      "typeVersion": 1,
       "position": [
         -448,
         128
-      ]
+      ],
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1
     },
     {
+      "id": "e9f84ab9-f25b-4028-a6ba-ba1db10f3afb",
+      "name": "Basic LLM Chain1",
       "parameters": {
-        "promptType": "define",
-        "text": "=Nombre: {{ $('Append row in sheet').item.json.Empresa }}\nCorreo: {{ $json.email[0] }} \n",
+        "batching": {},
         "messages": {
           "messageValues": [
             {
@@ -377,18 +380,25 @@
             }
           ]
         },
-        "batching": {}
+        "promptType": "define",
+        "text": "=Nombre: {{ $('Append row in sheet').item.json.Empresa }}\nCorreo: {{ $json.email[0] }} \n"
       },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
       "position": [
         0,
         0
       ],
-      "id": "e9f84ab9-f25b-4028-a6ba-ba1db10f3afb",
-      "name": "Basic LLM Chain1"
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7
     },
     {
+      "credentials": {
+        "openAiApi": {
+          "id": "UUb7LT0t44WTS54p",
+          "name": "OpenAi account"
+        }
+      },
+      "id": "65e691f3-aa83-44ad-b1a3-08b5ec82a1de",
+      "name": "OpenAI Chat Model3",
       "parameters": {
         "model": {
           "__rl": true,
@@ -397,341 +407,333 @@
         },
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
       "position": [
         80,
         224
       ],
-      "id": "65e691f3-aa83-44ad-b1a3-08b5ec82a1de",
-      "name": "OpenAI Chat Model3",
-      "credentials": {
-        "openAiApi": {
-          "id": "UUb7LT0t44WTS54p",
-          "name": "OpenAi account"
-        }
-      }
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2
     },
     {
-      "parameters": {
-        "sendTo": "=adri-sanch@hotmail.com",
-        "subject": "Tenemos que hablar!",
-        "message": "={{ $json.html }}",
-        "options": {
-          "appendAttribution": true
-        }
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        576,
-        0
-      ],
-      "id": "1490ad7d-5e4b-49b6-8e3c-7f898278e9da",
-      "name": "Send a message",
-      "webhookId": "2dfca845-0a80-49c3-a5f1-d9bb54679d6d",
       "credentials": {
         "gmailOAuth2": {
           "id": "8oiXd9w5jkwovane",
           "name": "Gmail account"
         }
-      }
+      },
+      "id": "1490ad7d-5e4b-49b6-8e3c-7f898278e9da",
+      "name": "Send a message",
+      "parameters": {
+        "message": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": true
+        },
+        "sendTo": "=adri-sanch@hotmail.com",
+        "subject": "Tenemos que hablar!"
+      },
+      "position": [
+        576,
+        0
+      ],
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "webhookId": "2dfca845-0a80-49c3-a5f1-d9bb54679d6d"
     },
     {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "XHtKlMeWz7J9QV4n",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "618f90d3-871f-495e-bb5f-4e44970790d8",
+      "name": "Append or update row in sheet",
       "parameters": {
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U",
-          "mode": "list",
-          "cachedResultName": "Leads",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Hoja 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GLPJe9LsYqC6mE0DoYB8fIevMxUREpmRh-hXJQ8gkOE/edit#gid=0"
-        },
         "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
           "mappingMode": "defineBelow",
-          "value": {
-            "Email": "={{ $('Extraer Correos').item.json.email[0] }}",
-            "Sitio Web": "={{ $('Append row in sheet').item.json['Sitio Web'] }}"
-          },
           "matchingColumns": [
             "Sitio Web"
           ],
           "schema": [
             {
-              "id": "Empresa",
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
               "displayName": "Empresa",
+              "id": "Empresa",
+              "removed": true,
               "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
+              "type": "string"
             },
             {
-              "id": "Email",
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
               "displayName": "Email",
+              "id": "Email",
+              "removed": false,
               "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "type": "string"
             },
             {
-              "id": "Sitio Web",
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
               "displayName": "Sitio Web",
+              "id": "Sitio Web",
+              "removed": false,
               "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "type": "string"
             },
             {
-              "id": "Telefono",
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
               "displayName": "Telefono",
+              "id": "Telefono",
+              "removed": true,
               "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
+              "type": "string"
             },
             {
-              "id": "Ciudad",
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
               "displayName": "Ciudad",
+              "id": "Ciudad",
+              "removed": true,
               "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
+              "type": "string"
             },
             {
-              "id": "Dirección ",
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
               "displayName": "Dirección ",
+              "id": "Dirección ",
+              "removed": true,
               "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
+              "type": "string"
             },
             {
-              "id": "Estrellas",
-              "displayName": "Estrellas",
-              "required": false,
+              "canBeUsedToMatch": true,
               "defaultMatch": false,
               "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
+              "displayName": "Estrellas",
+              "id": "Estrellas",
+              "removed": true,
+              "required": false,
+              "type": "string"
             }
           ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
+          "value": {
+            "Email": "={{ $('Extraer Correos').item.json.email[0] }}",
+            "Sitio Web": "={{ $('Append row in sheet').item.json['Sitio Web'] }}"
+          }
         },
-        "options": {}
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit?usp=drivesdk",
+          "mode": "list",
+          "value": "1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U"
+        },
+        "operation": "appendOrUpdate",
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GLPJe9LsYqC6mE0DoYB8fIevMxUREpmRh-hXJQ8gkOE/edit#gid=0",
+          "mode": "list",
+          "value": "gid=0"
+        }
       },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
       "position": [
         800,
         128
       ],
-      "id": "618f90d3-871f-495e-bb5f-4e44970790d8",
-      "name": "Append or update row in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "XHtKlMeWz7J9QV4n",
-          "name": "Google Sheets account"
-        }
-      }
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
     },
     {
+      "id": "84afc4c9-a3c5-44fa-b56c-9d10e0a5d0b3",
+      "name": "If",
       "parameters": {
         "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "b4e91613-6fdc-4345-a2cf-1f016ec0dc0d",
+              "leftValue": "={{ $json.email[0] }}",
+              "operator": {
+                "operation": "exists",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
           "options": {
             "caseSensitive": true,
             "leftValue": "",
             "typeValidation": "strict",
             "version": 2
-          },
-          "conditions": [
-            {
-              "id": "b4e91613-6fdc-4345-a2cf-1f016ec0dc0d",
-              "leftValue": "={{ $json.email[0] }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "exists",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
+          }
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
       "position": [
         -224,
         128
       ],
-      "id": "84afc4c9-a3c5-44fa-b56c-9d10e0a5d0b3",
-      "name": "If"
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
     },
     {
-      "parameters": {
-        "url": "={{ $json['Sitio Web'] }}",
-        "responseFormat": "string",
-        "options": {}
-      },
       "id": "6d33e20b-d9ce-47d5-a2bc-7be2d865c2e1",
       "name": "Obtener HTML",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 1,
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "options": {},
+        "responseFormat": "string",
+        "url": "={{ $json['Sitio Web'] }}"
+      },
       "position": [
         -672,
         128
       ],
-      "onError": "continueErrorOutput"
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1
     },
     {
+      "id": "3a37611b-6426-4372-a669-4bd35eeb58dd",
+      "name": "Code",
       "parameters": {
         "jsCode": "const raw = items[0].json.text || '';\n\n// 1) intenta bloque ```html ... ```\nconst mHtml = raw.match(/```html([\\s\\S]*?)```/i);\n// 2) o bloque genérico ``` ... ```\nconst mAny  = raw.match(/```([\\s\\S]*?)```/);\n\nlet cleaned = mHtml?.[1] ?? mAny?.[1] ?? raw;\ncleaned = cleaned.trim();\n\n// (OPCIONAL) si después del bloque hay notas separadas por '---', córtalas\ncleaned = cleaned.split('---')[0].trim();\n\nreturn [{ json: { html: cleaned } }];\n"
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
       "position": [
         352,
         0
       ],
-      "id": "3a37611b-6426-4372-a669-4bd35eeb58dd",
-      "name": "Code"
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
     },
     {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U",
-          "mode": "list",
-          "cachedResultName": "Leads",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Hoja 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Empresa": "={{ $json.title }}",
-            "Sitio Web": "={{ $json.website }}",
-            "Ciudad": "={{ $json.city }}",
-            "Dirección ": "={{ $json.address }}",
-            "Estrellas": "={{ $json.totalScore }}",
-            "Telefono": "={{ \"'\" + $json.phone }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Empresa",
-              "displayName": "Empresa",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Email",
-              "displayName": "Email",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Sitio Web",
-              "displayName": "Sitio Web",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Telefono",
-              "displayName": "Telefono",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Ciudad",
-              "displayName": "Ciudad",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Dirección ",
-              "displayName": "Dirección ",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Estrellas",
-              "displayName": "Estrellas",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        -1104,
-        192
-      ],
-      "id": "c9ec1f7c-3b5f-4fa1-94e8-f377c847a6b1",
-      "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "XHtKlMeWz7J9QV4n",
           "name": "Google Sheets account"
         }
-      }
+      },
+      "id": "c9ec1f7c-3b5f-4fa1-94e8-f377c847a6b1",
+      "name": "Append row in sheet",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Empresa",
+              "id": "Empresa",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Email",
+              "id": "Email",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Sitio Web",
+              "id": "Sitio Web",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Telefono",
+              "id": "Telefono",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Ciudad",
+              "id": "Ciudad",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Dirección ",
+              "id": "Dirección ",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Estrellas",
+              "id": "Estrellas",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "Ciudad": "={{ $json.city }}",
+            "Dirección ": "={{ $json.address }}",
+            "Empresa": "={{ $json.title }}",
+            "Estrellas": "={{ $json.totalScore }}",
+            "Sitio Web": "={{ $json.website }}",
+            "Telefono": "={{ \"'\" + $json.phone }}"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit?usp=drivesdk",
+          "mode": "list",
+          "value": "1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U"
+        },
+        "operation": "append",
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YtH5VZcB73SWEDTNtCfn2CFNX7fl0j9nlWmA7XJNr_U/edit#gid=0",
+          "mode": "list",
+          "value": "gid=0"
+        }
+      },
+      "position": [
+        -1104,
+        192
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
     }
   ],
   "pinData": {},
@@ -740,11 +742,11 @@
   },
   "shared": [
     {
-      "updatedAt": "2025-12-01T18:21:11.385Z",
       "createdAt": "2025-12-01T18:21:11.385Z",
+      "projectId": "4uSls6g8LWC7Ie72",
       "role": "workflow:owner",
-      "workflowId": "CHqLSikojdGHI6E8",
-      "projectId": "4uSls6g8LWC7Ie72"
+      "updatedAt": "2025-12-01T18:21:11.385Z",
+      "workflowId": "CHqLSikojdGHI6E8"
     }
   ],
   "staticData": null,
