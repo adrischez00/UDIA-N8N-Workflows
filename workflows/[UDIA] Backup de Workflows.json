@@ -489,17 +489,6 @@
   },
   "activeVersionId": "e4ec3cd0-26f3-4e38-b10e-3a91b784f13f",
   "connections": {
-    "Code in JavaScript": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "github_status",
-            "type": "main"
-          }
-        ]
-      ]
-    },
     "Every 12 hours": {
       "main": [
         [
@@ -641,7 +630,7 @@
         [
           {
             "index": 0,
-            "node": "Code in JavaScript",
+            "node": "github_status",
             "type": "main"
           }
         ]
@@ -888,7 +877,7 @@
         "jsCode": "// Helper: ordena claves de un objeto de forma estable\nfunction sortObjectKeys(obj) {\n  if (Array.isArray(obj)) {\n    return obj.map(sortObjectKeys);\n  }\n\n  if (obj && typeof obj === 'object') {\n    const sorted = {};\n    Object.keys(obj).sort().forEach((key) => {\n      sorted[key] = sortObjectKeys(obj[key]);\n    });\n    return sorted;\n  }\n\n  return obj;\n}\n\n// Helper: limpia posibles secretos antes de subir a GitHub\nfunction sanitizeForGitHub(obj) {\n  let text = JSON.stringify(obj, null, 2);\n\n  // Apify\n  text = text.replace(/apify_api_[A-Za-z0-9]+/gi, 'APIFY_TOKEN_MASKED');\n  text = text.replace(/(\"APIFY_TOKEN_MASKED\"\\s*:\\s*)\"[^\"]*\"/g, '$1\"APIFY_TOKEN_MASKED\"');\n\n  // Supabase\n  text = text.replace(/sb_secret_[A-Za-z0-9_\\-]+/g, 'SUPABASE_SECRET_MASKED');\n  text = text.replace(/(\"apikey\"\\s*:\\s*)\"[^\"]*\"/gi, '$1\"SUPABASE_SECRET_MASKED\"');\n  text = text.replace(/(\"Authorization\"\\s*:\\s*)\"Bearer [^\"]*\"/gi, '$1\"Bearer SUPABASE_SECRET_MASKED\"');\n\n  // Otros campos sensibles típicos\n  text = text.replace(\n    /(\"(accessToken|token|secret|clientSecret|service_role|serviceRoleKey|anonKey|apiKey|x-api-key|x_api_key)\"\\s*:\\s*)\"[^\"]*\"/gi,\n    '$1\"__REDACTED__\"'\n  );\n\n  // JWTs\n  text = text.replace(/\\beyJ[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\b/g, 'JWT_MASKED');\n\n  return text;\n}\n\n// Helper: intenta decodificar/parsing del contenido de GitHub\nfunction parseGithubContent(content) {\n  if (!content || typeof content !== 'string') return null;\n\n  const decoded = Buffer.from(content, 'base64').toString('utf8').trim();\n  if (!decoded) return null;\n\n  try {\n    return JSON.parse(decoded);\n  } catch (e) {\n    return null;\n  }\n}\n\nconst items = $input.all();\nconst githubItem = items[0];\nconst workflowItem = items[1];\n\nif (!githubItem || !workflowItem) {\n  throw new Error('isDiffOrNew necesita 2 entradas: GitHub + workflow n8n');\n}\n\nconst githubJson = githubItem.json ?? {};\nconst n8nWorkflow = workflowItem.json ?? {};\nconst orderedActual = sortObjectKeys(n8nWorkflow);\n\n// OJO: esta será la versión saneada del workflow actual\nconst sanitizedActual = sanitizeForGitHub(orderedActual);\n\n// CASO 1: el archivo existe en GitHub\nconst fileExistsInGitHub =\n  Object.prototype.hasOwnProperty.call(githubJson, 'sha') ||\n  Object.prototype.hasOwnProperty.call(githubJson, 'content') ||\n  Object.prototype.hasOwnProperty.call(githubJson, 'path');\n\nif (fileExistsInGitHub) {\n  const origWorkflow = parseGithubContent(githubJson.content);\n\n  // Si existe pero está vacío/corrupto => different\n  if (!origWorkflow) {\n    githubJson.github_status = 'different';\n    githubJson.content_decoded = null;\n    githubJson.n8n_data_stringy = sanitizedActual;\n    return items;\n  }\n\n  const orderedOriginal = sortObjectKeys(origWorkflow);\n\n  // IMPORTANTE:\n  // también saneamos el original antes de comparar\n  const sanitizedOriginal = sanitizeForGitHub(orderedOriginal);\n\n  if (sanitizedOriginal === sanitizedActual) {\n    githubJson.github_status = 'same';\n    githubJson.content_decoded = orderedOriginal;\n  } else {\n    githubJson.github_status = 'different';\n    githubJson.content_decoded = orderedOriginal;\n    githubJson.n8n_data_stringy = sanitizedActual;\n  }\n} else {\n  // CASO 2: archivo no existe en GitHub\n  githubJson.github_status = 'new';\n  githubJson.content_decoded = null;\n  githubJson.n8n_data_stringy = sanitizedActual;\n}\n\nreturn items;"
       },
       "position": [
-        -320,
+        -192,
         352
       ],
       "type": "n8n-nodes-base.code",
@@ -957,19 +946,6 @@
       ],
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3
-    },
-    {
-      "id": "912462c5-fde4-486a-a045-fbb0984e705a",
-      "name": "Code in JavaScript",
-      "parameters": {
-        "jsCode": "const raw = $json.n8n_data_string || '';\n\nlet clean = raw;\n\n// Cabeceras Authorization tipo Bearer\nclean = clean.replace(\n  /\"Authorization\"\\s*:\\s*\"Bearer [^\"]+\"/gi,\n  '\"Authorization\":\"Bearer __REDACTED__\"'\n);\n\n// apiKey / apikey / x-api-key\nclean = clean.replace(\n  /\"(apiKey|apikey|x-api-key|x_api_key)\"\\s*:\\s*\"[^\"]+\"/gi,\n  '\"$1\":\"__REDACTED__\"'\n);\n\n// campos típicos sensibles\nclean = clean.replace(\n  /\"(accessToken|token|secret|clientSecret|service_role|anonKey|serviceRoleKey)\"\\s*:\\s*\"[^\"]+\"/gi,\n  '\"$1\":\"__REDACTED__\"'\n);\n\n// patrones comunes de Supabase / JWT / secrets en texto plano\nclean = clean.replace(/sb_secret_[A-Za-z0-9_\\-]+/g, '__REDACTED__');\nclean = clean.replace(/sbp_[A-Za-z0-9_\\-]+/g, '__REDACTED__');\nclean = clean.replace(/eyJ[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+/g, '__REDACTED_JWT__');\n\n// opcional: URLs firmadas o tokens largos en query params\nclean = clean.replace(/([?&](token|apikey|api_key|access_token)=)[^\"&]+/gi, '$1__REDACTED__');\n\nreturn [\n  {\n    json: {\n      ...$json,\n      n8n_data_string_sanitized: clean\n    }\n  }\n];"
-      },
-      "position": [
-        -112,
-        352
-      ],
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2
     }
   ],
   "pinData": {},
@@ -989,6 +965,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-03-27T18:41:55.028Z",
-  "versionId": "3dc083a2-aeba-42bf-8008-80cc3959d4f4"
+  "updatedAt": "2026-03-27T18:44:58.556Z",
+  "versionId": "42fc9f77-50df-4a78-aa5d-16882f97113d"
 }
