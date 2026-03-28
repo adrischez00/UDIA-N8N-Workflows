@@ -218,13 +218,7 @@
     },
     "Webhook": {
       "main": [
-        [
-          {
-            "index": 0,
-            "node": "Edit Fields",
-            "type": "main"
-          }
-        ]
+        []
       ]
     },
     "different": {
