@@ -1,0 +1,464 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "connections": {
+    "Code - Batch 50": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request -  insert supabase",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code - Deduplicar equipos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code - Preparar body",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code - Equipos Array": {
+      "main": [
+        [
+          {
+            "index": 1,
+            "node": "Merge",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code - Extraer equipos faltantes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code - Deduplicar equipos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code - Map Equipo UUIDs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code - Parse Openfootball": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code - Preparar body": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code Temporadas Históricas": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get many rows - teams": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code - Equipos Array",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code - Parse Openfootball",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code - Batch 50",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Code - Extraer equipos faltantes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code - Map Equipo UUIDs",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get many rows - teams",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Code Temporadas Históricas",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "id": "dmEADxCjUcVIXkjx",
+  "isArchived": false,
+  "name": "Histórico LaLiga",
+  "nodes": [
+    {
+      "id": "3a4a62ec-3b68-4a96-a097-a17ce31ac83a",
+      "name": "When clicking ‘Execute workflow’",
+      "parameters": {},
+      "position": [
+        0,
+        48
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "f996289b-af19-4bb8-9586-e5d0ea72bdaa",
+      "name": "Code Temporadas Históricas",
+      "parameters": {
+        "jsCode": "const seasons = [\n  \"2023-24\",\n  \"2022-23\",\n  \"2021-22\"\n];\n\nreturn seasons.map(season => ({\n  json: { season }\n}));"
+      },
+      "position": [
+        416,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "37db34ce-c7f6-406b-be41-2f6322de9222",
+      "name": "HTTP Request",
+      "parameters": {
+        "options": {
+          "response": {
+            "response": {}
+          }
+        },
+        "url": "={{ \"https://raw.githubusercontent.com/openfootball/espana/master/\" + $json.season + \"/1-liga.txt\" }}"
+      },
+      "position": [
+        624,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4
+    },
+    {
+      "id": "8fc2c445-9911-4cd9-bb9c-925d1a71f3a1",
+      "name": "Code - Parse Openfootball",
+      "parameters": {
+        "jsCode": "function slugify(text) {\n  return String(text || \"\")\n    .normalize(\"NFD\")\n    .replace(/[\\u0300-\\u036f]/g, \"\")\n    .toLowerCase()\n    .replace(/[^a-z0-9]+/g, \"-\")\n    .replace(/^-+|-+$/g, \"\");\n}\n\nconst output = [];\n\nfor (const item of items) {\n  const raw = item.json.data || item.json.body || \"\";\n\n  const text = String(raw)\n    .replace(/\\\\n/g, \"\\n\")\n    .replace(/\\r/g, \"\\n\");\n\n  let seasonRaw =\n    item.json.season ||\n    item.json.input?.season ||\n    item.json.params?.season ||\n    null;\n\n  if (!seasonRaw) {\n    const seasonMatch = text.match(/\\b(20\\d{2})\\/(\\d{2})\\b/);\n    if (seasonMatch) {\n      seasonRaw = `${seasonMatch[1]}-${seasonMatch[2]}`;\n    }\n  }\n\n  const season = seasonRaw ? seasonRaw.replace(\"-\", \"/\") : null;\n\n  const lines = text\n    .split(\"\\n\")\n    .map(l => l.trim())\n    .filter(Boolean);\n\n  let currentMatchday = null;\n\n  for (let line of lines) {\n\n    // detectar jornada\n    const md = line.match(/Matchday\\s+(\\d+)/i);\n    if (md) {\n      currentMatchday = Number(md[1]);\n      continue;\n    }\n\n    // ignorar basura\n    if (\n      line.startsWith(\"=\") ||\n      line.startsWith(\"#\") ||\n      line.startsWith(\"[\") ||\n      /^primera division/i.test(line)\n    ) continue;\n\n    // eliminar fecha tipo \"Fri Aug/11\"\n    line = line.replace(/^[A-Z][a-z]{2}\\s+[A-Z][a-z]{3}\\/\\d{1,2}\\s+/, \"\");\n\n    // regex REAL para openfootball\n    const match = line.match(\n      /^(?:(\\d{1,2}\\.\\d{2})\\s+)?(.+?)\\s+(\\d+)-(\\d+)(?:\\s+\\(\\d+-\\d+\\))?\\s+(.+)$/\n    );\n\n    if (!match) continue;\n\n    const kickoff = match[1] || null;\n    let homeTeam = match[2].trim();\n    const homeScore = Number(match[3]);\n    const awayScore = Number(match[4]);\n    let awayTeam = match[5].trim();\n\n    output.push({\n      json: {\n        season,\n        matchday: currentMatchday,\n        kickoff_text: kickoff,\n        utc_date: null,\n        home_team_name: homeTeam,\n        away_team_name: awayTeam,\n        home_team_slug_guess: slugify(homeTeam),\n        away_team_slug_guess: slugify(awayTeam),\n        home_score: homeScore,\n        away_score: awayScore,\n        status: \"finished\",\n        source: \"openfootball\",\n        source_id: [\n          \"openfootball\",\n          seasonRaw || \"noseason\",\n          currentMatchday || \"nomd\",\n          slugify(homeTeam),\n          slugify(awayTeam),\n          kickoff || \"notime\"\n        ].join(\"-\")\n      }\n    });\n  }\n}\n\nreturn output;"
+      },
+      "position": [
+        832,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": false,
+      "id": "35978c44-ca38-4139-b7c1-501d81cdd287",
+      "name": "Code - Map Equipo UUIDs",
+      "parameters": {
+        "jsCode": "function slugify(text) {\n  return String(text || \"\")\n    .normalize(\"NFD\")\n    .replace(/[\\u0300-\\u036f]/g, \"\")\n    .toLowerCase()\n    .replace(/[^a-z0-9]+/g, \"-\")\n    .replace(/^-+|-+$/g, \"\");\n}\n\nconst aliasMap = {\n  \"atletico-madrid\": \"club-atletico-de-madrid\",\n  \"club-atletico-de-madrid\": \"club-atletico-de-madrid\",\n\n  \"athletic-bilbao\": \"athletic-club\",\n  \"athletic\": \"athletic-club\",\n\n  \"espanyol\": \"rcd-espanyol-de-barcelona\",\n  \"espanyol-de-barcelona\": \"rcd-espanyol-de-barcelona\",\n  \"rcd-espanyol\": \"rcd-espanyol-de-barcelona\",\n\n  \"alaves\": \"deportivo-alaves\",\n  \"deportivo-alaves\": \"deportivo-alaves\",\n\n  \"real-sociedad\": \"real-sociedad-de-futbol\",\n  \"real-sociedad-de-san-sebastian\": \"real-sociedad-de-futbol\",\n\n  \"betis\": \"real-betis-balompie\",\n  \"real-betis\": \"real-betis-balompie\",\n  \"real-betis-balompie\": \"real-betis-balompie\",\n\n  \"mallorca\": \"rcd-mallorca\",\n  \"real-mallorca\": \"rcd-mallorca\",\n\n  \"celta\": \"rc-celta-de-vigo\",\n  \"celta-vigo\": \"rc-celta-de-vigo\",\n  \"real-club-celta-de-vigo\": \"rc-celta-de-vigo\",\n\n  \"leganes\": \"cd-leganes\",\n  \"deportivo-leganes\": \"cd-leganes\",\n\n  \"deportivo-la-coruna\": \"rc-deportivo-de-la-coruna\",\n  \"deportivo\": \"rc-deportivo-de-la-coruna\",\n  \"rc-deportivo\": \"rc-deportivo-de-la-coruna\",\n  \"la-coruna\": \"rc-deportivo-de-la-coruna\",\n\n  \"barcelona\": \"fc-barcelona\",\n  \"fc-barcelona\": \"fc-barcelona\",\n\n  \"sevilla\": \"sevilla-fc\",\n  \"sevilla-fc\": \"sevilla-fc\",\n\n  \"valencia\": \"valencia-cf\",\n  \"valencia-cf\": \"valencia-cf\",\n\n  \"villarreal\": \"villarreal-cf\",\n  \"villarreal-cf\": \"villarreal-cf\",\n\n  \"getafe\": \"getafe-cf\",\n  \"getafe-cf\": \"getafe-cf\",\n\n  \"osasuna\": \"ca-osasuna\",\n  \"ca-osasuna\": \"ca-osasuna\",\n\n  \"girona\": \"girona-fc\",\n  \"girona-fc\": \"girona-fc\",\n\n  \"rayo\": \"rayo-vallecano-de-madrid\",\n  \"rayo-vallecano\": \"rayo-vallecano-de-madrid\",\n  \"rayo-vallecano-de-madrid\": \"rayo-vallecano-de-madrid\",\n\n  \"real-madrid\": \"real-madrid-cf\",\n  \"real-madrid-cf\": \"real-madrid-cf\",\n\n  \"las-palmas\": \"ud-las-palmas\",\n  \"ud-las-palmas\": \"ud-las-palmas\",\n\n  \"real-valladolid\": \"real-valladolid-cf\",\n  \"real-valladolid-cf\": \"real-valladolid-cf\",\n\n  \"oviedo\": \"real-oviedo\",\n  \"real-oviedo\": \"real-oviedo\",\n\n  \"elche\": \"elche-cf\",\n  \"elche-cf\": \"elche-cf\",\n\n  \"levante\": \"levante-ud\",\n  \"levante-ud\": \"levante-ud\"\n};\n\nconst merged = items.map(i => i.json);\n\nconst teamsContainer = merged.find(i => Array.isArray(i.teams));\nconst teams = teamsContainer?.teams || [];\nconst matches = merged.filter(i => !Array.isArray(i.teams));\n\nconst teamsBySlug = new Map();\nconst teamsByNameSlug = new Map();\n\nfor (const team of teams) {\n  const slug = slugify(team.slug || \"\");\n  const nameSlug = slugify(team.name || \"\");\n\n  if (slug) teamsBySlug.set(slug, team);\n  if (nameSlug) teamsByNameSlug.set(nameSlug, team);\n}\n\nfunction resolveTeam(rawSlugGuess, rawName) {\n  let guess = slugify(rawSlugGuess || rawName || \"\");\n\n  guess = aliasMap[guess] || guess;\n\n  return (\n    teamsBySlug.get(guess) ||\n    teamsByNameSlug.get(guess) ||\n    teamsBySlug.get(aliasMap[slugify(rawName || \"\")] || \"\") ||\n    teamsByNameSlug.get(slugify(rawName || \"\")) ||\n    null\n  );\n}\n\nreturn matches.map(match => {\n  const homeTeam = resolveTeam(match.home_team_slug_guess, match.home_team_name);\n  const awayTeam = resolveTeam(match.away_team_slug_guess, match.away_team_name);\n\n  return {\n    json: {\n      ...match,\n      competition_id: \"a6d5fa20-1a02-4aa8-bd08-707a87c488d6\",\n      home_team_id: homeTeam ? homeTeam.id : null,\n      away_team_id: awayTeam ? awayTeam.id : null\n    }\n  };\n});"
+      },
+      "position": [
+        1248,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "60db267f-245b-48f4-99d8-1e5b730cdea5",
+      "name": "Code - Equipos Array",
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      teams: items.map(i => i.json)\n    }\n  }\n];"
+      },
+      "position": [
+        400,
+        176
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "1033852a-58fb-419a-9c65-f98b6c213d71",
+      "name": "Merge",
+      "parameters": {},
+      "position": [
+        1056,
+        96
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "03176283-f70d-4b57-957b-e5010eba0acd",
+      "name": "If",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "577beee6-ef4d-4232-94a4-c44cb4c537ca",
+              "leftValue": "={{ $json.home_team_id }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            },
+            {
+              "id": "6f0874db-298d-4e70-85e4-3ff560774006",
+              "leftValue": "={{ $json.away_team_id }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1456,
+        96
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "ef4b2f55-c22e-40b2-af66-239ef2918ef7",
+      "name": "Code - Batch 50",
+      "parameters": {
+        "jsCode": "const chunkSize = 50;\nconst rows = items.map(i => i.json);\n\nconst cleaned = rows.map(r => ({\n  competition_id: r.competition_id,\n  season: r.season,\n  matchday: r.matchday ?? null,\n  home_team_id: r.home_team_id,\n  away_team_id: r.away_team_id,\n  stadium_id: null,\n  kickoff_at: r.utc_date ?? null,\n  home_score: r.home_score ?? null,\n  away_score: r.away_score ?? null,\n  status: r.status,\n  source: \"openfootball\",\n  source_id: r.source_id\n}));\n\nconst batches = [];\nfor (let i = 0; i < cleaned.length; i += chunkSize) {\n  batches.push({\n    json: {\n      batch: cleaned.slice(i, i + chunkSize)\n    }\n  });\n}\n\nreturn batches;"
+      },
+      "position": [
+        1664,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "5d3fb141-7b90-4a72-aacf-57a71b76737a",
+      "name": "HTTP Request -  insert supabase",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "JWT_MASKED"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer JWT_MASKED"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates"
+            }
+          ]
+        },
+        "jsonBody": "={{$json.batch}}",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://scmytuehzrdyjsxzmujv.supabase.co/rest/v1/matches?on_conflict=source,source_id"
+      },
+      "position": [
+        1872,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4
+    },
+    {
+      "credentials": {
+        "supabaseApi": {
+          "id": "xgmADd6dlV14GpeX",
+          "name": "Supabase account 2"
+        }
+      },
+      "id": "4f256a84-7578-429f-aa81-74a2b9278f72",
+      "name": "Get many rows - teams",
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true,
+        "tableId": "teams"
+      },
+      "position": [
+        192,
+        176
+      ],
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "id": "8a2fa7e7-1a2d-4fb3-b291-baa053b4a68b",
+      "name": "Code - Extraer equipos faltantes",
+      "parameters": {
+        "jsCode": "const out = [];\n\nfor (const item of items) {\n  const j = item.json;\n\n  if (!j.home_team_id && j.home_team_name) {\n    out.push({\n      json: {\n        name: j.home_team_name,\n        slug: j.home_team_slug_guess || null,\n        external_id: null,\n        source: \"openfootball\",\n        source_id: j.home_team_slug_guess || null\n      }\n    });\n  }\n\n  if (!j.away_team_id && j.away_team_name) {\n    out.push({\n      json: {\n        name: j.away_team_name,\n        slug: j.away_team_slug_guess || null,\n        external_id: null,\n        source: \"openfootball\",\n        source_id: j.away_team_slug_guess || null\n      }\n    });\n  }\n}\n\nreturn out;"
+      },
+      "position": [
+        1664,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "6c759406-e7c5-489f-972a-d374c698b547",
+      "name": "Code - Deduplicar equipos",
+      "parameters": {
+        "jsCode": "const seen = new Set();\nconst unique = [];\n\nfor (const item of items) {\n  const key = (item.json.slug || item.json.name || \"\").toLowerCase().trim();\n  if (!key) continue;\n\n  if (!seen.has(key)) {\n    seen.add(key);\n    unique.push({\n      json: item.json\n    });\n  }\n}\n\nreturn unique;"
+      },
+      "position": [
+        1872,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "efaa0e58-b8a4-4901-a2ed-9604814e5d0e",
+      "name": "HTTP Request1",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "JWT_MASKED"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer JWT_MASKED"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates"
+            }
+          ]
+        },
+        "jsonBody": "={{ $json.payload }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://scmytuehzrdyjsxzmujv.supabase.co/rest/v1/teams?on_conflict=slug"
+      },
+      "position": [
+        2256,
+        192
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4
+    },
+    {
+      "id": "8efe8529-251a-40e1-81eb-830d2f1e8a77",
+      "name": "Code - Preparar body",
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      payload: items.map(i => ({\n        name: i.json.name,\n        slug: i.json.slug,\n        country_id: \"37f46503-683b-4aa0-be0b-dea6d5db4b50\",\n        source: \"openfootball\",\n        source_id: i.json.source_id ?? null,\n        external_id: null\n      }))\n    }\n  }\n];"
+      },
+      "position": [
+        2080,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
