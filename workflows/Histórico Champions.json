@@ -1,0 +1,403 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "connections": {
+    "Clean & Normalize Knockout": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Expand Knockout -> Matches",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Expand Knockout -> Matches": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Clean Knockout Matches",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extract Knockout Bracket": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse Knockout Rounds",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extract wikitext": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse Tables from Wikitext",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Extract Knockout Bracket",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Filter matchday Tables": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse matches",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extract wikitext",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse Knockout Rounds": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Clean & Normalize Knockout",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse Tables from Wikitext": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Filter matchday Tables",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse matches": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Clean & Normalize Matches",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Edit Fields",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "id": "whYox9ZKuY0jjc6x",
+  "isArchived": false,
+  "name": "Histórico Champions",
+  "nodes": [
+    {
+      "id": "857fa634-92aa-4d73-9c17-2610a3134617",
+      "name": "When clicking ‘Execute workflow’",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "8625e4d9-7117-4477-964f-654dcecfc19c",
+      "name": "Edit Fields",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "82d103ff-dfa4-4414-953e-04cfc9b0ccba",
+              "name": "competition_slug",
+              "type": "string",
+              "value": "uefa-champions-league"
+            },
+            {
+              "id": "3fdd872e-9c1d-420a-96cf-7828d148ef69",
+              "name": "season_label",
+              "type": "string",
+              "value": "2024/25"
+            },
+            {
+              "id": "7b275721-e391-431d-a67e-c8d8184a76e6",
+              "name": "wikpedia_url",
+              "type": "string",
+              "value": "https://en.wikipedia.org/wiki/2024%E2%80%9325_UEFA_Champions_League"
+            },
+            {
+              "id": "4e567eeb-4097-472a-915b-d29cd10346a9",
+              "name": "page",
+              "type": "string",
+              "value": "Liga_de_Campeones_de_la_UEFA_2024-25"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        208,
+        0
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "5900bab7-6374-4971-9e85-78e3da2ea44c",
+      "name": "HTTP Request",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "parse"
+            },
+            {
+              "name": "=page",
+              "value": "={{$json.page}}"
+            },
+            {
+              "name": "prop",
+              "value": "wikitext"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            },
+            {
+              "name": "formatversion",
+              "value": "2"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "sendQuery": true,
+        "url": "https://es.wikipedia.org/w/api.php"
+      },
+      "position": [
+        416,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "2e5598f0-e4dd-4657-9cae-5870e5a004b3",
+      "name": "Extract wikitext",
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  return {\n    json: {\n      wikitext: item.json.parse.wikitext\n    }\n  };\n});"
+      },
+      "position": [
+        624,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "0a38c206-b104-4b81-8519-a903e73d70ba",
+      "name": "Parse Tables from Wikitext",
+      "parameters": {
+        "jsCode": "const wikitext = items[0].json.wikitext;\n\n// Separar tablas wikitable\nconst tables = wikitext.split('{|').slice(1).map((t, i) => {\n  const content = '{|' + t.split('|}')[0] + '|}';\n\n  return {\n    table_index: i,\n    content,\n    isMatchday: /Jornada\\s+\\d+/i.test(content)\n  };\n});\n\nreturn tables.map(t => ({ json: t }));"
+      },
+      "position": [
+        848,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "187c8bb5-43bf-4200-bcb1-b8740a00a505",
+      "name": "Filter matchday Tables",
+      "parameters": {
+        "jsCode": "return items.filter(item => {\n  const content = item.json.content || \"\";\n\n  const hasMatchday = /Jornada\\s+\\d+/i.test(content);\n  const hasLocal = /Local/i.test(content);\n  const hasResultado = /Resultado/i.test(content);\n  const hasVisitante = /Visitante/i.test(content);\n  const hasEstadio = /Estadio/i.test(content);\n  const hasFecha = /Fecha/i.test(content);\n  const hasHora = /Hora/i.test(content);\n\n  return hasMatchday && hasLocal && hasResultado && hasVisitante && hasEstadio && hasFecha && hasHora;\n});"
+      },
+      "position": [
+        1056,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "05d83091-a8e6-45ec-9d50-f1b5a8494503",
+      "name": "Parse matches",
+      "parameters": {
+        "jsCode": "const results = [];\n\nfunction cleanCell(value) {\n  if (!value) return null;\n\n  return String(value)\n    .replace(/\\[\\[|\\]\\]/g, \"\")\n    .replace(/\\{\\{.*?\\}\\}/g, \"\")\n    .replace(/<.*?>/g, \"\")\n    .replace(/\\[https?:\\/\\/[^\\s\\]]+/g, \"\")\n    .replace(/\\[|\\]/g, \"\")\n    .replace(/bgcolor=.*?\\|/gi, \"\")\n    .replace(/style=.*?\\|/gi, \"\")\n    .replace(/rowspan=\"?\\d+\"?\\|/gi, \"\")\n    .replace(/colspan=\"?\\d+\"?\\|/gi, \"\")\n    .replace(/rowspan=\\d+\\|/gi, \"\")\n    .replace(/colspan=\\d+\\|/gi, \"\")\n    .replace(/\\{\\{bandera2?\\|.*?\\}\\}/gi, \"\")\n    .replace(/\\{\\{flagicon\\|.*?\\}\\}/gi, \"\")\n    .replace(/'''/g, \"\")\n    .replace(/''/g, \"\")\n    .replace(/\\(\\s*\\)/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction isScore(value) {\n  return /^\\d+\\s*[–-]\\s*\\d+$/.test(value || \"\");\n}\n\nfunction isTime(value) {\n  return /^(\\d{1,2}:\\d{2})$/.test(value || \"\");\n}\n\nfunction isAttendance(value) {\n  return /^\\d{4,6}$/.test(value || \"\");\n}\n\nfunction isDate(value) {\n  return /^(\\d{1,2}\\s+de\\s+\\w+|\\d{1,2}\\s+\\w+)$/i.test(value || \"\");\n}\n\nfunction normalizeScore(value) {\n  return value.replace(/\\s+/g, \"\").replace(\"-\", \"–\");\n}\n\nfor (const item of items) {\n  const content = item.json.content || \"\";\n\n  const jornadaMatch = content.match(/Jornada\\s+(\\d+)/i);\n  const matchday = jornadaMatch ? parseInt(jornadaMatch[1], 10) : null;\n\n  const rows = content.split(\"|-\").slice(1);\n\n  let currentDate = null;\n  let currentTime = null;\n\n  for (const row of rows) {\n    const rawCols = row\n      .split(\"\\n\")\n      .map(l => l.trim())\n      .filter(l => l.startsWith(\"|\") && !l.startsWith(\"|+\"))\n      .map(l => l.replace(/^\\|+/, \"\").trim());\n\n    const cols = rawCols.map(cleanCell).filter(v => v && v !== \"—\");\n\n    if (!cols.length) continue;\n\n    const joined = cols.join(\" | \").toLowerCase();\n    if (\n      joined.includes(\"local\") &&\n      joined.includes(\"visitante\") &&\n      joined.includes(\"resultado\")\n    ) {\n      continue;\n    }\n\n    // Primero capturamos fecha/hora de cualquier celda de la fila\n    for (const col of cols) {\n      if (isDate(col)) currentDate = col;\n      if (isTime(col)) currentTime = col;\n    }\n\n    const scoreIndex = cols.findIndex(isScore);\n    if (scoreIndex === -1) continue;\n\n    const score = normalizeScore(cols[scoreIndex]);\n    const [home_score, away_score] = score.split(\"–\").map(n => parseInt(n, 10));\n\n    const before = cols.slice(0, scoreIndex);\n    const after = cols.slice(scoreIndex + 1);\n\n    const possibleHome = before.filter(v => !isDate(v) && !isTime(v) && !isAttendance(v));\n    const home_team = possibleHome.length ? possibleHome[possibleHome.length - 1] : null;\n\n    let away_team = null;\n    let stadium = null;\n    let attendance = null;\n\n    const afterNonNumeric = after.filter(v => !isAttendance(v) && !isTime(v) && !isDate(v));\n\n    if (afterNonNumeric.length >= 1) away_team = afterNonNumeric[0];\n    if (afterNonNumeric.length >= 2) stadium = afterNonNumeric[1];\n\n    const att = after.find(isAttendance);\n    if (att) attendance = parseInt(att, 10);\n\n    if (!home_team || !away_team) continue;\n\n    if (stadium && stadium.includes(\"/\")) {\n      const parts = stadium.split(\"/\").map(s => s.trim()).filter(Boolean);\n      if (parts.length >= 2 && parts[0].toLowerCase() === parts[1].toLowerCase()) {\n        stadium = parts[0];\n      }\n    }\n\n    results.push({\n      matchday,\n      date: currentDate,\n      time: currentTime,\n      home_team,\n      away_team,\n      score,\n      stadium,\n      attendance,\n      home_score,\n      away_score,\n      source: \"wikipedia\",\n      competition: \"UEFA Champions League\",\n      season: \"2024/25\",\n      stage: \"league_phase\"\n    });\n  }\n}\n\nreturn results.map(r => ({ json: r }));"
+      },
+      "position": [
+        1264,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "6ecdef17-3412-4483-8972-fd27fa49e933",
+      "name": "Clean & Normalize Matches",
+      "parameters": {
+        "jsCode": "function cleanText(value) {\n  if (value === null || value === undefined) return null;\n\n  let v = String(value)\n    .replace(/\\u00a0/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n\n  if (!v) return null;\n  if (v.toLowerCase() === \"null\") return null;\n  return v;\n}\n\nfunction dedupeSlashName(value) {\n  if (!value) return value;\n\n  const parts = value.split(\"/\").map(s => s.trim()).filter(Boolean);\n  if (parts.length !== 2) return value;\n\n  const a = parts[0].toLowerCase();\n  const b = parts[1].toLowerCase();\n\n  if (a === b) return parts[0];\n  return value;\n}\n\nfunction normalizeDate(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  return value\n    .replace(/\\s+de\\s+/gi, \" de \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction normalizeTime(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  const m = value.match(/^(\\d{1,2}):(\\d{2})$/);\n  if (!m) return null;\n\n  const hh = String(parseInt(m[1], 10)).padStart(2, \"0\");\n  const mm = m[2];\n  return `${hh}:${mm}`;\n}\n\nfunction normalizeTeam(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  return value\n    .replace(/\\s+\\(\\w+\\)$/i, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction normalizeStadium(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  value = dedupeSlashName(value);\n\n  return value\n    .replace(/\\s+\\(\\(\\)\\)$/g, \"\")\n    .replace(/\\s+\\)$/g, \"\")\n    .replace(/\\{\\{.*?\\}\\}/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction normalizeScore(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  value = value.replace(/-/g, \"–\").replace(/\\s+/g, \"\");\n  return /^\\d+–\\d+$/.test(value) ? value : null;\n}\n\nfunction normalizeAttendance(value) {\n  if (value === null || value === undefined || value === \"\") return null;\n\n  const digits = String(value).replace(/\\D/g, \"\");\n  if (!digits) return null;\n\n  const n = parseInt(digits, 10);\n  return Number.isNaN(n) ? null : n;\n}\n\nconst out = [];\nconst seen = new Set();\n\nfor (const item of items) {\n  const m = item.json || {};\n\n  const matchday = m.matchday ?? null;\n  const date = normalizeDate(m.date);\n  const time = normalizeTime(m.time);\n  const home_team = normalizeTeam(m.home_team);\n  const away_team = normalizeTeam(m.away_team);\n  const score = normalizeScore(m.score);\n  const stadium = normalizeStadium(m.stadium);\n  const attendance = normalizeAttendance(m.attendance);\n\n  const home_score =\n    m.home_score !== undefined && m.home_score !== null ? Number(m.home_score) : null;\n  const away_score =\n    m.away_score !== undefined && m.away_score !== null ? Number(m.away_score) : null;\n\n  // Filtrar basura\n  if (!home_team || !away_team || !score) continue;\n  if (!Number.isInteger(home_score) || !Number.isInteger(away_score)) continue;\n\n  const dedupeKey = [\n    m.competition || \"UEFA Champions League\",\n    m.season || \"2024/25\",\n    m.stage || \"league_phase\",\n    matchday,\n    date,\n    time,\n    home_team,\n    away_team,\n    score\n  ].join(\"|\");\n\n  if (seen.has(dedupeKey)) continue;\n  seen.add(dedupeKey);\n\n  out.push({\n    json: {\n      competition: cleanText(m.competition) || \"UEFA Champions League\",\n      season: cleanText(m.season) || \"2024/25\",\n      stage: cleanText(m.stage) || \"league_phase\",\n      matchday: matchday,\n      date: date,\n      time: time,\n      home_team: home_team,\n      away_team: away_team,\n      score: score,\n      home_score: home_score,\n      away_score: away_score,\n      stadium: stadium,\n      attendance: attendance,\n      source: cleanText(m.source) || \"wikipedia\"\n    }\n  });\n}\n\nreturn out;"
+      },
+      "position": [
+        1472,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "2c4789e9-4a1e-4374-97ad-a174f853554a",
+      "name": "Extract Knockout Bracket",
+      "parameters": {
+        "jsCode": "const wikitext = items[0].json.wikitext;\n\nif (!wikitext) {\n  throw new Error(\"No hay wikitext\");\n}\n\nconst start = wikitext.indexOf(\"=== Eliminatorias ===\");\nconst end = wikitext.indexOf(\"=== Ronda preliminar ===\");\n\nif (start === -1 || end === -1 || end <= start) {\n  throw new Error(\"No se encontró el bloque de eliminatorias\");\n}\n\nconst bracketText = wikitext.slice(start, end);\n\nreturn [\n  {\n    json: {\n      bracketText\n    }\n  }\n];"
+      },
+      "position": [
+        736,
+        224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d306a997-eb95-4490-b283-bc7ff2295e0b",
+      "name": "Parse Knockout Rounds",
+      "parameters": {
+        "jsCode": "const text = items[0].json.bracketText;\n\nfunction getValue(key) {\n  const re = new RegExp(`\\\\|\\\\s*${key}\\\\s*=\\\\s*(.+)`);\n  const m = text.match(re);\n  return m ? m[1].trim() : null;\n}\n\nfunction cleanWiki(value) {\n  if (!value) return null;\n\n  return String(value)\n    .replace(/\\{\\{bandera\\|[^}]+\\}\\}/gi, \"\")\n    .replace(/\\{\\{esd\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\{\\{small\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\[\\[([^|\\]]+)\\|([^\\]]+)\\]\\]/g, \"$2\")\n    .replace(/\\[\\[([^\\]]+)\\]\\]/g, \"$1\")\n    .replace(/'''/g, \"\")\n    .replace(/''/g, \"\")\n    .replace(/<small>.*?<\\/small>/gi, \"\")\n    .replace(/<br\\s*\\/?>/gi, \" \")\n    .replace(/&nbsp;/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nconst roundMap = {\n  RD1: \"round_of_16\",\n  RD2: \"quarter_final\",\n  RD3: \"semi_final\",\n  RD4: \"final\"\n};\n\nconst out = [];\n\nfor (const roundKey of [\"RD1\", \"RD2\", \"RD3\"]) {\n  const roundName = roundMap[roundKey];\n  const roundDate = cleanWiki(getValue(`${roundKey}-date`));\n\n  for (let i = 1; i <= 16; i += 2) {\n    const n1 = String(i).padStart(2, \"0\");\n    const n2 = String(i + 1).padStart(2, \"0\");\n\n    const team1 = cleanWiki(getValue(`${roundKey}-team${n1}`));\n    const team2 = cleanWiki(getValue(`${roundKey}-team${n2}`));\n\n    if (!team1 || !team2) continue;\n\n    const score1_1 = getValue(`${roundKey}-score${n1}-1`);\n    const score1_2 = getValue(`${roundKey}-score${n1}-2`);\n    const score1_3 = getValue(`${roundKey}-score${n1}-3`);\n\n    const score2_1 = getValue(`${roundKey}-score${n2}-1`);\n    const score2_2 = getValue(`${roundKey}-score${n2}-2`);\n    const score2_3 = getValue(`${roundKey}-score${n2}-3`);\n\n    out.push({\n      competition: \"UEFA Champions League\",\n      season: \"2024/25\",\n      stage: roundName,\n      round_dates: roundDate,\n      team_1: team1,\n      team_2: team2,\n      team_1_leg1: score1_1 ? Number(score1_1) : null,\n      team_1_leg2: score1_2 ? Number(score1_2) : null,\n      team_1_agg: score1_3 ? cleanWiki(score1_3) : null,\n      team_2_leg1: score2_1 ? Number(score2_1) : null,\n      team_2_leg2: score2_2 ? Number(score2_2) : null,\n      team_2_agg: score2_3 ? cleanWiki(score2_3) : null,\n      source: \"wikipedia\"\n    });\n  }\n}\n\n// Final\nconst finalDate = cleanWiki(getValue(\"RD4-date\"));\nconst finalTeam1 = cleanWiki(getValue(\"RD4-team01\"));\nconst finalTeam2 = cleanWiki(getValue(\"RD4-team02\"));\nconst finalScore1 = getValue(\"RD4-score01\");\nconst finalScore2 = getValue(\"RD4-score02\");\n\nif (finalTeam1 && finalTeam2) {\n  out.push({\n    competition: \"UEFA Champions League\",\n    season: \"2024/25\",\n    stage: \"final\",\n    round_dates: finalDate,\n    team_1: finalTeam1,\n    team_2: finalTeam2,\n    team_1_leg1: null,\n    team_1_leg2: null,\n    team_1_agg: finalScore1 ? cleanWiki(finalScore1) : null,\n    team_2_leg1: null,\n    team_2_leg2: null,\n    team_2_agg: finalScore2 ? cleanWiki(finalScore2) : null,\n    source: \"wikipedia\"\n  });\n}\n\nreturn out.map(x => ({ json: x }));"
+      },
+      "position": [
+        944,
+        224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "57d2ae59-6933-4ba7-a932-b318658c4ff6",
+      "name": "Clean & Normalize Knockout",
+      "parameters": {
+        "jsCode": "function cleanText(v) {\n  if (v === null || v === undefined) return null;\n  const s = String(v).replace(/\\s+/g, \" \").trim();\n  return s || null;\n}\n\nfunction toIntOrNull(v) {\n  if (v === null || v === undefined || v === \"\") return null;\n  const n = parseInt(String(v).replace(/\\D/g, \"\"), 10);\n  return Number.isNaN(n) ? null : n;\n}\n\nconst seen = new Set();\nconst out = [];\n\nfor (const item of items) {\n  const m = item.json;\n\n  const row = {\n    competition: cleanText(m.competition) || \"UEFA Champions League\",\n    season: cleanText(m.season) || \"2024/25\",\n    stage: cleanText(m.stage),\n    round_dates: cleanText(m.round_dates),\n    team_1: cleanText(m.team_1),\n    team_2: cleanText(m.team_2),\n    team_1_leg1: toIntOrNull(m.team_1_leg1),\n    team_1_leg2: toIntOrNull(m.team_1_leg2),\n    team_1_agg: cleanText(m.team_1_agg),\n    team_2_leg1: toIntOrNull(m.team_2_leg1),\n    team_2_leg2: toIntOrNull(m.team_2_leg2),\n    team_2_agg: cleanText(m.team_2_agg),\n    source: cleanText(m.source) || \"wikipedia\"\n  };\n\n  if (!row.team_1 || !row.team_2 || !row.stage) continue;\n\n  const key = [\n    row.competition,\n    row.season,\n    row.stage,\n    row.team_1,\n    row.team_2,\n    row.team_1_agg,\n    row.team_2_agg\n  ].join(\"|\");\n\n  if (seen.has(key)) continue;\n  seen.add(key);\n\n  out.push({ json: row });\n}\n\nreturn out;"
+      },
+      "position": [
+        1152,
+        224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "f7f3c594-d543-493e-bc03-5c976da6ff4c",
+      "name": "Expand Knockout -> Matches",
+      "parameters": {
+        "jsCode": "function cleanText(v) {\n  if (v === null || v === undefined) return null;\n  const s = String(v)\n    .replace(/<small>.*?<\\/small>/gi, \"\")\n    .replace(/\\{\\{.*?\\}\\}/g, \"\")\n    .replace(/\\[\\[([^|\\]]+)\\|([^\\]]+)\\]\\]/g, \"$2\")\n    .replace(/\\[\\[([^\\]]+)\\]\\]/g, \"$1\")\n    .replace(/'''/g, \"\")\n    .replace(/''/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n  return s || null;\n}\n\nconst out = [];\n\nfor (const item of items) {\n  const m = item.json;\n\n  const competition = cleanText(m.competition) || \"UEFA Champions League\";\n  const season = cleanText(m.season) || \"2024/25\";\n  const stage = cleanText(m.stage);\n  const round_dates = cleanText(m.round_dates);\n  const team1 = cleanText(m.team_1);\n  const team2 = cleanText(m.team_2);\n\n  const t1l1 = m.team_1_leg1 ?? null;\n  const t1l2 = m.team_1_leg2 ?? null;\n  const t2l1 = m.team_2_leg1 ?? null;\n  const t2l2 = m.team_2_leg2 ?? null;\n  const t1agg = cleanText(m.team_1_agg);\n  const t2agg = cleanText(m.team_2_agg);\n  const source = cleanText(m.source) || \"wikipedia\";\n\n  if (!team1 || !team2 || !stage) continue;\n\n  if (stage === \"final\") {\n    out.push({\n      json: {\n        competition,\n        season,\n        stage,\n        leg: \"final\",\n        round_dates,\n        date: null,\n        time: null,\n        home_team: team1,\n        away_team: team2,\n        home_score: t1agg !== null ? parseInt(String(t1agg).replace(/\\D/g, \"\"), 10) : null,\n        away_score: t2agg !== null ? parseInt(String(t2agg).replace(/\\D/g, \"\"), 10) : null,\n        score:\n          t1agg !== null && t2agg !== null\n            ? `${parseInt(String(t1agg).replace(/\\D/g, \"\"), 10)}–${parseInt(String(t2agg).replace(/\\D/g, \"\"), 10)}`\n            : null,\n        stadium: null,\n        attendance: null,\n        source\n      }\n    });\n    continue;\n  }\n\n  if (t1l1 !== null && t2l1 !== null) {\n    out.push({\n      json: {\n        competition,\n        season,\n        stage,\n        leg: \"first_leg\",\n        round_dates,\n        date: null,\n        time: null,\n        home_team: team1,\n        away_team: team2,\n        home_score: Number(t1l1),\n        away_score: Number(t2l1),\n        score: `${Number(t1l1)}–${Number(t2l1)}`,\n        stadium: null,\n        attendance: null,\n        source\n      }\n    });\n  }\n\n  if (t1l2 !== null && t2l2 !== null) {\n    out.push({\n      json: {\n        competition,\n        season,\n        stage,\n        leg: \"second_leg\",\n        round_dates,\n        date: null,\n        time: null,\n        home_team: team2,\n        away_team: team1,\n        home_score: Number(t2l2),\n        away_score: Number(t1l2),\n        score: `${Number(t2l2)}–${Number(t1l2)}`,\n        stadium: null,\n        attendance: null,\n        source\n      }\n    });\n  }\n}\n\nreturn out;"
+      },
+      "position": [
+        1360,
+        224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "e735343f-6505-4100-b0e4-bd1d8703ae41",
+      "name": "Code in JavaScript1",
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "position": [
+        1664,
+        -288
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "2c11811c-ed35-4c3d-bc05-f8fe115ed4c2",
+      "name": "Clean Knockout Matches",
+      "parameters": {
+        "jsCode": "function cleanText(v) {\n  if (v === null || v === undefined) return null;\n  const s = String(v).replace(/\\s+/g, \" \").trim();\n  return s || null;\n}\n\nconst seen = new Set();\nconst out = [];\n\nfor (const item of items) {\n  const m = item.json;\n\n  const row = {\n    competition: cleanText(m.competition),\n    season: cleanText(m.season),\n    stage: cleanText(m.stage),\n    leg: cleanText(m.leg),\n    round_dates: cleanText(m.round_dates),\n    date: cleanText(m.date),\n    time: cleanText(m.time),\n    home_team: cleanText(m.home_team),\n    away_team: cleanText(m.away_team),\n    home_score: m.home_score ?? null,\n    away_score: m.away_score ?? null,\n    score: cleanText(m.score),\n    stadium: cleanText(m.stadium),\n    attendance: m.attendance ?? null,\n    source: cleanText(m.source) || \"wikipedia\"\n  };\n\n  if (!row.home_team || !row.away_team || !row.score) continue;\n\n  const key = [\n    row.competition,\n    row.season,\n    row.stage,\n    row.leg,\n    row.home_team,\n    row.away_team,\n    row.score\n  ].join(\"|\");\n\n  if (seen.has(key)) continue;\n  seen.add(key);\n\n  out.push({ json: row });\n}\n\nreturn out;"
+      },
+      "position": [
+        1568,
+        224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
