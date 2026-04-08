@@ -1,8 +1,6 @@
 {
   "active": true,
   "activeVersion": {
-    "authors": "Adrián Sánchez",
-    "autosaved": false,
     "connections": {
       "Code in JavaScript": {
         "main": [
@@ -143,6 +141,11 @@
               "index": 0,
               "node": "Code in JavaScript",
               "type": "main"
+            },
+            {
+              "index": 0,
+              "node": "Preparar contenido email",
+              "type": "main"
             }
           ]
         ]
@@ -201,6 +204,17 @@
           ]
         ]
       },
+      "Preparar contenido email": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "HTTP Request",
+              "type": "main"
+            }
+          ]
+        ]
+      },
       "Preparar respuesta": {
         "main": [
           [
@@ -253,9 +267,6 @@
         ]
       }
     },
-    "createdAt": "2026-03-21T21:40:09.097Z",
-    "description": null,
-    "name": null,
     "nodes": [
       {
         "id": "92aa3457-707f-41c1-8e40-408f113bc0ca",
@@ -423,8 +434,8 @@
           "toEmail": "={{ $json.email }}"
         },
         "position": [
-          2320,
-          -176
+          2400,
+          -288
         ],
         "type": "n8n-nodes-base.emailSend",
         "typeVersion": 2.1,
@@ -686,7 +697,7 @@
         },
         "position": [
           1824,
-          144
+          112
         ],
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2
@@ -800,7 +811,7 @@
         },
         "position": [
           2144,
-          -176
+          -288
         ],
         "type": "n8n-nodes-base.code",
         "typeVersion": 2
@@ -817,7 +828,7 @@
               },
               {
                 "name": "workflow_run_id",
-                "value": "{{$execution.id}}"
+                "value": "={{$execution.id}}"
               },
               {
                 "name": "step",
@@ -829,11 +840,11 @@
               },
               {
                 "name": "to_email",
-                "value": "={{ $('Merge - Alumno + Ticket').item.json.email }}"
+                "value": "={{ $items(\"Preparar contenido email\")[$itemIndex].json.to_email }}"
               },
               {
                 "name": "subject",
-                "value": "={{ 'MAIL DE BIENVENIDA AL CURSO \"' + $('Code in JavaScript').first().json.ticket.curso_nombre + '\"' }}"
+                "value": "={{ $items(\"Preparar contenido email\")[$itemIndex].json.email_subject }}"
               },
               {
                 "name": "status",
@@ -845,11 +856,47 @@
               },
               {
                 "name": "response",
-                "value": "={{ JSON.stringify($json) }}"
+                "value": "={{ {\n  accepted: $json.accepted ?? [],\n  rejected: $json.rejected ?? [],\n  ehlo: $json.ehlo ?? [],\n  envelopeTime: $json.envelopeTime ?? null,\n  messageTime: $json.messageTime ?? null,\n  messageSize: $json.messageSize ?? null,\n  response: $json.response ?? null,\n  envelope: $json.envelope ?? null,\n  messageId: $json.messageId ?? null\n} }}"
               },
               {
                 "name": "error",
                 "value": "={{ $json.error || null }}"
+              },
+              {
+                "name": "sent_at",
+                "value": "={{ $now.toISO() }}"
+              },
+              {
+                "name": "meta",
+                "value": "={{ {\n  email: $('Merge - Alumno + Ticket').item.json.email ?? null,\n  nombre: $('Merge - Alumno + Ticket').item.json.firstname ?? null,\n  apellidos: $('Merge - Alumno + Ticket').item.json.lastname ?? null,\n  username: $('Merge - Alumno + Ticket').item.json.username ?? null,\n  dni: $('Merge - Alumno + Ticket').item.json.profile_field_ND ?? null,\n  curso_nombre: $('Code in JavaScript').first().json.ticket?.curso_nombre ?? null,\n  empresa_nombre: $('Code in JavaScript').first().json.ticket?.empresa_nombre ?? null,\n  nombre_completo: $('Merge - Alumno + Ticket').item.json.nombre_completo ?? null\n} }}"
+              },
+              {
+                "name": "from_email",
+                "value": "={{ $json.envelope?.from ?? null }}"
+              },
+              {
+                "name": "recipient_name",
+                "value": "={{ $('Merge - Alumno + Ticket').item.json.nombre_completo ?? null }}"
+              },
+              {
+                "name": "recipient_identifier",
+                "value": "={{ $('Merge - Alumno + Ticket').item.json.profile_field_ND ?? null }}"
+              },
+              {
+                "name": "row_index",
+                "value": "={{ null }}"
+              },
+              {
+                "name": "attachments_json",
+                "value": "={{ \n  $items(\"Preparar contenido email\")[$itemIndex].json.attachment_filename ? [\n    {\n      filename: $items(\"Preparar contenido email\")[$itemIndex].json.attachment_filename,\n      mime_type: $items(\"Preparar contenido email\")[$itemIndex].json.attachment_mime_type,\n      size: $items(\"Preparar contenido email\")[$itemIndex].json.attachment_file_size\n    }\n  ] : []\n}}"
+              },
+              {
+                "name": "html_body",
+                "value": "={{ $items(\"Preparar contenido email\")[$itemIndex].json.html_body }}"
+              },
+              {
+                "name": "text_body",
+                "value": "={{ $items(\"Preparar contenido email\")[$itemIndex].json.text_body }}"
               }
             ]
           },
@@ -881,18 +928,28 @@
           "url": "https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/ticket_email_logs"
         },
         "position": [
-          2528,
+          2560,
           -176
         ],
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3
+      },
+      {
+        "id": "66119c0a-604d-4d34-856e-aab1f84d3731",
+        "name": "Preparar contenido email",
+        "parameters": {
+          "jsCode": "const item = $input.item;\n\nconst cursoNombre = item.json.ticket?.curso_nombre ?? \"\";\nconst empresaNombre = item.json.ticket?.empresa_nombre ?? \"\";\nconst fechaInicio = item.json.ticket?.fecha_inicio ?? \"\";\nconst fechaFin = item.json.ticket?.fecha_fin ?? \"\";\nconst duracion = item.json.ticket?.duracion_horas ?? item.json.ticket?.duracion_minutos ?? \"\";\n\nconst firstname = item.json.firstname ?? \"\";\nconst lastname = item.json.lastname ?? \"\";\nconst username = item.json.username ?? \"\";\nconst password = item.json.password ?? \"\";\nconst to_email = item.json.email ?? \"\";\nconst from_email = \"produccion@harveylluch.com\";\n\nconst email_subject = `MAIL DE BIENVENIDA AL CURSO \"${cursoNombre}\"`;\n\nconst html_body = `\n<div style=\"font-family: Arial, Helvetica, sans-serif; font-size: 14px; color:#111; line-height: 1.5;\">\n  <p style=\"margin: 0 0 18px 0;\">\n    Estimad@ ${firstname} ${lastname}:\n  </p>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Le damos la bienvenida al curso <strong>${cursoNombre}</strong>${empresaNombre ? ` de la empresa <strong>${empresaNombre}</strong>` : \"\"}.\n  </p>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Sus credenciales de acceso son:\n  </p>\n\n  <ul style=\"margin: 0 0 18px 20px; padding: 0;\">\n    <li><strong>Usuario:</strong> ${username}</li>\n    <li><strong>Contraseña:</strong> ${password}</li>\n  </ul>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    ${fechaInicio ? `<strong>Fecha de inicio:</strong> ${fechaInicio}<br>` : \"\"}\n    ${fechaFin ? `<strong>Fecha de fin:</strong> ${fechaFin}<br>` : \"\"}\n    ${duracion ? `<strong>Duración:</strong> ${duracion}` : \"\"}\n  </p>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Acceda a la plataforma con sus credenciales y siga las instrucciones del curso.\n  </p>\n\n  <p style=\"margin: 0;\">\n    Un saludo.\n  </p>\n</div>\n`;\n\nconst text_body = `Estimad@ ${firstname} ${lastname}:\n\nLe damos la bienvenida al curso ${cursoNombre}${empresaNombre ? ` de la empresa ${empresaNombre}` : \"\"}.\n\nSus credenciales de acceso son:\n\n- Usuario: ${username}\n- Contraseña: ${password}\n\n${fechaInicio ? `Fecha de inicio: ${fechaInicio}\\n` : \"\"}${fechaFin ? `Fecha de fin: ${fechaFin}\\n` : \"\"}${duracion ? `Duración: ${duracion}\\n` : \"\"}\n\nAcceda a la plataforma con sus credenciales y siga las instrucciones del curso.\n\nUn saludo.`;\n\nlet attachmentFilename = item.binary?.pdf?.fileName\n  ? decodeURIComponent(item.binary.pdf.fileName)\n  : null;\n\nif (attachmentFilename) {\n  const corrections = {\n    \"COMO\": \"CÓMO\",\n    \"MAS\": \"MÁS\",\n    \"ANIOS\": \"AÑOS\"\n  };\n\n  for (const [wrong, correct] of Object.entries(corrections)) {\n    const regex = new RegExp(`\\\\b${wrong}\\\\b`, \"g\");\n    attachmentFilename = attachmentFilename.replace(regex, correct);\n  }\n}\n\nfunction parseFileSizeToBytes(rawSize) {\n  if (rawSize == null) return null;\n  if (typeof rawSize === \"number\" && Number.isFinite(rawSize)) return rawSize;\n  if (typeof rawSize !== \"string\") return null;\n\n  const normalized = rawSize.trim().replace(\",\", \".\").toLowerCase();\n  const match = normalized.match(/^([\\d.]+)\\s*(b|kb|mb|gb)$/i);\n\n  if (!match) {\n    const parsed = Number(normalized);\n    return Number.isFinite(parsed) ? parsed : null;\n  }\n\n  const value = Number(match[1]);\n  const unit = match[2];\n  if (!Number.isFinite(value)) return null;\n\n  const multipliers = {\n    b: 1,\n    kb: 1024,\n    mb: 1024 * 1024,\n    gb: 1024 * 1024 * 1024,\n  };\n\n  return Math.round(value * multipliers[unit]);\n}\n\nconst attachmentFileSize = parseFileSizeToBytes(item.binary?.pdf?.fileSize);\n\nitem.json.to_email = to_email;\nitem.json.from_email = from_email;\nitem.json.email_subject = email_subject;\nitem.json.html_body = html_body;\nitem.json.text_body = text_body;\nitem.json.attachment_filename = attachmentFilename;\nitem.json.attachment_mime_type = item.binary?.pdf?.mimeType ?? null;\nitem.json.attachment_file_size = attachmentFileSize;\n\nreturn item;",
+          "mode": "runOnceForEachItem"
+        },
+        "position": [
+          2144,
+          -80
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
       }
-    ],
-    "updatedAt": "2026-03-21T21:40:09.097Z",
-    "versionId": "124c660e-9781-43c5-a914-bbf2fc451b38",
-    "workflowId": "00rhy00KuogH0Y2o"
+    ]
   },
-  "activeVersionId": "124c660e-9781-43c5-a914-bbf2fc451b38",
   "connections": {
     "Code in JavaScript": {
       "main": [
@@ -1033,6 +1090,11 @@
             "index": 0,
             "node": "Code in JavaScript",
             "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Preparar contenido email",
+            "type": "main"
           }
         ]
       ]
@@ -1091,6 +1153,17 @@
         ]
       ]
     },
+    "Preparar contenido email": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request",
+            "type": "main"
+          }
+        ]
+      ]
+    },
     "Preparar respuesta": {
       "main": [
         [
@@ -1143,12 +1216,8 @@
       ]
     }
   },
-  "createdAt": "2026-02-27T08:03:43.148Z",
   "id": "00rhy00KuogH0Y2o",
   "isArchived": false,
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
   "name": "2. Alta confirmada → Bienvenida",
   "nodes": [
     {
@@ -1311,14 +1380,15 @@
         "fromEmail": "=produccion@harveylluch.com",
         "html": "=<div style=\"font-family: Arial, Helvetica, sans-serif; font-size: 14px; color:#111; line-height: 1.5;\">\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Estimad@ {{$json.firstname}} {{$json.lastname}}:\n  </p>\n\n  <p style=\"margin: 0 0 14px 0;\">\n    Desde el departamento de formación le damos la bienvenida al curso de referencia que ha gestionado su empresa \n    “<strong>{{$json.ticket.empresa_nombre}}</strong>”.\n  </p>\n\n  <p style=\"margin: 0 0 10px 0;\">\n    Para el correcto desarrollo del mismo, hay que seguir los siguientes pasos:\n  </p>\n\n  <ol style=\"margin: 0 0 16px 20px; padding: 0;\">\n    <li style=\"margin: 0 0 6px 0;\">\n      Acceder a \n      <a href=\"https://campus.centrodeformacionvirtual.es/\" style=\"color:#0b57d0; text-decoration: underline;\">\n        https://campus.centrodeformacionvirtual.es/\n      </a>\n    </li>\n    <li style=\"margin: 0 0 6px 0;\">\n      <strong>Nombre de usuario:</strong> {{$json.username}}\n    </li>\n    <li style=\"margin: 0;\">\n      <strong>Contraseña:</strong> {{$json.password}}\n    </li>\n  </ol>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    El curso es muy intuitivo, hay que seguir las instrucciones de la plataforma hasta su finalización.\n  </p>\n\n  <p style=\"margin: 0 0 18px 0; color:#8a0055; font-weight: 600;\">\n    Por favor, revise en su navegador que tiene desbloqueadas las ventanas emergentes (pop-up). \n    Consulte el PDF adjunto en caso de duda.\n  </p>\n\n  <p style=\"margin: 0 0 12px 0;\">\n    <strong>MUY IMPORTANTE:</strong> \n    El curso tiene una duración de \n    <strong>{{ Math.floor($json.ticket.duracion_minutos / 60) }} horas</strong>, \n    siendo la fecha de inicio el \n    <strong>{{ $json.ticket.fecha_inicio.split('-').reverse().join('/') }}</strong> \n    y la de finalización el \n    <strong>{{ $json.ticket.fecha_fin.split('-').reverse().join('/') }}</strong>. \n    Para dar por finalizada la formación es necesario cumplir los siguientes requisitos:\n  </p>\n\n  <ul style=\"margin: 0 0 18px 20px; padding: 0;\">\n    <li style=\"margin: 0 0 6px 0;\">Visualizar el 100% del curso.</li>\n    <li style=\"margin: 0 0 6px 0;\">Realizar como mínimo el 75% del tiempo total de conexión de la duración total del curso.</li>\n    <li style=\"margin: 0;\">Superar el 100% de las evaluaciones del curso.</li>\n  </ul>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Si no se cumplen dichos requisitos, la FUNDAE puede incidentar el curso en las inspecciones que pueda realizar posteriormente, \n    calificándolo como “no válido”.\n  </p>\n\n  <p style=\"margin: 0;\">\n    En caso de cualquier duda y/o aclaración, estoy a su disposición. \n    Reciba un cordial saludo,\n  </p>\n\n</div>",
         "options": {
-          "attachments": "pdf"
+          "attachments": "pdf",
+          "ccEmail": "soporte@harveylluch.com"
         },
         "subject": "=MAIL DE BIENVENIDA AL CURSO \"{{$json.ticket.curso_nombre}}\"",
         "toEmail": "={{ $json.email }}"
       },
       "position": [
-        2320,
-        -176
+        2400,
+        -288
       ],
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
@@ -1694,7 +1764,7 @@
       },
       "position": [
         2144,
-        -176
+        -288
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
@@ -1711,7 +1781,7 @@
             },
             {
               "name": "workflow_run_id",
-              "value": "{{$execution.id}}"
+              "value": "={{$execution.id}}"
             },
             {
               "name": "step",
@@ -1723,11 +1793,11 @@
             },
             {
               "name": "to_email",
-              "value": "={{ $('Merge - Alumno + Ticket').item.json.email }}"
+              "value": "={{ $items(\"Preparar contenido email\")[$itemIndex].json.to_email }}"
             },
             {
               "name": "subject",
-              "value": "={{ 'MAIL DE BIENVENIDA AL CURSO \"' + $('Code in JavaScript').first().json.ticket.curso_nombre + '\"' }}"
+              "value": "={{ $items(\"Preparar contenido email\")[$itemIndex].json.email_subject }}"
             },
             {
               "name": "status",
@@ -1739,11 +1809,47 @@
             },
             {
               "name": "response",
-              "value": "={{ JSON.stringify($json) }}"
+              "value": "={{ {\n  accepted: $json.accepted ?? [],\n  rejected: $json.rejected ?? [],\n  ehlo: $json.ehlo ?? [],\n  envelopeTime: $json.envelopeTime ?? null,\n  messageTime: $json.messageTime ?? null,\n  messageSize: $json.messageSize ?? null,\n  response: $json.response ?? null,\n  envelope: $json.envelope ?? null,\n  messageId: $json.messageId ?? null\n} }}"
             },
             {
               "name": "error",
               "value": "={{ $json.error || null }}"
+            },
+            {
+              "name": "sent_at",
+              "value": "={{ $now.toISO() }}"
+            },
+            {
+              "name": "meta",
+              "value": "={{ {\n  email: $('Merge - Alumno + Ticket').item.json.email ?? null,\n  nombre: $('Merge - Alumno + Ticket').item.json.firstname ?? null,\n  apellidos: $('Merge - Alumno + Ticket').item.json.lastname ?? null,\n  username: $('Merge - Alumno + Ticket').item.json.username ?? null,\n  dni: $('Merge - Alumno + Ticket').item.json.profile_field_ND ?? null,\n  curso_nombre: $('Code in JavaScript').first().json.ticket?.curso_nombre ?? null,\n  empresa_nombre: $('Code in JavaScript').first().json.ticket?.empresa_nombre ?? null,\n  nombre_completo: $('Merge - Alumno + Ticket').item.json.nombre_completo ?? null\n} }}"
+            },
+            {
+              "name": "from_email",
+              "value": "={{ $json.envelope?.from ?? null }}"
+            },
+            {
+              "name": "recipient_name",
+              "value": "={{ $('Merge - Alumno + Ticket').item.json.nombre_completo ?? null }}"
+            },
+            {
+              "name": "recipient_identifier",
+              "value": "={{ $('Merge - Alumno + Ticket').item.json.profile_field_ND ?? null }}"
+            },
+            {
+              "name": "row_index",
+              "value": "={{ null }}"
+            },
+            {
+              "name": "attachments_json",
+              "value": "={{ \n  $items(\"Preparar contenido email\")[$itemIndex].json.attachment_filename ? [\n    {\n      filename: $items(\"Preparar contenido email\")[$itemIndex].json.attachment_filename,\n      mime_type: $items(\"Preparar contenido email\")[$itemIndex].json.attachment_mime_type,\n      size: $items(\"Preparar contenido email\")[$itemIndex].json.attachment_file_size\n    }\n  ] : []\n}}"
+            },
+            {
+              "name": "html_body",
+              "value": "={{ $items(\"Preparar contenido email\")[$itemIndex].json.html_body }}"
+            },
+            {
+              "name": "text_body",
+              "value": "={{ $items(\"Preparar contenido email\")[$itemIndex].json.text_body }}"
             }
           ]
         },
@@ -1775,19 +1881,101 @@
         "url": "https://oyktngpmaevmahrtmguw.supabase.co/rest/v1/ticket_email_logs"
       },
       "position": [
-        2528,
+        2560,
         -176
       ],
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3
+    },
+    {
+      "id": "66119c0a-604d-4d34-856e-aab1f84d3731",
+      "name": "Preparar contenido email",
+      "parameters": {
+        "jsCode": "const item = $input.item;\n\nconst cursoNombre = item.json.ticket?.curso_nombre ?? \"\";\nconst empresaNombre = item.json.ticket?.empresa_nombre ?? \"\";\nconst fechaInicio = item.json.ticket?.fecha_inicio ?? \"\";\nconst fechaFin = item.json.ticket?.fecha_fin ?? \"\";\nconst duracion = item.json.ticket?.duracion_horas ?? item.json.ticket?.duracion_minutos ?? \"\";\n\nconst firstname = item.json.firstname ?? \"\";\nconst lastname = item.json.lastname ?? \"\";\nconst username = item.json.username ?? \"\";\nconst password = item.json.password ?? \"\";\nconst to_email = item.json.email ?? \"\";\nconst from_email = \"produccion@harveylluch.com\";\n\nconst email_subject = `MAIL DE BIENVENIDA AL CURSO \"${cursoNombre}\"`;\n\nconst html_body = `\n<div style=\"font-family: Arial, Helvetica, sans-serif; font-size: 14px; color:#111; line-height: 1.5;\">\n  <p style=\"margin: 0 0 18px 0;\">\n    Estimad@ ${firstname} ${lastname}:\n  </p>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Le damos la bienvenida al curso <strong>${cursoNombre}</strong>${empresaNombre ? ` de la empresa <strong>${empresaNombre}</strong>` : \"\"}.\n  </p>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Sus credenciales de acceso son:\n  </p>\n\n  <ul style=\"margin: 0 0 18px 20px; padding: 0;\">\n    <li><strong>Usuario:</strong> ${username}</li>\n    <li><strong>Contraseña:</strong> ${password}</li>\n  </ul>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    ${fechaInicio ? `<strong>Fecha de inicio:</strong> ${fechaInicio}<br>` : \"\"}\n    ${fechaFin ? `<strong>Fecha de fin:</strong> ${fechaFin}<br>` : \"\"}\n    ${duracion ? `<strong>Duración:</strong> ${duracion}` : \"\"}\n  </p>\n\n  <p style=\"margin: 0 0 18px 0;\">\n    Acceda a la plataforma con sus credenciales y siga las instrucciones del curso.\n  </p>\n\n  <p style=\"margin: 0;\">\n    Un saludo.\n  </p>\n</div>\n`;\n\nconst text_body = `Estimad@ ${firstname} ${lastname}:\n\nLe damos la bienvenida al curso ${cursoNombre}${empresaNombre ? ` de la empresa ${empresaNombre}` : \"\"}.\n\nSus credenciales de acceso son:\n\n- Usuario: ${username}\n- Contraseña: ${password}\n\n${fechaInicio ? `Fecha de inicio: ${fechaInicio}\\n` : \"\"}${fechaFin ? `Fecha de fin: ${fechaFin}\\n` : \"\"}${duracion ? `Duración: ${duracion}\\n` : \"\"}\n\nAcceda a la plataforma con sus credenciales y siga las instrucciones del curso.\n\nUn saludo.`;\n\nlet attachmentFilename = item.binary?.pdf?.fileName\n  ? decodeURIComponent(item.binary.pdf.fileName)\n  : null;\n\nif (attachmentFilename) {\n  const corrections = {\n    \"COMO\": \"CÓMO\",\n    \"MAS\": \"MÁS\",\n    \"ANIOS\": \"AÑOS\"\n  };\n\n  for (const [wrong, correct] of Object.entries(corrections)) {\n    const regex = new RegExp(`\\\\b${wrong}\\\\b`, \"g\");\n    attachmentFilename = attachmentFilename.replace(regex, correct);\n  }\n}\n\nfunction parseFileSizeToBytes(rawSize) {\n  if (rawSize == null) return null;\n  if (typeof rawSize === \"number\" && Number.isFinite(rawSize)) return rawSize;\n  if (typeof rawSize !== \"string\") return null;\n\n  const normalized = rawSize.trim().replace(\",\", \".\").toLowerCase();\n  const match = normalized.match(/^([\\d.]+)\\s*(b|kb|mb|gb)$/i);\n\n  if (!match) {\n    const parsed = Number(normalized);\n    return Number.isFinite(parsed) ? parsed : null;\n  }\n\n  const value = Number(match[1]);\n  const unit = match[2];\n  if (!Number.isFinite(value)) return null;\n\n  const multipliers = {\n    b: 1,\n    kb: 1024,\n    mb: 1024 * 1024,\n    gb: 1024 * 1024 * 1024,\n  };\n\n  return Math.round(value * multipliers[unit]);\n}\n\nconst attachmentFileSize = parseFileSizeToBytes(item.binary?.pdf?.fileSize);\n\nitem.json.to_email = to_email;\nitem.json.from_email = from_email;\nitem.json.email_subject = email_subject;\nitem.json.html_body = html_body;\nitem.json.text_body = text_body;\nitem.json.attachment_filename = attachmentFilename;\nitem.json.attachment_mime_type = item.binary?.pdf?.mimeType ?? null;\nitem.json.attachment_file_size = attachmentFileSize;\n\nreturn item;",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        2144,
+        -80
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
     }
   ],
   "pinData": {
+    "Send email": [
+      {
+        "json": {
+          "accepted": [
+            "adri-sanch@hotmail.com"
+          ],
+          "ehlo": [
+            "PIPELINING",
+            "SIZE 31457280",
+            "ETRN",
+            "AUTH PLAIN LOGIN",
+            "AUTH=PLAIN LOGIN",
+            "ENHANCEDSTATUSCODES",
+            "8BITMIME",
+            "DSN",
+            "CHUNKING"
+          ],
+          "envelope": {
+            "from": "produccion@harveylluch.com",
+            "to": [
+              "adri-sanch@hotmail.com"
+            ]
+          },
+          "envelopeTime": 63,
+          "messageId": "<5b37996f-3885-0858-d158-fb991510c240@harveylluch.com>",
+          "messageSize": 177264,
+          "messageTime": 128,
+          "rejected": [],
+          "response": "250 2.0.0 Ok: queued as 30F6A104294C"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "accepted": [
+            "m.guerrero@harveylluch.com"
+          ],
+          "ehlo": [
+            "PIPELINING",
+            "SIZE 31457280",
+            "ETRN",
+            "AUTH PLAIN LOGIN",
+            "AUTH=PLAIN LOGIN",
+            "ENHANCEDSTATUSCODES",
+            "8BITMIME",
+            "DSN",
+            "CHUNKING"
+          ],
+          "envelope": {
+            "from": "produccion@harveylluch.com",
+            "to": [
+              "m.guerrero@harveylluch.com"
+            ]
+          },
+          "envelopeTime": 64,
+          "messageId": "<c438d947-ef60-af85-c88a-6f97c20d94fd@harveylluch.com>",
+          "messageSize": 177261,
+          "messageTime": 153,
+          "rejected": [],
+          "response": "250 2.0.0 Ok: queued as 8DA071042D11"
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      }
+    ],
     "Webhook": [
       {
         "json": {
           "body": {
-            "ticket_id": "a17a99dc-d4a2-4e5c-8af1-8c7936311795"
+            "ticket_id": "eefdfafe-7d79-4f91-a4d8-a90bdd6edeb9"
           },
           "executionMode": "production",
           "headers": {
@@ -1797,16 +1985,19 @@
             "content-type": "application/json",
             "host": "n8n-n8n.c2cjix.easypanel.host",
             "user-agent": "python-httpx/0.28.1",
-            "x-forwarded-for": "74.220.51.251",
+            "x-forwarded-for": "90.160.102.106",
             "x-forwarded-host": "n8n-n8n.c2cjix.easypanel.host",
             "x-forwarded-port": "443",
             "x-forwarded-proto": "https",
             "x-forwarded-server": "be88d6f91c28",
-            "x-real-ip": "74.220.51.251"
+            "x-real-ip": "90.160.102.106"
           },
           "params": {},
           "query": {},
           "webhookUrl": "https://n8n-n8n.c2cjix.easypanel.host/webhook/alta-confirmada"
+        },
+        "pairedItem": {
+          "item": 0
         }
       }
     ]
@@ -1815,18 +2006,5 @@
     "binaryMode": "separate",
     "executionOrder": "v1"
   },
-  "shared": [
-    {
-      "createdAt": "2026-02-27T08:03:43.160Z",
-      "projectId": "4uSls6g8LWC7Ie72",
-      "role": "workflow:owner",
-      "updatedAt": "2026-02-27T08:03:43.160Z",
-      "workflowId": "00rhy00KuogH0Y2o"
-    }
-  ],
-  "staticData": null,
-  "tags": [],
-  "triggerCount": 1,
-  "updatedAt": "2026-03-21T22:12:23.467Z",
-  "versionId": "45c54975-4618-4ccd-acef-fa7f88132529"
+  "tags": []
 }
