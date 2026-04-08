@@ -1,7 +1,843 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
+  "active": true,
+  "activeVersion": {
+    "connections": {
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Convert to File",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Validar",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript2": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Code in JavaScript",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Convert to File": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "HTTP Request",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Create a row": {
+        "main": [
+          []
+        ]
+      },
+      "Email Trigger (IMAP)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Set_meta_email",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Extract from File": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Code in JavaScript1",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Generar_ticket_id": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Set_ctx_ticket",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Update a row",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request1": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "update xslx_key",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Extract from File",
+              "type": "main"
+            },
+            {
+              "index": 0,
+              "node": "HTTP Request1",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "Crear falta adjunto",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Code in JavaScript2",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "Crear error validar",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Resumen_validacion": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "If1",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Set_ctx_ticket": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Create a row",
+              "type": "main"
+            },
+            {
+              "index": 0,
+              "node": "If",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Set_meta_email": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Generar_ticket_id",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Validar": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Resumen_validacion",
+              "type": "main"
+            }
+          ]
+        ]
+      }
+    },
+    "nodes": [
+      {
+        "credentials": {
+          "imap": {
+            "id": "oMLKmKHTrQdpFjJx",
+            "name": "IMAP account"
+          }
+        },
+        "id": "40a47418-fd95-4e4e-ad8e-27d05b573636",
+        "name": "Email Trigger (IMAP)",
+        "parameters": {
+          "downloadAttachments": true,
+          "mailbox": "=Altas Cursos",
+          "options": {
+            "forceReconnect": 1,
+            "trackLastMessageId": true
+          }
+        },
+        "position": [
+          -128,
+          0
+        ],
+        "type": "n8n-nodes-base.emailReadImap",
+        "typeVersion": 2.1
+      },
+      {
+        "id": "51c80ddb-a55e-4881-b7ec-c3ee8a203451",
+        "name": "Convert to File",
+        "parameters": {
+          "options": {
+            "delimiter": ";",
+            "headerRow": true
+          }
+        },
+        "position": [
+          3136,
+          -304
+        ],
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1
+      },
+      {
+        "id": "994966ea-5fce-44f2-8797-576b03728fed",
+        "name": "Extract from File",
+        "parameters": {
+          "binaryPropertyName": "attachment_0",
+          "operation": "xlsx",
+          "options": {}
+        },
+        "position": [
+          1696,
+          -64
+        ],
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1
+      },
+      {
+        "id": "85fe167d-bdcd-4fd3-8b09-c3aabdfffe17",
+        "name": "If",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "1c0a2747-fe7e-473d-ba49-df23704710b2",
+                "leftValue": "={{ Object.values($binary || {}).some(b =>\n  ['xlsx','xls'].includes(((b.fileExtension || '') + '').toLowerCase())\n) }}",
+                "operator": {
+                  "operation": "true",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": "="
+              }
+            ],
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            }
+          },
+          "options": {}
+        },
+        "position": [
+          928,
+          32
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2
+      },
+      {
+        "id": "a9dec01c-3cfe-4741-8eb2-108fd5883ffe",
+        "name": "Validar",
+        "parameters": {
+          "jsCode": "function norm(s) {\n  return (s ?? \"\").toString().trim().replace(/\\s+/g, \" \");\n}\n\nfunction limpiarEmail(email) {\n  let e = norm(email).toLowerCase();\n  e = e.replace(/^mailto:/i, \"\").replace(/[<>]/g, \"\");\n  e = e.split(/\\s+/)[0] || \"\";\n  return e;\n}\n\nfunction validarEmail(email) {\n  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(email);\n}\n\nfunction limpiarDocumento(valor) {\n  return norm(valor).toUpperCase().replace(/[^A-Z0-9]/g, \"\");\n}\n\nfunction validarDniNie(valor) {\n  const v = limpiarDocumento(valor);\n  const dniRe = /^\\d{8}[A-Z]$/;\n  const nieRe = /^[XYZ]\\d{7}[A-Z]$/;\n  const letras = \"TRWAGMYFPDXBNJZSQVHLCKE\";\n\n  if (dniRe.test(v)) {\n    const num = parseInt(v.slice(0, 8), 10);\n    return letras[num % 23] === v.slice(8);\n  }\n\n  if (nieRe.test(v)) {\n    const map = { X: \"0\", Y: \"1\", Z: \"2\" };\n    const num = parseInt(map[v[0]] + v.slice(1, 8), 10);\n    return letras[num % 23] === v.slice(8);\n  }\n\n  return false;\n}\n\nfunction splitNombreApellidos(nombre, apellidos, nombreCompleto) {\n  let n = norm(nombre);\n  let a = norm(apellidos);\n\n  if ((!n || !a) && nombreCompleto) {\n    const full = norm(nombreCompleto);\n    if (full.includes(\",\")) {\n      const [ap, nom] = full.split(\",\").map((x) => norm(x));\n      n = n || nom;\n      a = a || ap;\n    } else {\n      const parts = full.split(\" \").filter(Boolean);\n      if (!n && parts.length) n = parts[0];\n      if (!a && parts.length > 1) a = parts.slice(1).join(\" \");\n    }\n  }\n\n  if (n && !a && n.includes(\" \")) {\n    const parts = n.split(\" \").filter(Boolean);\n    n = parts[0];\n    a = parts.slice(1).join(\" \");\n  }\n\n  return { nombre: n, apellidos: a };\n}\n\nfunction aplicarDuplicadosEnLote(lista, getEmail, getDni, setError, getErrores) {\n  const seenEmail = new Map();\n  const seenDni = new Map();\n\n  lista.forEach((obj, idx) => {\n    const email = getEmail(obj);\n    const dni = getDni(obj);\n\n    if (email && validarEmail(email)) {\n      if (seenEmail.has(email)) {\n        const firstIdx = seenEmail.get(email);\n        setError(obj, `Email duplicado en el fichero (repite fila/item ${firstIdx + 1})`, getErrores(obj));\n      } else {\n        seenEmail.set(email, idx);\n      }\n    }\n\n    if (dni && validarDniNie(dni)) {\n      if (seenDni.has(dni)) {\n        const firstIdx = seenDni.get(dni);\n        setError(obj, `DNI/NIE duplicado en el fichero (repite fila/item ${firstIdx + 1})`, getErrores(obj));\n      } else {\n        seenDni.set(dni, idx);\n      }\n    }\n  });\n}\n\n// 1) Si viene agrupado en datos_normalizados[]\nif (Array.isArray(items?.[0]?.json?.datos_normalizados)) {\n  const base = { ...items[0].json };\n\n  // ✅ asegura ctx si existe\n  const ctx = items[0].json?.ctx ?? null;\n\n  const rows = base.datos_normalizados;\n  delete base.datos_normalizados;\n\n  const out = rows.map((r, idx) => {\n    const src = r ?? {};\n    const { nombre, apellidos } = splitNombreApellidos(\n      src.nombre,\n      src.apellidos,\n      src.nombre_completo || src.nombreCompleto\n    );\n\n    const dni = limpiarDocumento(src.dni || src.nif || src.nie || \"\");\n    const email = limpiarEmail(src.email || src.correo || \"\");\n\n    const errores = [];\n    if (!nombre) errores.push(\"Falta nombre\");\n    if (!apellidos) errores.push(\"Faltan apellidos\");\n    if (!dni) errores.push(\"Falta DNI/NIE\");\n    if (dni && !validarDniNie(dni)) errores.push(\"DNI/NIE inválido\");\n    if (!email) errores.push(\"Falta email\");\n    if (email && !validarEmail(email)) errores.push(\"Email inválido\");\n\n    return {\n      json: {\n        ...base,\n        ...(ctx ? { ctx } : {}),\n        ...src,\n        nombre,\n        apellidos,\n        dni,\n        email,\n        errores,\n        valido: errores.length === 0,\n        _fila_excel: idx + 1,\n      },\n      // ✅ no perder binary del email/adjunto\n      binary: items[0].binary,\n    };\n  });\n\n  aplicarDuplicadosEnLote(\n    out,\n    (it) => it.json.email,\n    (it) => it.json.dni,\n    (it, msg, errs) => {\n      errs.push(msg);\n      it.json.valido = false;\n    },\n    (it) => it.json.errores\n  );\n\n  return out;\n}\n\n// 2) Caso normal\nconst out = items.map((item, idx) => {\n  const src = item.json?.normalizado ?? item.json ?? {};\n\n  const { nombre, apellidos } = splitNombreApellidos(\n    src.nombre,\n    src.apellidos,\n    src.nombre_completo || src.nombreCompleto\n  );\n\n  const dni = limpiarDocumento(src.dni || src.nif || src.nie || \"\");\n  const email = limpiarEmail(src.email || src.correo || \"\");\n\n  const errores = [];\n  if (!nombre) errores.push(\"Falta nombre\");\n  if (!apellidos) errores.push(\"Faltan apellidos\");\n  if (!dni) errores.push(\"Falta DNI/NIE\");\n  if (dni && !validarDniNie(dni)) errores.push(\"DNI/NIE inválido\");\n  if (!email) errores.push(\"Falta email\");\n  if (email && !validarEmail(email)) errores.push(\"Email inválido\");\n\n  item.json.nombre = nombre;\n  item.json.apellidos = apellidos;\n  item.json.dni = dni;\n  item.json.email = email;\n  item.json.errores = errores;\n  item.json.valido = errores.length === 0;\n  item.json._item_index = idx + 1;\n\n  return item; // ✅ mantiene binary\n});\n\naplicarDuplicadosEnLote(\n  out,\n  (it) => it.json.email,\n  (it) => it.json.dni,\n  (it, msg, errs) => {\n    errs.push(msg);\n    it.json.valido = false;\n  },\n  (it) => it.json.errores\n);\n\nreturn out;"
+        },
+        "position": [
+          2160,
+          -64
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "f08f853a-73d5-4f90-be8c-faa64d3f42fc",
+        "name": "Code in JavaScript",
+        "parameters": {
+          "jsCode": "function norm(s) {\n  return (s ?? \"\").toString().replace(/\\s+/g, \" \").trim();\n}\n\nfunction stripAccents(s) {\n  return (s || \"\").normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\");\n}\n\nfunction cleanPasswordToken(s) {\n  return stripAccents(norm(s))\n    .toLowerCase()\n    .replace(/[^a-z0-9]/g, \"\");\n}\n\nfunction passwordFromApellidos(apellidosRaw) {\n  const apellidos = norm(apellidosRaw).toLowerCase();\n  if (!apellidos) return \"\";\n\n  const tokens = apellidos.split(\" \").filter(Boolean);\n\n  const conectores = new Set([\n    \"de\",\"del\",\"la\",\"las\",\"los\",\"da\",\"do\",\"dos\",\"das\",\"di\",\"van\",\"von\",\"y\",\"e\"\n  ]);\n\n  const t1 = tokens[0] || \"\";\n  const t2 = tokens[1] || \"\";\n\n  if (!t2) return cleanPasswordToken(t1);\n\n  const t1c = cleanPasswordToken(t1);\n\n  if (conectores.has(t1c) || t1c.length < 3) {\n    return cleanPasswordToken(t1 + t2);\n  }\n\n  return t1c;\n}\n\nfunction splitNombreApellidos(nombreRaw, apellidosRaw) {\n  let nombre = norm(nombreRaw);\n  let apellidos = norm(apellidosRaw);\n\n  if (!apellidos && nombre) {\n    const parts = nombre.split(\" \").filter(Boolean);\n    if (parts.length >= 2) {\n      nombre = parts[0];\n      apellidos = parts.slice(1).join(\" \");\n    }\n  }\n\n  return { nombre, apellidos };\n}\n\nconst out = [];\n\nfor (const item of $input.all()) {\n  const j = item.json || {};\n\n  const { nombre, apellidos } = splitNombreApellidos(j.nombre, j.apellidos);\n\n  const dniUpper = norm(j.dni).toUpperCase().replace(/\\s+/g, \"\");\n  const dniLower = dniUpper.toLowerCase();\n  const email = norm(j.email).toLowerCase();\n\n  let password = passwordFromApellidos(apellidos);\n  if (!password) password = dniLower || dniUpper;\n\n  if (!nombre || !apellidos || !dniUpper || !email || !password) continue;\n\n  out.push({\n    json: {\n      // ✅ SOLO CAMPOS DEL CSV (sin ctx, sin ticket_id, sin empresa_id)\n      firstname: nombre,\n      lastname: apellidos,\n      username: dniLower,\n      password,\n      email,\n      city: \"MADRID\",\n      course1: \"\",\n      type1: 1,\n\n      // ✅ profile fields correctos\n      profile_field_TD: \"D\",\n      profile_field_ND: dniUpper,\n      profile_field_LD: \"\"\n    }\n  });\n}\n\nreturn out;"
+        },
+        "position": [
+          2912,
+          -272
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "cb5e3015-85ec-46a2-9a3b-621bb9e8f38d",
+        "name": "HTTP Request",
+        "parameters": {
+          "contentType": "binaryData",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Authorization",
+                "value": "Bearer SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Content-Type",
+                "value": "text/csv"
+              }
+            ]
+          },
+          "inputDataFieldName": "data",
+          "method": "PUT",
+          "options": {},
+          "sendBody": true,
+          "sendHeaders": true,
+          "url": "=https://oyktngpmaevmahrtmguw.supabase.co/storage/v1/object/altas-cursos/empresas/f77ce600-761e-4461-945e-b305c2df7c1a/tickets/{{ $('Generar_ticket_id').first().json.ticket_id }}\n/alta.csv"
+        },
+        "position": [
+          3312,
+          -304
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "id": "781b464f-334b-455e-894a-2a9502b46cdd",
+        "name": "Generar_ticket_id",
+        "parameters": {
+          "jsCode": "function uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nreturn items.map(item => {\n  // 1) ticket_id\n  const ticket_id = uuidv4();\n\n  // 2) dominio desde _meta_email.to (Modelo A)\n  const to = item.json._meta_email?.to || \"\";\n  const match = to.match(/@([a-zA-Z0-9.-]+)/);\n  const dominio = match ? match[1].toLowerCase() : null;\n\n  // 3) mapping dominio -> empresa_id\n  const empresas = {\n    \"harveylluch.com\": \"f77ce600-761e-4461-945e-b305c2df7c1a\",\n  };\n\n  const empresa_id = dominio ? (empresas[dominio] || null) : null;\n\n  // 4) guardar en raíz (compat) + ctx (pro)\n  item.json.ticket_id = ticket_id;\n  item.json.empresa_id = empresa_id;\n\n  item.json.ctx = {\n    ticket_id,\n    empresa_id,\n    dominio_to: dominio,\n    meta_email: item.json._meta_email || null,\n  };\n\n  return item;\n});"
+        },
+        "position": [
+          272,
+          0
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "a69af105-3d08-419c-a16d-88334369f8b6",
+        "name": "HTTP Request1",
+        "parameters": {
+          "contentType": "binaryData",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apiKey",
+                "value": "SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Authorization",
+                "value": "Bearer SUPABASE_SECRET_MASKED"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              },
+              {
+                "name": "x-upsert",
+                "value": "true"
+              }
+            ]
+          },
+          "inputDataFieldName": "=attachment_0",
+          "method": "POST",
+          "options": {
+            "response": {
+              "response": {
+                "fullResponse": true,
+                "responseFormat": "text"
+              }
+            }
+          },
+          "sendBody": true,
+          "sendHeaders": true,
+          "url": "=https://oyktngpmaevmahrtmguw.supabase.co/storage/v1/object/altas-cursos/empresas/{{$json.empresa_id}}/tickets/{{$json.ticket_id}}/original.xlsx"
+        },
+        "position": [
+          1456,
+          -192
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3
+      },
+      {
+        "credentials": {
+          "supabaseApi": {
+            "id": "RhF1ouYC5xU2Uidc",
+            "name": "Supabase account"
+          }
+        },
+        "id": "358e9931-0585-44bd-9f40-1acabacaf992",
+        "name": "Crear falta adjunto",
+        "parameters": {
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "id",
+                "fieldValue": "={{ $json.id }}"
+              },
+              {
+                "fieldId": "empresa_id",
+                "fieldValue": "={{ $json.empresa_id }}"
+              },
+              {
+                "fieldId": "estado",
+                "fieldValue": "SIN_ADJUNTO"
+              },
+              {
+                "fieldId": "fecha_email",
+                "fieldValue": "={{ $json.fecha_email }}"
+              },
+              {
+                "fieldId": "remitente",
+                "fieldValue": "={{ $json.remitente }}"
+              },
+              {
+                "fieldId": "asunto",
+                "fieldValue": "={{ $json.asunto }}"
+              },
+              {
+                "fieldId": "motivo_error",
+                "fieldValue": "Falta adjunto XLSX en el email"
+              },
+              {
+                "fieldId": "csv_key",
+                "fieldValue": "null"
+              },
+              {
+                "fieldId": "xlsx_key",
+                "fieldValue": "null"
+              }
+            ]
+          },
+          "filters": {
+            "conditions": [
+              {
+                "condition": "eq",
+                "keyName": "id",
+                "keyValue": "={{ $json.id }}"
+              }
+            ]
+          },
+          "operation": "update",
+          "tableId": "tickets"
+        },
+        "position": [
+          1680,
+          128
+        ],
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1
+      },
+      {
+        "credentials": {
+          "supabaseApi": {
+            "id": "RhF1ouYC5xU2Uidc",
+            "name": "Supabase account"
+          }
+        },
+        "id": "dbf1de70-13d8-4aca-89c9-60c172906405",
+        "name": "Crear error validar",
+        "parameters": {
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "id",
+                "fieldValue": "={{ $json.ticket_id }}"
+              },
+              {
+                "fieldId": "empresa_id",
+                "fieldValue": "={{ ($json.empresa_id || '').replace(/\"/g,'').trim() }}"
+              },
+              {
+                "fieldId": "fecha_email",
+                "fieldValue": "={{ $json.fecha_email }}"
+              },
+              {
+                "fieldId": "estado",
+                "fieldValue": "ERROR_VALIDACION"
+              },
+              {
+                "fieldId": "remitente",
+                "fieldValue": "={{ $json.remitente }}"
+              },
+              {
+                "fieldId": "asunto",
+                "fieldValue": "={{ $json.asunto }}"
+              },
+              {
+                "fieldId": "motivo_error",
+                "fieldValue": "{{$json.motivo_error || 'Validación fallida'}}"
+              },
+              {
+                "fieldId": "errores_validacion",
+                "fieldValue": "={{$json.errores_validacion || []}}"
+              },
+              {
+                "fieldId": "datos_normalizados",
+                "fieldValue": "={{$json.datos_normalizados || []}}"
+              },
+              {
+                "fieldId": "xlsx_key",
+                "fieldValue": "=empresas/{{$json.empresa_id}}/tickets/{{$json.ticket_id}}/original.xlsx"
+              }
+            ]
+          },
+          "filters": {
+            "conditions": [
+              {
+                "condition": "eq",
+                "keyName": "id",
+                "keyValue": "={{ ($json.ticket_id || '').replace(/\"/g,'').trim() }}"
+              }
+            ]
+          },
+          "operation": "update",
+          "tableId": "tickets"
+        },
+        "position": [
+          2768,
+          144
+        ],
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1
+      },
+      {
+        "id": "98763449-1255-4706-979c-bceaad061dca",
+        "name": "Resumen_validacion",
+        "parameters": {
+          "jsCode": "// 1) Base del ticket (primer item)\nconst base = items[0]?.json ?? {};\n\n// 2) Meta email: primero _meta_email (estable), si no, trigger\nconst mail = base._meta_email\n  ?? $items(\"Email Trigger (IMAP)\")[0]?.json\n  ?? {};\n\n// 3) ctx: si ya venía, lo usamos; si no, lo creamos\nconst ctx = base.ctx ?? {\n  ticket_id: base.ticket_id ?? null,\n  empresa_id: base.empresa_id ?? null,\n};\n\n// 4) Construimos filas normalizadas (ojo: tu normalizado está en item.json.normalizado)\nconst filas = items.map((i, idx) => {\n  const n = i.json.normalizado ?? {};\n\n  return {\n    fila: i.json.fila ?? i.json._fila_excel ?? (idx + 1),\n    nombre: n.nombre ?? i.json.nombre ?? null,\n    apellidos: n.apellidos ?? i.json.apellidos ?? null,\n    dni: n.dni ?? i.json.dni ?? null,\n    email: n.email ?? i.json.email ?? null,\n    valido: i.json.valido ?? false,\n    errores: i.json.errores ?? [],\n  };\n});\n\n// 5) Filas inválidas\nconst invalidas = filas.filter(f => f.valido === false);\n\n// 6) Estado final\nconst estado = invalidas.length ? \"ERROR_VALIDACION\" : \"PENDIENTE_ALTA\";\n\n// 7) Resultado consolidado\nreturn [{\n  json: {\n    // 🔥 ctx (fuente única para todo el flujo)\n    ctx,\n\n    // 🔐 Meta ticket (plano también, por compat)\n    ticket_id: ctx.ticket_id,\n    empresa_id: ctx.empresa_id,\n    estado,\n\n    // 📧 Meta email\n    fecha_email: mail.date ?? null,\n    remitente: mail.from ?? null,\n    asunto: mail.subject ?? null,\n\n    // 📊 Datos del Excel\n    datos_normalizados: filas,\n\n    hay_errores_validacion: invalidas.length > 0,\n    errores_validacion: invalidas,\n\n    motivo_error: invalidas.length\n      ? `Validación fallida: ${invalidas.length} fila(s) con errores`\n      : null,\n\n    created_at: new Date().toISOString(),\n    updated_at: new Date().toISOString(),\n  },\n  // ✅ no rompas binarios si alguien los necesita luego\n  binary: items[0].binary,\n}];"
+        },
+        "position": [
+          2352,
+          -64
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "839fcdec-339b-4c74-8bef-4afc3ad737eb",
+        "name": "If1",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "5679a5ff-b243-4bc6-986e-8c575f768e5b",
+                "leftValue": "={{ $json.hay_errores_validacion }}",
+                "operator": {
+                  "operation": "false",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": false
+              }
+            ],
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            }
+          },
+          "options": {}
+        },
+        "position": [
+          2528,
+          -64
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2
+      },
+      {
+        "id": "a047e7f6-ab6d-4285-8a18-7d547f62cea1",
+        "name": "Set_meta_email",
+        "parameters": {
+          "jsCode": "return items.map(item => {\n  const date =\n    item.json.date ??\n    item.json.dateTime ??\n    item.json.internalDate ??\n    item.json.headers?.date ??\n    null;\n\n  const from =\n    item.json.from?.text ??\n    item.json.from ??\n    item.json.headers?.from ??\n    \"\";\n\n  const to =\n    item.json.to?.text ??\n    item.json.to ??\n    item.json.headers?.to ??\n    \"\";\n\n  const subject =\n    item.json.subject ??\n    item.json.headers?.subject ??\n    null;\n\n  // ✅ message-id (puede venir en varias formas)\n  const message_id =\n    item.json.headers?.[\"message-id\"] ??\n    item.json.headers?.[\"Message-ID\"] ??\n    item.json.headers?.[\"Message-Id\"] ??\n    item.json.messageId ??\n    item.json.message_id ??\n    null;\n\n  let empresa_id = null;\n\n  if (to.toLowerCase().includes(\"@harveylluch.com\")) {\n    empresa_id = \"f77ce600-761e-4461-945e-b305c2df7c1a\";\n  }\n\n  item.json._meta_email = { date, from, to, subject, message_id };\n  item.json.empresa_id = empresa_id;\n\n  // ✅ para usarlo directo en expresiones\n  item.json.message_id = message_id;\n\n  return item;\n});"
+        },
+        "position": [
+          112,
+          0
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "b0b29c8e-f49a-49ea-9cba-c910f579a232",
+        "name": "Code in JavaScript1",
+        "parameters": {
+          "jsCode": "// Recuperamos el ticket y metadata del nodo anterior al XLSX\nconst meta = $items(\"Generar_ticket_id\")[0]?.json ?? {};\n\n// Helpers\nfunction normKey(k) {\n  return String(k ?? \"\")\n    .toLowerCase()\n    .normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\")\n    .replace(/\\s+/g, \"_\")\n    .replace(/[\\/]/g, \"_\")\n    .replace(/[-]/g, \"_\")\n    .trim();\n}\n\nfunction getValByAliases(row, aliases) {\n  const keys = Object.keys(row || {});\n  for (const k of keys) {\n    const nk = normKey(k);\n    if (aliases.includes(nk)) return row[k];\n  }\n  return \"\";\n}\n\nfunction splitNombreApellidos(fullRaw) {\n  const full = String(fullRaw ?? \"\").trim();\n  if (!full) return { nombre: \"\", apellidos: \"\" };\n\n  if (full.includes(\",\")) {\n    const [ap, nom] = full.split(\",\").map(s => s.trim());\n    return { nombre: nom ?? \"\", apellidos: ap ?? \"\" };\n  }\n\n  const parts = full.split(/\\s+/).filter(Boolean);\n  if (parts.length === 1) return { nombre: parts[0], apellidos: \"\" };\n  return { nombre: parts[0], apellidos: parts.slice(1).join(\" \") };\n}\n\nfunction limpiarEmail(email) {\n  let e = (email ?? \"\").toString().trim();\n  e = e.replace(/^mailto:/i, \"\").replace(/[<>]/g, \"\");\n  e = e.split(/\\s+/)[0] || \"\";\n  return e.toLowerCase();\n}\n\n// Aliases\nconst ALIASES = {\n  nombre: [\"nombre\"],\n  apellidos: [\"apellidos\"],\n  nombre_completo: [\n    \"nombre_y_apellidos\",\n    \"nombre_completo\",\n    \"nombre_apellidos\",\n    \"trabajador\",\n    \"empleado\",\n    \"nombre_y_apellido\",\n  ],\n  dni: [\n    \"dni\",\n    \"dni_nie\",\n    \"dni/nie\",\n    \"dni_nie_\",\n    \"nif\",\n    \"nie\",\n    \"documento\",\n    \"numero_documento\",\n  ],\n  email: [\n    \"email\",\n    \"correo\",\n    \"correo_electronico\",\n    \"e_mail\",\n    \"mail\",\n    \"email_corporativo\",\n    \"correo_corporativo\",\n  ],\n  username: [\"username\", \"usuario\", \"user\", \"login\"],\n  firstname: [\"firstname\", \"first_name\"],\n  lastname: [\"lastname\", \"last_name\"],\n};\n\nreturn items.map(item => {\n  const src = item.json ?? {};\n  const row = (src.raw_row && typeof src.raw_row === \"object\") ? src.raw_row : src;\n\n  const nombreDirecto = getValByAliases(row, ALIASES.nombre);\n  const apellidosDirecto = getValByAliases(row, ALIASES.apellidos);\n\n  const firstname = getValByAliases(row, ALIASES.firstname);\n  const lastname = getValByAliases(row, ALIASES.lastname);\n\n  const nombreCompleto = getValByAliases(row, ALIASES.nombre_completo);\n\n  let nombre = String(nombreDirecto ?? \"\").trim();\n  let apellidos = String(apellidosDirecto ?? \"\").trim();\n\n  if ((!nombre && !apellidos) && (firstname || lastname)) {\n    nombre = String(firstname ?? \"\").trim();\n    apellidos = String(lastname ?? \"\").trim();\n  }\n\n  if ((!nombre && !apellidos) && nombreCompleto) {\n    const sp = splitNombreApellidos(nombreCompleto);\n    nombre = sp.nombre;\n    apellidos = sp.apellidos;\n  }\n\n  const dni = String(getValByAliases(row, ALIASES.dni) ?? \"\")\n    .toUpperCase()\n    .replace(/\\s+/g, \"\")\n    .trim();\n\n  const email = limpiarEmail(getValByAliases(row, ALIASES.email));\n  const username = String(getValByAliases(row, ALIASES.username) ?? \"\").trim();\n\n  const normalizado = { nombre, apellidos, dni, email, username };\n\n  return {\n    json: {\n      ...src,           // primero lo que venga de extract\n      ...meta,          // ✅ meta manda SIEMPRE (ticket_id/empresa_id/ctx)\n      nombre,\n      apellidos,\n      dni,\n      email,\n      username,\n      normalizado,\n    },\n    binary: item.binary, // ✅ no pierdes binary\n  };\n});"
+        },
+        "position": [
+          1936,
+          -64
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "7ddd5019-f4c4-4372-933d-9bbb0bffcacc",
+        "name": "Code in JavaScript2",
+        "parameters": {
+          "jsCode": "const src =\n  $json.filas ??\n  $json.datos_normalizados ??\n  $json.validos ??\n  $json.rows ??\n  [];\n\nif (!Array.isArray(src)) {\n  throw new Error(\"No encuentro un array de filas (filas/datos_normalizados/validos/rows).\");\n}\n\n// Base/ctx para no perder contexto\nconst base = {\n  ctx: $json.ctx ?? null,\n  ticket_id: $json.ticket_id ?? null,\n  empresa_id: $json.empresa_id ?? null,\n  fecha_email: $json.fecha_email ?? null,\n  remitente: $json.remitente ?? null,\n  asunto: $json.asunto ?? null,\n};\n\n// Solo válidas (si no existe campo, las deja pasar)\nconst validas = src.filter(f => (f?.valido === undefined ? true : f.valido === true));\n\nreturn validas.map(f => ({\n  json: {\n    ...base,\n    ...f,\n  },\n}));"
+        },
+        "position": [
+          2736,
+          -144
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "f8e2de6e-a08d-4948-96a6-cf3bf9353729",
+        "name": "Set_ctx_ticket",
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "5dc90023-521b-44fb-81a7-d5738989f92e",
+                "name": "ctx.empresa_id",
+                "type": "string",
+                "value": "={{$json.empresa_id}}"
+              },
+              {
+                "id": "d34ff010-5005-4389-8804-b3e7adef6269",
+                "name": "ctx.ticket_id",
+                "type": "string",
+                "value": "={{$json.ticket_id}}"
+              },
+              {
+                "id": "3c68050f-c20e-46af-85f1-27d3222fa4b5",
+                "name": "ctx.meta_email",
+                "type": "object",
+                "value": "={{$json._meta_email}}"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "position": [
+          480,
+          -96
+        ],
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4
+      },
+      {
+        "credentials": {
+          "supabaseApi": {
+            "id": "RhF1ouYC5xU2Uidc",
+            "name": "Supabase account"
+          }
+        },
+        "id": "065b731b-a8f0-4770-bb43-134d969ebbf3",
+        "name": "Update a row",
+        "parameters": {
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "id",
+                "fieldValue": "={{ $('Resumen_validacion').item.json.ticket_id }}"
+              },
+              {
+                "fieldId": "empresa_id",
+                "fieldValue": "f77ce600-761e-4461-945e-b305c2df7c1a"
+              },
+              {
+                "fieldId": "estado",
+                "fieldValue": "PENDIENTE_ALTA"
+              },
+              {
+                "fieldId": "csv_key",
+                "fieldValue": "=empresas/f77ce600-761e-4461-945e-b305c2df7c1a/tickets/{{ $('Resumen_validacion').item.json.ticket_id }}/alta.csv"
+              },
+              {
+                "fieldId": "fecha_email",
+                "fieldValue": "={{ $('Resumen_validacion').item.json.fecha_email }}"
+              },
+              {
+                "fieldId": "remitente",
+                "fieldValue": "={{ $('Resumen_validacion').item.json.remitente }}"
+              },
+              {
+                "fieldId": "asunto",
+                "fieldValue": "={{ $('Resumen_validacion').item.json.asunto }}"
+              },
+              {
+                "fieldId": "xlsx_key",
+                "fieldValue": "=empresas/f77ce600-761e-4461-945e-b305c2df7c1a/tickets/{{ $('Resumen_validacion').item.json.ticket_id }}/original.xlsx"
+              }
+            ]
+          },
+          "filters": {
+            "conditions": [
+              {
+                "condition": "eq",
+                "keyName": "id",
+                "keyValue": "={{ $('Resumen_validacion').item.json.ticket_id }}"
+              }
+            ]
+          },
+          "operation": "update",
+          "tableId": "tickets"
+        },
+        "position": [
+          3488,
+          -304
+        ],
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1
+      },
+      {
+        "credentials": {
+          "supabaseApi": {
+            "id": "RhF1ouYC5xU2Uidc",
+            "name": "Supabase account"
+          }
+        },
+        "id": "ea47595e-548e-4c5b-8926-d2d145f909ef",
+        "name": "update xslx_key",
+        "parameters": {
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "empresa_id",
+                "fieldValue": "={{ $('Generar_ticket_id').item.json.empresa_id }}"
+              },
+              {
+                "fieldId": "estado",
+                "fieldValue": "PENDIENTE_VALIDACION"
+              },
+              {
+                "fieldId": "xlsx_key",
+                "fieldValue": "=empresas/{{ $('Generar_ticket_id').item.json.empresa_id }}/tickets/{{ $('Set_ctx_ticket').item.json.ctx.ticket_id }}/original.xlsx"
+              }
+            ]
+          },
+          "filters": {
+            "conditions": [
+              {
+                "condition": "eq",
+                "keyName": "id",
+                "keyValue": "={{ $('If').item.json.ticket_id }}"
+              }
+            ]
+          },
+          "operation": "update",
+          "tableId": "tickets"
+        },
+        "position": [
+          1680,
+          -240
+        ],
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1
+      },
+      {
+        "credentials": {
+          "supabaseApi": {
+            "id": "RhF1ouYC5xU2Uidc",
+            "name": "Supabase account"
+          }
+        },
+        "id": "239c640a-1acb-4292-8fa0-104c772b5822",
+        "name": "Create a row",
+        "parameters": {
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "id",
+                "fieldValue": "={{ $('Generar_ticket_id').item.json.ticket_id }}"
+              },
+              {
+                "fieldId": "empresa_id",
+                "fieldValue": "={{ $('Generar_ticket_id').item.json.empresa_id }}"
+              },
+              {
+                "fieldId": "estado",
+                "fieldValue": "PENDIENTE_VALIDACION"
+              },
+              {
+                "fieldId": "fecha_email",
+                "fieldValue": "={{$('Email Trigger (IMAP)').item.json.date}}"
+              },
+              {
+                "fieldId": "remitente",
+                "fieldValue": "={{$('Email Trigger (IMAP)').item.json.from}}"
+              },
+              {
+                "fieldId": "asunto",
+                "fieldValue": "={{$('Email Trigger (IMAP)').item.json.subject}}"
+              },
+              {
+                "fieldId": "created_at",
+                "fieldValue": "={{$now}}"
+              },
+              {
+                "fieldId": "message_id",
+                "fieldValue": "={{$json.message_id}}"
+              }
+            ]
+          },
+          "tableId": "tickets"
+        },
+        "position": [
+          736,
+          -192
+        ],
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1
+      }
+    ]
+  },
   "connections": {
     "Code in JavaScript": {
       "main": [
@@ -198,19 +1034,15 @@
       ]
     }
   },
-  "createdAt": "2026-02-25T15:45:21.114Z",
   "id": "6X94saGU48aLg7Up",
   "isArchived": false,
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
   "name": "1. Solicitud Alta Curso → Validación + Creación",
   "nodes": [
     {
       "credentials": {
         "imap": {
-          "id": "FAmepXGH9Tmu6ZRx",
-          "name": "IMAP account 2"
+          "id": "oMLKmKHTrQdpFjJx",
+          "name": "IMAP account"
         }
       },
       "id": "40a47418-fd95-4e4e-ad8e-27d05b573636",
@@ -850,23 +1682,5 @@
     "binaryMode": "separate",
     "executionOrder": "v1"
   },
-  "shared": [
-    {
-      "createdAt": "2026-02-25T15:45:21.119Z",
-      "projectId": "4uSls6g8LWC7Ie72",
-      "role": "workflow:owner",
-      "updatedAt": "2026-02-25T15:45:21.119Z",
-      "workflowId": "6X94saGU48aLg7Up"
-    }
-  ],
-  "staticData": {
-    "node:Email Trigger (IMAP)": {},
-    "node:Schedule Trigger": {
-      "recurrenceRules": []
-    }
-  },
-  "tags": [],
-  "triggerCount": 1,
-  "updatedAt": "2026-03-21T21:55:07.232Z",
-  "versionId": "151e5a43-fbdb-4129-8af2-c481c02d9cad"
+  "tags": []
 }
