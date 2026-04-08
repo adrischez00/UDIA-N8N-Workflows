@@ -1,0 +1,1006 @@
+{
+  "active": true,
+  "activeVersion": {
+    "connections": {
+      "C01 - Validate Request": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "If - Validación error",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "C02 - Preparar Body": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "If - Envío válido",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "C03 - Normalizar Adjuntos": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "If - Adjuntos Válidos",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "C04 - Renombrar Adjunto": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "C05 - Marcar Adjunto Descargado",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "C05 - Marcar Adjunto Descargado": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "If - Descarga correcta",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "HTTP Request - Descargar Adjuntos": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "C04 - Renombrar Adjunto",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "If - Adjuntos Válidos": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "HTTP Request - Descargar Adjuntos",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "Respond to Webhook2",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "If - Descarga correcta": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Send an Email",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "Respond to Webhook3",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "If - Envío válido": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "C03 - Normalizar Adjuntos",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "Respond to Webhook1",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "If - Validación error": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "C02 - Preparar Body",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "Respond to Webhook",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "Respond to Webhook1": {
+        "main": [
+          []
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "C01 - Validate Request",
+              "type": "main"
+            }
+          ]
+        ]
+      }
+    },
+    "nodes": [
+      {
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "39CfCD3EaoPah3mN",
+            "name": "Header Auth account"
+          }
+        },
+        "id": "3c51308a-03a2-4b51-9c3a-ee51810eaff9",
+        "name": "Webhook",
+        "parameters": {
+          "authentication": "headerAuth",
+          "httpMethod": "POST",
+          "options": {},
+          "path": "/email/resend",
+          "responseMode": "responseNode"
+        },
+        "position": [
+          0,
+          0
+        ],
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "webhookId": "0d74f6cd-a964-425f-bd55-9e4d12d3b703"
+      },
+      {
+        "id": "4dbc9b73-c483-4639-8296-ca610a7444e4",
+        "name": "Respond to Webhook",
+        "parameters": {
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "position": [
+          592,
+          64
+        ],
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5
+      },
+      {
+        "id": "a8d6210a-a79f-480f-b4f4-4ee8dad6a6b9",
+        "name": "C01 - Validate Request",
+        "parameters": {
+          "jsCode": "const src = ($json.body && typeof $json.body === \"object\") ? $json.body : $json;\nconst headers = $json.headers || {};\n\nconst h = (k) => headers[k] || headers[k.toLowerCase()] || headers[k.toUpperCase()] || \"\";\n\nconst timestampRaw = String(h(\"x-webhook-timestamp\") || \"\").trim();\n\nconst now = Math.floor(Date.now() / 1000);\nconst maxSkew = 300;\nconst ts = Number(timestampRaw);\n\nfunction fail(message, error) {\n  return {\n    json: {\n      ok: false,\n      status: \"ERROR\",\n      __error__: true,\n      message,\n      error,\n      provider: src.provider || \"smtp\",\n      sent_at: new Date().toISOString(),\n      response: null\n    }\n  };\n}\n\nif (!Number.isFinite(ts) || Math.abs(now - ts) > maxSkew) {\n  return fail(\"Timestamp inválido o expirado.\", \"INVALID_WEBHOOK_TIMESTAMP\");\n}\n\nif (src.action !== \"resend_email_log\") {\n  return fail(\"Acción no soportada.\", \"INVALID_ACTION\");\n}\n\nconst requestId =\n  src?.resend?.request_id ||\n  (globalThis.crypto?.randomUUID\n    ? globalThis.crypto.randomUUID()\n    : `${Date.now()}-${Math.random().toString(36).slice(2)}`);\n\nreturn {\n  json: {\n    ...src,\n    provider: src.provider || \"smtp\",\n    resend: {\n      ...(src.resend || {}),\n      request_id: requestId\n    },\n    __error__: false\n  }\n};"
+        },
+        "position": [
+          208,
+          0
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "6e486ac5-264b-4c3c-8b17-30deda0104d4",
+        "name": "If - Validación error",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "2f53c5ec-0741-4179-8686-6acb99e01e99",
+                "leftValue": "={{ $json.__error__ }}",
+                "operator": {
+                  "operation": "false",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": ""
+              }
+            ],
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            }
+          },
+          "options": {}
+        },
+        "position": [
+          416,
+          0
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3
+      },
+      {
+        "id": "2eb40805-4ce4-4083-a790-cb61972c4d7b",
+        "name": "C02 - Preparar Body",
+        "parameters": {
+          "jsCode": "const j = $json;\n\nconst html = typeof j.html_body === \"string\" ? j.html_body.trim() : \"\";\nconst text = typeof j.text_body === \"string\" ? j.text_body.trim() : \"\";\nconst to = String(j.to_email || \"\").trim();\nconst subject = String(j.subject || \"\").trim();\n\nif (!to || !subject) {\n  return {\n    json: {\n      ...j,\n      __error__: true,\n      ok: false,\n      status: \"ERROR\",\n      message: \"Faltan campos obligatorios: to_email o subject.\",\n      error: \"MISSING_REQUIRED_FIELDS\",\n      sent_at: new Date().toISOString(),\n      response: null\n    }\n  };\n}\n\nif (!html && !text) {\n  return {\n    json: {\n      ...j,\n      __error__: true,\n      ok: false,\n      status: \"ERROR\",\n      message: \"Faltan html_body y text_body.\",\n      error: \"EMAIL_BODY_MISSING\",\n      sent_at: new Date().toISOString(),\n      response: null\n    }\n  };\n}\n\nreturn {\n  json: {\n    ...j,\n    _send_html: html || null,\n    _send_text: text || null,\n    _send_mode: html ? \"html\" : \"text\",\n    __error__: false\n  }\n};$input.item;",
+          "mode": "runOnceForEachItem"
+        },
+        "position": [
+          624,
+          -96
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "4fa0b69a-3fe3-4cf1-9791-225d4033f4b7",
+        "name": "If - Envío válido",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "52720880-c24f-4e13-a4cb-9e515125082e",
+                "leftValue": "={{ $json.__error__ }}",
+                "operator": {
+                  "operation": "false",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": ""
+              }
+            ],
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            }
+          },
+          "options": {}
+        },
+        "position": [
+          832,
+          -96
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3
+      },
+      {
+        "id": "4fe0d2dd-a569-4bc4-bda0-2ee6785ab1c7",
+        "name": "C03 - Normalizar Adjuntos",
+        "parameters": {
+          "jsCode": "const j = $json;\nlet raw = j.attachments_json;\n\nif (typeof raw === \"string\") {\n  try {\n    raw = JSON.parse(raw);\n  } catch {\n    raw = [];\n  }\n}\n\nif (!raw) raw = [];\nif (!Array.isArray(raw)) raw = [raw];\n\nconst adjuntos = raw\n  .map((a, i) => {\n    if (typeof a === \"string\") {\n      return {\n        filename: a.split(\"/\").pop() || `adjunto-${i + 1}`,\n        mime_type: null,\n        signed_url: null,\n        storage_key: a\n      };\n    }\n\n    if (a && typeof a === \"object\") {\n      return {\n        filename: a.filename || a.name || (a.path ? a.path.split(\"/\").pop() : `adjunto-${i + 1}`),\n        mime_type: a.mime_type || a.content_type || null,\n        signed_url: a.signed_url || a.url || null,\n        storage_key: a.storage_key || a.path || null\n      };\n    }\n\n    return null;\n  })\n  .filter(Boolean);\n\nconst hayAdjuntos = adjuntos.length > 0;\nconst hayAdjuntosDescargables = adjuntos.some(a => !!a.signed_url);\n\nif (hayAdjuntos && !hayAdjuntosDescargables) {\n  return {\n    json: {\n      ...j,\n      __error__: true,\n      ok: false,\n      status: \"ERROR\",\n      message: \"Hay adjuntos pero ninguno tiene signed_url utilizable.\",\n      error: \"ATTACHMENT_URL_MISSING\",\n      sent_at: new Date().toISOString(),\n      response: { attachments_count: adjuntos.length }\n    }\n  };\n}\n\nreturn {\n  json: {\n    ...j,\n    _adjuntos: adjuntos.filter(a => !!a.signed_url),\n    _claves_adjuntos: [],\n    __error__: false\n  }\n};$input.item;",
+          "mode": "runOnceForEachItem"
+        },
+        "position": [
+          1024,
+          -208
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "5adc4a1f-beea-4542-a1bb-04272c1c0de8",
+        "name": "Respond to Webhook1",
+        "parameters": {
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "position": [
+          1008,
+          -32
+        ],
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5
+      },
+      {
+        "id": "9fff7442-2337-49e2-8865-80c556c55704",
+        "name": "If - Adjuntos Válidos",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "e19cbd30-0788-4e47-bc1f-b89c4a140e6a",
+                "leftValue": "={{ $json.__error__ }}",
+                "operator": {
+                  "operation": "false",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": ""
+              }
+            ],
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            }
+          },
+          "options": {}
+        },
+        "position": [
+          1200,
+          -208
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3
+      },
+      {
+        "id": "19f0c0d8-acdc-4ac9-97ba-470acf7008bb",
+        "name": "Respond to Webhook2",
+        "parameters": {
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "position": [
+          1392,
+          -96
+        ],
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5
+      },
+      {
+        "id": "e60ee3df-253e-4705-a455-5a56c1bda79d",
+        "name": "If - Descarga correcta",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "08ec71fe-a130-404b-b7de-662a90499a5e",
+                "leftValue": "={{ $json.__error__ }}",
+                "operator": {
+                  "operation": "false",
+                  "singleValue": true,
+                  "type": "boolean"
+                },
+                "rightValue": ""
+              }
+            ],
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            }
+          },
+          "options": {}
+        },
+        "position": [
+          2048,
+          -288
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3
+      },
+      {
+        "id": "38696c8f-1c60-4b9e-9519-66e02a21f41c",
+        "name": "Respond to Webhook3",
+        "parameters": {
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "position": [
+          2240,
+          -240
+        ],
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5
+      },
+      {
+        "credentials": {
+          "smtp": {
+            "id": "yzPQYtqPMXa8RGyH",
+            "name": "SMTP account"
+          }
+        },
+        "id": "55046bd3-c1a2-4267-9620-aa8cb621b5d4",
+        "name": "Send an Email",
+        "onError": "continueRegularOutput",
+        "parameters": {
+          "fromEmail": "={{ $json.from_email }}",
+          "html": "={{ $json._send_html || \"\" }}",
+          "options": {
+            "attachments": "={{ ($json._claves_adjuntos || []).join(\",\") }}",
+            "bccEmail": "={{ $json.bcc || \"\" }}",
+            "ccEmail": "={{ $json.cc || \"\" }}"
+          },
+          "subject": "={{ $json.subject }}",
+          "toEmail": "={{ $json.to_email }}"
+        },
+        "position": [
+          2240,
+          -400
+        ],
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2.1,
+        "webhookId": "0a5fa9d7-c9dd-417f-ab1b-163ebd88b288"
+      },
+      {
+        "id": "7f51d9e2-cb2d-4f49-831a-204694731a3a",
+        "name": "HTTP Request - Descargar Adjuntos",
+        "parameters": {
+          "options": {
+            "response": {
+              "response": {
+                "outputPropertyName": "att_1",
+                "responseFormat": "file"
+              }
+            }
+          },
+          "url": "={{ $json._adjuntos[0].signed_url }}"
+        },
+        "position": [
+          1408,
+          -288
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4
+      },
+      {
+        "id": "9f3c89c9-b2ed-47c2-83a7-6180b7e9d285",
+        "name": "C04 - Renombrar Adjunto",
+        "parameters": {
+          "jsCode": "const item = $input.item;\n\nif (item.binary?.att_1) {\n  item.binary.att_1.fileName = item.json._adjuntos?.[0]?.filename || item.binary.att_1.fileName;\n}\n\nreturn item;"
+        },
+        "position": [
+          1616,
+          -288
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "id": "836b647f-f8d7-4921-bf11-87cd05eda93f",
+        "name": "C05 - Marcar Adjunto Descargado",
+        "parameters": {
+          "jsCode": "const item = $input.item;\nitem.json._claves_adjuntos = [\"att_1\"];\nitem.json.__error__ = false;\nreturn item;",
+          "mode": "runOnceForEachItem"
+        },
+        "position": [
+          1824,
+          -288
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      }
+    ]
+  },
+  "connections": {
+    "C01 - Validate Request": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If - Validación error",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "C02 - Preparar Body": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If - Envío válido",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "C03 - Normalizar Adjuntos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If - Adjuntos Válidos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "C04 - Renombrar Adjunto": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "C05 - Marcar Adjunto Descargado",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "C05 - Marcar Adjunto Descargado": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If - Descarga correcta",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Descargar Adjuntos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "C04 - Renombrar Adjunto",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If - Adjuntos Válidos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request - Descargar Adjuntos",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Respond to Webhook2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If - Descarga correcta": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send an Email",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Respond to Webhook3",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If - Envío válido": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "C03 - Normalizar Adjuntos",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Respond to Webhook1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If - Validación error": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "C02 - Preparar Body",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Respond to Webhook",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "C01 - Validate Request",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "id": "F1BIKGBObE2wLD4Y",
+  "isArchived": false,
+  "name": "3. Reenviar email",
+  "nodes": [
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "39CfCD3EaoPah3mN",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "3c51308a-03a2-4b51-9c3a-ee51810eaff9",
+      "name": "Webhook",
+      "parameters": {
+        "authentication": "headerAuth",
+        "httpMethod": "POST",
+        "options": {},
+        "path": "/email/resend",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "webhookId": "0d74f6cd-a964-425f-bd55-9e4d12d3b703"
+    },
+    {
+      "id": "4dbc9b73-c483-4639-8296-ca610a7444e4",
+      "name": "Respond to Webhook",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "position": [
+        592,
+        64
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "a8d6210a-a79f-480f-b4f4-4ee8dad6a6b9",
+      "name": "C01 - Validate Request",
+      "parameters": {
+        "jsCode": "const src = ($json.body && typeof $json.body === \"object\") ? $json.body : $json;\nconst headers = $json.headers || {};\n\nconst h = (k) => headers[k] || headers[k.toLowerCase()] || headers[k.toUpperCase()] || \"\";\n\nconst timestampRaw = String(h(\"x-webhook-timestamp\") || \"\").trim();\n\nconst now = Math.floor(Date.now() / 1000);\nconst maxSkew = 300;\nconst ts = Number(timestampRaw);\n\nfunction fail(message, error) {\n  return {\n    json: {\n      ok: false,\n      status: \"ERROR\",\n      __error__: true,\n      message,\n      error,\n      provider: src.provider || \"smtp\",\n      sent_at: new Date().toISOString(),\n      response: null\n    }\n  };\n}\n\nif (!Number.isFinite(ts) || Math.abs(now - ts) > maxSkew) {\n  return fail(\"Timestamp inválido o expirado.\", \"INVALID_WEBHOOK_TIMESTAMP\");\n}\n\nif (src.action !== \"resend_email_log\") {\n  return fail(\"Acción no soportada.\", \"INVALID_ACTION\");\n}\n\nconst requestId =\n  src?.resend?.request_id ||\n  (globalThis.crypto?.randomUUID\n    ? globalThis.crypto.randomUUID()\n    : `${Date.now()}-${Math.random().toString(36).slice(2)}`);\n\nreturn {\n  json: {\n    ...src,\n    provider: src.provider || \"smtp\",\n    resend: {\n      ...(src.resend || {}),\n      request_id: requestId\n    },\n    __error__: false\n  }\n};"
+      },
+      "position": [
+        208,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "6e486ac5-264b-4c3c-8b17-30deda0104d4",
+      "name": "If - Validación error",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "2f53c5ec-0741-4179-8686-6acb99e01e99",
+              "leftValue": "={{ $json.__error__ }}",
+              "operator": {
+                "operation": "false",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        416,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "2eb40805-4ce4-4083-a790-cb61972c4d7b",
+      "name": "C02 - Preparar Body",
+      "parameters": {
+        "jsCode": "const j = $json;\n\nconst html = typeof j.html_body === \"string\" ? j.html_body.trim() : \"\";\nconst text = typeof j.text_body === \"string\" ? j.text_body.trim() : \"\";\nconst to = String(j.to_email || \"\").trim();\nconst subject = String(j.subject || \"\").trim();\n\nif (!to || !subject) {\n  return {\n    json: {\n      ...j,\n      __error__: true,\n      ok: false,\n      status: \"ERROR\",\n      message: \"Faltan campos obligatorios: to_email o subject.\",\n      error: \"MISSING_REQUIRED_FIELDS\",\n      sent_at: new Date().toISOString(),\n      response: null\n    }\n  };\n}\n\nif (!html && !text) {\n  return {\n    json: {\n      ...j,\n      __error__: true,\n      ok: false,\n      status: \"ERROR\",\n      message: \"Faltan html_body y text_body.\",\n      error: \"EMAIL_BODY_MISSING\",\n      sent_at: new Date().toISOString(),\n      response: null\n    }\n  };\n}\n\nreturn {\n  json: {\n    ...j,\n    _send_html: html || null,\n    _send_text: text || null,\n    _send_mode: html ? \"html\" : \"text\",\n    __error__: false\n  }\n};$input.item;",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        624,
+        -96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "4fa0b69a-3fe3-4cf1-9791-225d4033f4b7",
+      "name": "If - Envío válido",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "52720880-c24f-4e13-a4cb-9e515125082e",
+              "leftValue": "={{ $json.__error__ }}",
+              "operator": {
+                "operation": "false",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        832,
+        -96
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "4fe0d2dd-a569-4bc4-bda0-2ee6785ab1c7",
+      "name": "C03 - Normalizar Adjuntos",
+      "parameters": {
+        "jsCode": "const j = $json;\nlet raw = j.attachments_json;\n\nif (typeof raw === \"string\") {\n  try {\n    raw = JSON.parse(raw);\n  } catch {\n    raw = [];\n  }\n}\n\nif (!raw) raw = [];\nif (!Array.isArray(raw)) raw = [raw];\n\nconst adjuntos = raw\n  .map((a, i) => {\n    if (typeof a === \"string\") {\n      return {\n        filename: a.split(\"/\").pop() || `adjunto-${i + 1}`,\n        mime_type: null,\n        signed_url: null,\n        storage_key: a\n      };\n    }\n\n    if (a && typeof a === \"object\") {\n      return {\n        filename: a.filename || a.name || (a.path ? a.path.split(\"/\").pop() : `adjunto-${i + 1}`),\n        mime_type: a.mime_type || a.content_type || null,\n        signed_url: a.signed_url || a.url || null,\n        storage_key: a.storage_key || a.path || null\n      };\n    }\n\n    return null;\n  })\n  .filter(Boolean);\n\nconst hayAdjuntos = adjuntos.length > 0;\nconst hayAdjuntosDescargables = adjuntos.some(a => !!a.signed_url);\n\nif (hayAdjuntos && !hayAdjuntosDescargables) {\n  return {\n    json: {\n      ...j,\n      __error__: true,\n      ok: false,\n      status: \"ERROR\",\n      message: \"Hay adjuntos pero ninguno tiene signed_url utilizable.\",\n      error: \"ATTACHMENT_URL_MISSING\",\n      sent_at: new Date().toISOString(),\n      response: { attachments_count: adjuntos.length }\n    }\n  };\n}\n\nreturn {\n  json: {\n    ...j,\n    _adjuntos: adjuntos.filter(a => !!a.signed_url),\n    _claves_adjuntos: [],\n    __error__: false\n  }\n};$input.item;",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        1024,
+        -208
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "5adc4a1f-beea-4542-a1bb-04272c1c0de8",
+      "name": "Respond to Webhook1",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "position": [
+        1008,
+        -32
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "9fff7442-2337-49e2-8865-80c556c55704",
+      "name": "If - Adjuntos Válidos",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "e19cbd30-0788-4e47-bc1f-b89c4a140e6a",
+              "leftValue": "={{ $json.__error__ }}",
+              "operator": {
+                "operation": "false",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1200,
+        -208
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "19f0c0d8-acdc-4ac9-97ba-470acf7008bb",
+      "name": "Respond to Webhook2",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "position": [
+        1392,
+        -96
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "e60ee3df-253e-4705-a455-5a56c1bda79d",
+      "name": "If - Descarga correcta",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "08ec71fe-a130-404b-b7de-662a90499a5e",
+              "leftValue": "={{ $json.__error__ }}",
+              "operator": {
+                "operation": "false",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        2048,
+        -288
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "38696c8f-1c60-4b9e-9519-66e02a21f41c",
+      "name": "Respond to Webhook3",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "position": [
+        2240,
+        -240
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "credentials": {
+        "smtp": {
+          "id": "yzPQYtqPMXa8RGyH",
+          "name": "SMTP account"
+        }
+      },
+      "id": "55046bd3-c1a2-4267-9620-aa8cb621b5d4",
+      "name": "Send an Email",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "fromEmail": "={{ $json.from_email }}",
+        "html": "={{ $json._send_html || \"\" }}",
+        "options": {
+          "attachments": "={{ ($json._claves_adjuntos || []).join(\",\") }}",
+          "bccEmail": "={{ $json.bcc || \"\" }}",
+          "ccEmail": "={{ $json.cc || \"soporte@harveylluch.com\" }}"
+        },
+        "subject": "={{ $json.subject }}",
+        "toEmail": "={{ $json.to_email }}"
+      },
+      "position": [
+        2240,
+        -400
+      ],
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "webhookId": "0a5fa9d7-c9dd-417f-ab1b-163ebd88b288"
+    },
+    {
+      "id": "7f51d9e2-cb2d-4f49-831a-204694731a3a",
+      "name": "HTTP Request - Descargar Adjuntos",
+      "parameters": {
+        "options": {
+          "response": {
+            "response": {
+              "outputPropertyName": "att_1",
+              "responseFormat": "file"
+            }
+          }
+        },
+        "url": "={{ $json._adjuntos[0].signed_url }}"
+      },
+      "position": [
+        1408,
+        -288
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4
+    },
+    {
+      "id": "9f3c89c9-b2ed-47c2-83a7-6180b7e9d285",
+      "name": "C04 - Renombrar Adjunto",
+      "parameters": {
+        "jsCode": "const item = $input.item;\n\nif (item.binary?.att_1) {\n  item.binary.att_1.fileName = item.json._adjuntos?.[0]?.filename || item.binary.att_1.fileName;\n}\n\nreturn item;"
+      },
+      "position": [
+        1616,
+        -288
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "836b647f-f8d7-4921-bf11-87cd05eda93f",
+      "name": "C05 - Marcar Adjunto Descargado",
+      "parameters": {
+        "jsCode": "const item = $input.item;\nitem.json._claves_adjuntos = [\"att_1\"];\nitem.json.__error__ = false;\nreturn item;",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        1824,
+        -288
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
