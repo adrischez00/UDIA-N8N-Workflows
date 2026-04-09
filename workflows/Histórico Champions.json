@@ -122,6 +122,17 @@
         ]
       ]
     },
+    "Extract Playoff": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse Playoff",
+            "type": "main"
+          }
+        ]
+      ]
+    },
     "Extract Teams From Matches": {
       "main": [
         [
@@ -144,6 +155,11 @@
           {
             "index": 0,
             "node": "Extract Knockout Bracket",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Extract Playoff",
             "type": "main"
           }
         ]
@@ -710,7 +726,7 @@
       "id": "2c4789e9-4a1e-4374-97ad-a174f853554a",
       "name": "Extract Knockout Bracket",
       "parameters": {
-        "jsCode": "const wikitext = items[0].json.wikitext;\n\nif (!wikitext) {\n  throw new Error(\"No hay wikitext\");\n}\n\nconst start = wikitext.indexOf(\"=== Eliminatorias ===\");\nconst end = wikitext.indexOf(\"=== Ronda preliminar ===\");\n\nif (start === -1 || end === -1 || end <= start) {\n  throw new Error(\"No se encontró el bloque de eliminatorias\");\n}\n\nconst bracketText = wikitext.slice(start, end);\n\nreturn [\n  {\n    json: {\n      bracketText\n    }\n  }\n];"
+        "jsCode": "const wikitext = items[0].json.wikitext;\n\nif (!wikitext) {\n  throw new Error(\"No hay wikitext\");\n}\n\nconst startCandidates = [\n  \"=== Knockout phase play-offs ===\",\n  \"=== Play-offs de la fase eliminatoria ===\",\n  \"=== Eliminatorias ===\"\n];\n\nlet sectionStart = -1;\nfor (const candidate of startCandidates) {\n  const idx = wikitext.indexOf(candidate);\n  if (idx !== -1) {\n    sectionStart = idx;\n    break;\n  }\n}\n\nif (sectionStart === -1) {\n  throw new Error(\"No se encontró el inicio del bloque de eliminatorias\");\n}\n\nconst afterSection = wikitext.slice(sectionStart);\n\n// aquí estaba el fallo: hay que incluir {{Copa\nconst bracketStartCandidates = [\n  \"{{Copa\",\n  \"{{16TeamBracket\",\n  \"{{8TeamBracket\",\n  \"{{TeamBracket\",\n  \"{{Bracket\"\n];\n\nlet relativeBracketStart = -1;\nfor (const candidate of bracketStartCandidates) {\n  const idx = afterSection.indexOf(candidate);\n  if (idx !== -1) {\n    relativeBracketStart = idx;\n    break;\n  }\n}\n\nif (relativeBracketStart === -1) {\n  return [{\n    json: {\n      foundBracket: false,\n      debug_start: afterSection.slice(0, 4000)\n    }\n  }];\n}\n\nconst bracketStart = sectionStart + relativeBracketStart;\nconst afterBracket = wikitext.slice(bracketStart);\n\n// cortamos al llegar a la siguiente sección grande\nconst nextSectionMatch = afterBracket.match(/\\n===\\s*[^=]+?\\s*===/);\nconst bracketChunk = nextSectionMatch\n  ? afterBracket.slice(0, nextSectionMatch.index)\n  : afterBracket;\n\nreturn [\n  {\n    json: {\n      foundBracket: true,\n      bracketText: bracketChunk\n    }\n  }\n];"
       },
       "position": [
         736,
@@ -723,7 +739,7 @@
       "id": "d306a997-eb95-4490-b283-bc7ff2295e0b",
       "name": "Parse Knockout Rounds",
       "parameters": {
-        "jsCode": "const text = items[0].json.bracketText || \"\";\n\nconst season = items[0].json.season || \"2024-25\";\nconst seasonLabel = items[0].json.season_label || season.replace(\"-\", \"/\");\n\nfunction getValue(key) {\n  const re = new RegExp(`\\\\|\\\\s*${key}\\\\s*=\\\\s*(.+)`);\n  const m = text.match(re);\n  return m ? m[1].trim() : null;\n}\n\nfunction cleanWiki(value) {\n  if (!value) return null;\n\n  return String(value)\n    .replace(/\\{\\{bandera\\|[^}]+\\}\\}/gi, \"\")\n    .replace(/\\{\\{esd\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\{\\{small\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\[\\[([^|\\]]+)\\|([^\\]]+)\\]\\]/g, \"$2\")\n    .replace(/\\[\\[([^\\]]+)\\]\\]/g, \"$1\")\n    .replace(/'''/g, \"\")\n    .replace(/''/g, \"\")\n    .replace(/<small>.*?<\\/small>/gi, \"\")\n    .replace(/<br\\s*\\/?>/gi, \" \")\n    .replace(/&nbsp;/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nconst roundMap = {\n  RD1: \"round_of_16\",\n  RD2: \"quarter_final\",\n  RD3: \"semi_final\",\n  RD4: \"final\"\n};\n\nconst out = [];\n\nfor (const roundKey of [\"RD1\", \"RD2\", \"RD3\"]) {\n  const roundName = roundMap[roundKey];\n  const roundDate = cleanWiki(getValue(`${roundKey}-date`));\n\n  for (let i = 1; i <= 16; i += 2) {\n    const n1 = String(i).padStart(2, \"0\");\n    const n2 = String(i + 1).padStart(2, \"0\");\n\n    const team1 = cleanWiki(getValue(`${roundKey}-team${n1}`));\n    const team2 = cleanWiki(getValue(`${roundKey}-team${n2}`));\n\n    if (!team1 || !team2) continue;\n\n    const score1_1 = getValue(`${roundKey}-score${n1}-1`);\n    const score1_2 = getValue(`${roundKey}-score${n1}-2`);\n    const score1_3 = getValue(`${roundKey}-score${n1}-3`);\n\n    const score2_1 = getValue(`${roundKey}-score${n2}-1`);\n    const score2_2 = getValue(`${roundKey}-score${n2}-2`);\n    const score2_3 = getValue(`${roundKey}-score${n2}-3`);\n\n    out.push({\n      competition: \"UEFA Champions League\",\n      season,\n      season_label: seasonLabel,\n      stage: roundName,\n      round_dates: roundDate,\n      team_1: team1,\n      team_2: team2,\n      team_1_leg1: score1_1 ? Number(score1_1) : null,\n      team_1_leg2: score1_2 ? Number(score1_2) : null,\n      team_1_agg: score1_3 ? cleanWiki(score1_3) : null,\n      team_2_leg1: score2_1 ? Number(score2_1) : null,\n      team_2_leg2: score2_2 ? Number(score2_2) : null,\n      team_2_agg: score2_3 ? cleanWiki(score2_3) : null,\n      source: \"wikipedia\"\n    });\n  }\n}\n\n// Final\nconst finalDate = cleanWiki(getValue(\"RD4-date\"));\nconst finalTeam1 = cleanWiki(getValue(\"RD4-team01\"));\nconst finalTeam2 = cleanWiki(getValue(\"RD4-team02\"));\nconst finalScore1 = getValue(\"RD4-score01\");\nconst finalScore2 = getValue(\"RD4-score02\");\n\nif (finalTeam1 && finalTeam2) {\n  out.push({\n    competition: \"UEFA Champions League\",\n    season,\n    season_label: seasonLabel,\n    stage: \"final\",\n    round_dates: finalDate,\n    team_1: finalTeam1,\n    team_2: finalTeam2,\n    team_1_leg1: null,\n    team_1_leg2: null,\n    team_1_agg: finalScore1 ? cleanWiki(finalScore1) : null,\n    team_2_leg1: null,\n    team_2_leg2: null,\n    team_2_agg: finalScore2 ? cleanWiki(finalScore2) : null,\n    source: \"wikipedia\"\n  });\n}\n\nreturn out.map(x => ({ json: x }));"
+        "jsCode": "const text = items[0].json.bracketText || \"\";\n\nconst season = items[0].json.season || \"2024-25\";\nconst seasonLabel = items[0].json.season_label || season.replace(\"-\", \"/\");\n\nfunction getValue(key) {\n  const re = new RegExp(`\\\\|\\\\s*${key}\\\\s*=\\\\s*([^\\\\n]+)`, \"i\");\n  const m = text.match(re);\n  return m ? m[1].trim() : null;\n}\n\nfunction cleanWiki(value) {\n  if (!value) return null;\n\n  return String(value)\n    .replace(/\\{\\{bandera\\|[^}]+\\}\\}/gi, \"\")\n    .replace(/\\{\\{Bandera\\|[^}]+\\}\\}/gi, \"\")\n    .replace(/\\{\\{esd\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\{\\{small\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\[\\[([^|\\]]+)\\|([^\\]]+)\\]\\]/g, \"$2\")\n    .replace(/\\[\\[([^\\]]+)\\]\\]/g, \"$1\")\n    .replace(/'''/g, \"\")\n    .replace(/''/g, \"\")\n    .replace(/<small>.*?<\\/small>/gi, \"\")\n    .replace(/<br\\s*\\/?>/gi, \" \")\n    .replace(/&nbsp;/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction parseScore(value) {\n  if (value == null) return null;\n  const m = String(value).match(/\\d+/);\n  return m ? Number(m[0]) : null;\n}\n\n// Detectar si hay una ronda extra antes de octavos\nconst hasRD5 = !!getValue(\"RD5-team01\");\n\nconst roundMap = hasRD5\n  ? {\n      RD1: \"knockout_playoff\",\n      RD2: \"round_of_16\",\n      RD3: \"quarter_final\",\n      RD4: \"semi_final\",\n      RD5: \"final\"\n    }\n  : {\n      RD1: \"round_of_16\",\n      RD2: \"quarter_final\",\n      RD3: \"semi_final\",\n      RD4: \"final\"\n    };\n\nconst out = [];\n\nconst normalRounds = Object.keys(roundMap).filter(r => roundMap[r] !== \"final\");\nconst finalRoundKey = Object.keys(roundMap).find(r => roundMap[r] === \"final\");\n\n// Parse de rondas ida/vuelta\nfor (const roundKey of normalRounds) {\n  const roundName = roundMap[roundKey];\n  const roundDate = cleanWiki(getValue(`${roundKey}-date`));\n\n  for (let i = 1; i <= 16; i += 2) {\n    const n1 = String(i).padStart(2, \"0\");\n    const n2 = String(i + 1).padStart(2, \"0\");\n\n    const team1 = cleanWiki(getValue(`${roundKey}-team${n1}`));\n    const team2 = cleanWiki(getValue(`${roundKey}-team${n2}`));\n\n    if (!team1 || !team2) continue;\n\n    const score1_1 = getValue(`${roundKey}-score${n1}-1`);\n    const score1_2 = getValue(`${roundKey}-score${n1}-2`);\n    const score1_3 = getValue(`${roundKey}-score${n1}-3`);\n\n    const score2_1 = getValue(`${roundKey}-score${n2}-1`);\n    const score2_2 = getValue(`${roundKey}-score${n2}-2`);\n    const score2_3 = getValue(`${roundKey}-score${n2}-3`);\n\n    out.push({\n      competition: \"UEFA Champions League\",\n      season,\n      season_label: seasonLabel,\n      stage: roundName,\n      round_dates: roundDate,\n      team_1: team1,\n      team_2: team2,\n      team_1_leg1: parseScore(score1_1),\n      team_1_leg2: parseScore(score1_2),\n      team_1_agg: cleanWiki(score1_3),\n      team_2_leg1: parseScore(score2_1),\n      team_2_leg2: parseScore(score2_2),\n      team_2_agg: cleanWiki(score2_3),\n      source: \"wikipedia\"\n    });\n  }\n}\n\n// Parse de final\nconst finalDate = cleanWiki(getValue(`${finalRoundKey}-date`));\nconst finalTeam1 = cleanWiki(getValue(`${finalRoundKey}-team01`));\nconst finalTeam2 = cleanWiki(getValue(`${finalRoundKey}-team02`));\nconst finalScore1 = getValue(`${finalRoundKey}-score01`);\nconst finalScore2 = getValue(`${finalRoundKey}-score02`);\n\nif (finalTeam1 && finalTeam2) {\n  out.push({\n    competition: \"UEFA Champions League\",\n    season,\n    season_label: seasonLabel,\n    stage: \"final\",\n    round_dates: finalDate,\n    team_1: finalTeam1,\n    team_2: finalTeam2,\n    team_1_leg1: null,\n    team_1_leg2: null,\n    team_1_agg: cleanWiki(finalScore1),\n    team_2_leg1: null,\n    team_2_leg2: null,\n    team_2_agg: cleanWiki(finalScore2),\n    source: \"wikipedia\"\n  });\n}\n\nreturn out.map(x => ({ json: x }));"
       },
       "position": [
         944,
@@ -846,7 +862,7 @@
       "id": "7726097d-99eb-460a-b1c2-e62e84b92b9a",
       "name": "Extract Knockout Detail Wikitext",
       "parameters": {
-        "jsCode": "const out = [];\n\nfor (const item of items) {\n  const p = item.json.parse || {};\n\n  out.push({\n    json: {\n      competition: item.json.competition || \"UEFA Champions League\",\n      season: item.json.season || item.json.season_label || \"2024/25\",\n      season_label: item.json.season_label || item.json.season || \"2024/25\",\n      detail_stage: item.json.detail_stage || null,\n      page: item.json.page || null,\n      title: p.title || null,\n      pageid: p.pageid || null,\n      wikitext: p.wikitext || null,\n      source: \"wikipedia\"\n    }\n  });\n}\n\nreturn out;"
+        "jsCode": "const wikitext = items[0].json.wikitext;\n\nif (!wikitext) {\n  throw new Error(\"No hay wikitext\");\n}\n\nconst startCandidates = [\n  \"=== Knockout phase play-offs ===\",\n  \"=== Play-offs de la fase eliminatoria ===\",\n  \"=== Eliminatorias ===\"\n];\n\nlet sectionStart = -1;\nfor (const candidate of startCandidates) {\n  const idx = wikitext.indexOf(candidate);\n  if (idx !== -1) {\n    sectionStart = idx;\n    break;\n  }\n}\n\nif (sectionStart === -1) {\n  throw new Error(\"No se encontró el inicio del bloque de eliminatorias\");\n}\n\nconst afterSection = wikitext.slice(sectionStart);\n\nconst bracketStartCandidates = [\n  \"{{16TeamBracket\",\n  \"{{8TeamBracket\",\n  \"{{TeamBracket\",\n  \"{{Bracket\"\n];\n\nlet relativeBracketStart = -1;\nfor (const candidate of bracketStartCandidates) {\n  const idx = afterSection.indexOf(candidate);\n  if (idx !== -1) {\n    relativeBracketStart = idx;\n    break;\n  }\n}\n\nif (relativeBracketStart === -1) {\n  return [{\n    json: {\n      foundBracket: false,\n      debug_start: afterSection.slice(0, 4000)\n    }\n  }];\n}\n\nconst bracketStart = sectionStart + relativeBracketStart;\nconst afterBracket = wikitext.slice(bracketStart);\n\nconst nextSectionMatch = afterBracket.match(/\\n===\\s*[^=]+?\\s*===/);\nlet bracketChunk = nextSectionMatch\n  ? afterBracket.slice(0, nextSectionMatch.index)\n  : afterBracket;\n\nreturn [\n  {\n    json: {\n      bracketText: bracketChunk,\n      foundBracket: true\n    }\n  }\n];"
       },
       "position": [
         2192,
@@ -1274,7 +1290,7 @@
         "tableId": "teams"
       },
       "position": [
-        6416,
+        6432,
         144
       ],
       "retryOnFail": false,
@@ -1396,6 +1412,32 @@
       ],
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1
+    },
+    {
+      "id": "3db7b754-8b99-4b54-8757-2516942332cb",
+      "name": "Extract Playoff",
+      "parameters": {
+        "jsCode": "const wikitext = items[0].json.wikitext;\n\nif (!wikitext) {\n  throw new Error(\"No hay wikitext\");\n}\n\n// Intentamos coger el bloque completo de eliminatorias modernas\nconst startCandidates = [\n  \"=== Knockout phase play-offs ===\",\n  \"=== Play-offs de la fase eliminatoria ===\",\n  \"=== Eliminatorias ===\"\n];\n\nlet start = -1;\nfor (const candidate of startCandidates) {\n  const idx = wikitext.indexOf(candidate);\n  if (idx !== -1) {\n    start = idx;\n    break;\n  }\n}\n\nif (start === -1) {\n  throw new Error(\"No se encontró el inicio del bloque de eliminatorias\");\n}\n\n// Cortamos hasta después de la final si existe, o hasta el siguiente bloque grande\nconst endCandidates = [\n  \"=== Final ===\",\n  \"=== Véase también ===\",\n  \"=== Referencias ===\",\n  \"=== Ronda preliminar ===\"\n];\n\nlet end = -1;\nfor (const candidate of endCandidates) {\n  const idx = wikitext.indexOf(candidate, start + 1);\n  if (idx !== -1) {\n    end = idx;\n    break;\n  }\n}\n\nif (end === -1) {\n  end = wikitext.length;\n}\n\nconst bracketText = wikitext.slice(start, end);\n\nreturn [\n  {\n    json: {\n      bracketText\n    }\n  }\n];"
+      },
+      "position": [
+        800,
+        -224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "9bfa26d2-7fe2-4fcc-b23a-aa08255b3cfb",
+      "name": "Parse Playoff",
+      "parameters": {
+        "jsCode": "const text = items[0].json.playoffText || \"\";\n\nconst rows = text\n  .split(\"|-\")\n  .map(r => r.trim())\n  .filter(r => r.includes(\"[[\"));\n\nreturn rows.slice(0, 10).map((row, i) => ({\n  json: {\n    index: i,\n    row\n  }\n}));"
+      },
+      "position": [
+        1008,
+        -224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
     }
   ],
   "pinData": {},
