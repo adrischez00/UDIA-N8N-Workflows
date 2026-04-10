@@ -122,12 +122,23 @@
         ]
       ]
     },
-    "Extract Playoff": {
+    "Extract Playoff WIki": {
       "main": [
         [
           {
             "index": 0,
-            "node": "Parse Playoff",
+            "node": "Parse Playoff Sections",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extract Playoff_page": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request - Playoff",
             "type": "main"
           }
         ]
@@ -159,7 +170,7 @@
           },
           {
             "index": 0,
-            "node": "Extract Playoff",
+            "node": "Extract Playoff_page",
             "type": "main"
           }
         ]
@@ -171,6 +182,17 @@
           {
             "index": 0,
             "node": "Parse matches",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Filtrado": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolve Team IDs Matches",
             "type": "main"
           }
         ]
@@ -193,6 +215,17 @@
           {
             "index": 0,
             "node": "Extract wikitext",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Playoff": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extract Playoff WIki",
             "type": "main"
           }
         ]
@@ -269,11 +302,6 @@
         ]
       ]
     },
-    "Matches Unresolved": {
-      "main": [
-        []
-      ]
-    },
     "Merge": {
       "main": [
         [
@@ -346,6 +374,28 @@
           {
             "index": 0,
             "node": "Clean & Normalize Knockout",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse Playoff Boxes": {
+      "main": [
+        [
+          {
+            "index": 2,
+            "node": "Merge",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse Playoff Sections": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse Playoff Boxes",
             "type": "main"
           }
         ]
@@ -449,7 +499,7 @@
           },
           {
             "index": 0,
-            "node": "Resolve Team IDs Matches",
+            "node": "Filtrado",
             "type": "main"
           }
         ]
@@ -474,11 +524,6 @@
     "Resolve Team IDs Matches": {
       "main": [
         [
-          {
-            "index": 0,
-            "node": "Matches Unresolved",
-            "type": "main"
-          },
           {
             "index": 0,
             "node": "Prepare Insert Matches",
@@ -677,7 +722,7 @@
         "jsCode": "const wikitext = items[0].json.wikitext;\n\n// Separar tablas wikitable\nconst tables = wikitext.split('{|').slice(1).map((t, i) => {\n  const content = '{|' + t.split('|}')[0] + '|}';\n\n  return {\n    table_index: i,\n    content,\n    isMatchday: /Jornada\\s+\\d+/i.test(content)\n  };\n});\n\nreturn tables.map(t => ({ json: t }));"
       },
       "position": [
-        848,
+        1056,
         0
       ],
       "type": "n8n-nodes-base.code",
@@ -690,7 +735,7 @@
         "jsCode": "return items.filter(item => {\n  const content = item.json.content || \"\";\n\n  const hasMatchday = /Jornada\\s+\\d+/i.test(content);\n  const hasLocal = /Local/i.test(content);\n  const hasResultado = /Resultado/i.test(content);\n  const hasVisitante = /Visitante/i.test(content);\n  const hasEstadio = /Estadio/i.test(content);\n  const hasFecha = /Fecha/i.test(content);\n  const hasHora = /Hora/i.test(content);\n\n  return hasMatchday && hasLocal && hasResultado && hasVisitante && hasEstadio && hasFecha && hasHora;\n});"
       },
       "position": [
-        1056,
+        1264,
         0
       ],
       "type": "n8n-nodes-base.code",
@@ -703,7 +748,7 @@
         "jsCode": "const results = [];\n\nfunction cleanCell(value) {\n  if (!value) return null;\n\n  return String(value)\n    .replace(/\\[\\[|\\]\\]/g, \"\")\n    .replace(/\\{\\{.*?\\}\\}/g, \"\")\n    .replace(/<.*?>/g, \"\")\n    .replace(/\\[https?:\\/\\/[^\\s\\]]+/g, \"\")\n    .replace(/\\[|\\]/g, \"\")\n    .replace(/bgcolor=.*?\\|/gi, \"\")\n    .replace(/style=.*?\\|/gi, \"\")\n    .replace(/rowspan=\"?\\d+\"?\\|/gi, \"\")\n    .replace(/colspan=\"?\\d+\"?\\|/gi, \"\")\n    .replace(/rowspan=\\d+\\|/gi, \"\")\n    .replace(/colspan=\\d+\\|/gi, \"\")\n    .replace(/\\{\\{bandera2?\\|.*?\\}\\}/gi, \"\")\n    .replace(/\\{\\{flagicon\\|.*?\\}\\}/gi, \"\")\n    .replace(/'''/g, \"\")\n    .replace(/''/g, \"\")\n    .replace(/\\(\\s*\\)/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction isScore(value) {\n  return /^\\d+\\s*[–-]\\s*\\d+$/.test(value || \"\");\n}\n\nfunction isTime(value) {\n  return /^(\\d{1,2}:\\d{2})$/.test(value || \"\");\n}\n\nfunction isAttendance(value) {\n  return /^\\d{4,6}$/.test(value || \"\");\n}\n\nfunction isDate(value) {\n  return /^(\\d{1,2}\\s+de\\s+\\w+|\\d{1,2}\\s+\\w+)$/i.test(value || \"\");\n}\n\nfunction normalizeScore(value) {\n  return value.replace(/\\s+/g, \"\").replace(\"-\", \"–\");\n}\n\nfor (const item of items) {\n  const content = item.json.content || \"\";\n\n  const jornadaMatch = content.match(/Jornada\\s+(\\d+)/i);\n  const matchday = jornadaMatch ? parseInt(jornadaMatch[1], 10) : null;\n\n  const rows = content.split(\"|-\").slice(1);\n\n  let currentDate = null;\n  let currentTime = null;\n\n  for (const row of rows) {\n    const rawCols = row\n      .split(\"\\n\")\n      .map(l => l.trim())\n      .filter(l => l.startsWith(\"|\") && !l.startsWith(\"|+\"))\n      .map(l => l.replace(/^\\|+/, \"\").trim());\n\n    const cols = rawCols.map(cleanCell).filter(v => v && v !== \"—\");\n\n    if (!cols.length) continue;\n\n    const joined = cols.join(\" | \").toLowerCase();\n    if (\n      joined.includes(\"local\") &&\n      joined.includes(\"visitante\") &&\n      joined.includes(\"resultado\")\n    ) {\n      continue;\n    }\n\n    // Primero capturamos fecha/hora de cualquier celda de la fila\n    for (const col of cols) {\n      if (isDate(col)) currentDate = col;\n      if (isTime(col)) currentTime = col;\n    }\n\n    const scoreIndex = cols.findIndex(isScore);\n    if (scoreIndex === -1) continue;\n\n    const score = normalizeScore(cols[scoreIndex]);\n    const [home_score, away_score] = score.split(\"–\").map(n => parseInt(n, 10));\n\n    const before = cols.slice(0, scoreIndex);\n    const after = cols.slice(scoreIndex + 1);\n\n    const possibleHome = before.filter(v => !isDate(v) && !isTime(v) && !isAttendance(v));\n    const home_team = possibleHome.length ? possibleHome[possibleHome.length - 1] : null;\n\n    let away_team = null;\n    let stadium = null;\n    let attendance = null;\n\n    const afterNonNumeric = after.filter(v => !isAttendance(v) && !isTime(v) && !isDate(v));\n\n    if (afterNonNumeric.length >= 1) away_team = afterNonNumeric[0];\n    if (afterNonNumeric.length >= 2) stadium = afterNonNumeric[1];\n\n    const att = after.find(isAttendance);\n    if (att) attendance = parseInt(att, 10);\n\n    if (!home_team || !away_team) continue;\n\n    if (stadium && stadium.includes(\"/\")) {\n      const parts = stadium.split(\"/\").map(s => s.trim()).filter(Boolean);\n      if (parts.length >= 2 && parts[0].toLowerCase() === parts[1].toLowerCase()) {\n        stadium = parts[0];\n      }\n    }\n\n    results.push({\n      matchday,\n      date: currentDate,\n      time: currentTime,\n      home_team,\n      away_team,\n      score,\n      stadium,\n      attendance,\n      home_score,\n      away_score,\n      source: \"wikipedia\",\n      competition: \"UEFA Champions League\",\n      season: \"2024/25\",\n      stage: \"league_phase\"\n    });\n  }\n}\n\nreturn results.map(r => ({ json: r }));"
       },
       "position": [
-        1264,
+        1472,
         0
       ],
       "type": "n8n-nodes-base.code",
@@ -716,7 +761,7 @@
         "jsCode": "function cleanText(value) {\n  if (value === null || value === undefined) return null;\n\n  let v = String(value)\n    .replace(/\\u00a0/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n\n  if (!v) return null;\n  if (v.toLowerCase() === \"null\") return null;\n  return v;\n}\n\nfunction dedupeSlashName(value) {\n  if (!value) return value;\n\n  const parts = value.split(\"/\").map(s => s.trim()).filter(Boolean);\n  if (parts.length !== 2) return value;\n\n  const a = parts[0].toLowerCase();\n  const b = parts[1].toLowerCase();\n\n  if (a === b) return parts[0];\n  return value;\n}\n\nfunction normalizeDate(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  return value\n    .replace(/\\s+de\\s+/gi, \" de \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction normalizeTime(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  const m = value.match(/^(\\d{1,2}):(\\d{2})$/);\n  if (!m) return null;\n\n  const hh = String(parseInt(m[1], 10)).padStart(2, \"0\");\n  const mm = m[2];\n  return `${hh}:${mm}`;\n}\n\nfunction normalizeTeam(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  return value\n    .replace(/\\s+\\(\\w+\\)$/i, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction normalizeStadium(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  value = dedupeSlashName(value);\n\n  return value\n    .replace(/\\s+\\(\\(\\)\\)$/g, \"\")\n    .replace(/\\s+\\)$/g, \"\")\n    .replace(/\\{\\{.*?\\}\\}/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction normalizeScore(value) {\n  value = cleanText(value);\n  if (!value) return null;\n\n  value = value.replace(/-/g, \"–\").replace(/\\s+/g, \"\");\n  return /^\\d+–\\d+$/.test(value) ? value : null;\n}\n\nfunction normalizeAttendance(value) {\n  if (value === null || value === undefined || value === \"\") return null;\n\n  const digits = String(value).replace(/\\D/g, \"\");\n  if (!digits) return null;\n\n  const n = parseInt(digits, 10);\n  return Number.isNaN(n) ? null : n;\n}\n\nconst out = [];\nconst seen = new Set();\n\nfor (const item of items) {\n  const m = item.json || {};\n\n  const matchday = m.matchday ?? null;\n  const date = normalizeDate(m.date);\n  const time = normalizeTime(m.time);\n  const home_team = normalizeTeam(m.home_team);\n  const away_team = normalizeTeam(m.away_team);\n  const score = normalizeScore(m.score);\n  const stadium = normalizeStadium(m.stadium);\n  const attendance = normalizeAttendance(m.attendance);\n\n  const home_score =\n    m.home_score !== undefined && m.home_score !== null ? Number(m.home_score) : null;\n  const away_score =\n    m.away_score !== undefined && m.away_score !== null ? Number(m.away_score) : null;\n\n  // Filtrar basura\n  if (!home_team || !away_team || !score) continue;\n  if (!Number.isInteger(home_score) || !Number.isInteger(away_score)) continue;\n\n  const dedupeKey = [\n    m.competition || \"UEFA Champions League\",\n    m.season || \"2024/25\",\n    m.stage || \"league_phase\",\n    matchday,\n    date,\n    time,\n    home_team,\n    away_team,\n    score\n  ].join(\"|\");\n\n  if (seen.has(dedupeKey)) continue;\n  seen.add(dedupeKey);\n\n  out.push({\n    json: {\n      competition: cleanText(m.competition) || \"UEFA Champions League\",\n      season: cleanText(m.season) || \"2024/25\",\n      stage: cleanText(m.stage) || \"league_phase\",\n      matchday: matchday,\n      date: date,\n      time: time,\n      home_team: home_team,\n      away_team: away_team,\n      score: score,\n      home_score: home_score,\n      away_score: away_score,\n      stadium: stadium,\n      attendance: attendance,\n      source: cleanText(m.source) || \"wikipedia\"\n    }\n  });\n}\n\nreturn out;"
       },
       "position": [
-        1472,
+        1680,
         0
       ],
       "type": "n8n-nodes-base.code",
@@ -742,7 +787,7 @@
         "jsCode": "const text = items[0].json.bracketText || \"\";\n\nconst season = items[0].json.season || \"2024-25\";\nconst seasonLabel = items[0].json.season_label || season.replace(\"-\", \"/\");\n\nfunction getValue(key) {\n  const re = new RegExp(`\\\\|\\\\s*${key}\\\\s*=\\\\s*([^\\\\n]+)`, \"i\");\n  const m = text.match(re);\n  return m ? m[1].trim() : null;\n}\n\nfunction cleanWiki(value) {\n  if (!value) return null;\n\n  return String(value)\n    .replace(/\\{\\{bandera\\|[^}]+\\}\\}/gi, \"\")\n    .replace(/\\{\\{Bandera\\|[^}]+\\}\\}/gi, \"\")\n    .replace(/\\{\\{esd\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\{\\{small\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\[\\[([^|\\]]+)\\|([^\\]]+)\\]\\]/g, \"$2\")\n    .replace(/\\[\\[([^\\]]+)\\]\\]/g, \"$1\")\n    .replace(/'''/g, \"\")\n    .replace(/''/g, \"\")\n    .replace(/<small>.*?<\\/small>/gi, \"\")\n    .replace(/<br\\s*\\/?>/gi, \" \")\n    .replace(/&nbsp;/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction parseScore(value) {\n  if (value == null) return null;\n  const m = String(value).match(/\\d+/);\n  return m ? Number(m[0]) : null;\n}\n\n// Detectar si hay una ronda extra antes de octavos\nconst hasRD5 = !!getValue(\"RD5-team01\");\n\nconst roundMap = hasRD5\n  ? {\n      RD1: \"knockout_playoff\",\n      RD2: \"round_of_16\",\n      RD3: \"quarter_final\",\n      RD4: \"semi_final\",\n      RD5: \"final\"\n    }\n  : {\n      RD1: \"round_of_16\",\n      RD2: \"quarter_final\",\n      RD3: \"semi_final\",\n      RD4: \"final\"\n    };\n\nconst out = [];\n\nconst normalRounds = Object.keys(roundMap).filter(r => roundMap[r] !== \"final\");\nconst finalRoundKey = Object.keys(roundMap).find(r => roundMap[r] === \"final\");\n\n// Parse de rondas ida/vuelta\nfor (const roundKey of normalRounds) {\n  const roundName = roundMap[roundKey];\n  const roundDate = cleanWiki(getValue(`${roundKey}-date`));\n\n  for (let i = 1; i <= 16; i += 2) {\n    const n1 = String(i).padStart(2, \"0\");\n    const n2 = String(i + 1).padStart(2, \"0\");\n\n    const team1 = cleanWiki(getValue(`${roundKey}-team${n1}`));\n    const team2 = cleanWiki(getValue(`${roundKey}-team${n2}`));\n\n    if (!team1 || !team2) continue;\n\n    const score1_1 = getValue(`${roundKey}-score${n1}-1`);\n    const score1_2 = getValue(`${roundKey}-score${n1}-2`);\n    const score1_3 = getValue(`${roundKey}-score${n1}-3`);\n\n    const score2_1 = getValue(`${roundKey}-score${n2}-1`);\n    const score2_2 = getValue(`${roundKey}-score${n2}-2`);\n    const score2_3 = getValue(`${roundKey}-score${n2}-3`);\n\n    out.push({\n      competition: \"UEFA Champions League\",\n      season,\n      season_label: seasonLabel,\n      stage: roundName,\n      round_dates: roundDate,\n      team_1: team1,\n      team_2: team2,\n      team_1_leg1: parseScore(score1_1),\n      team_1_leg2: parseScore(score1_2),\n      team_1_agg: cleanWiki(score1_3),\n      team_2_leg1: parseScore(score2_1),\n      team_2_leg2: parseScore(score2_2),\n      team_2_agg: cleanWiki(score2_3),\n      source: \"wikipedia\"\n    });\n  }\n}\n\n// Parse de final\nconst finalDate = cleanWiki(getValue(`${finalRoundKey}-date`));\nconst finalTeam1 = cleanWiki(getValue(`${finalRoundKey}-team01`));\nconst finalTeam2 = cleanWiki(getValue(`${finalRoundKey}-team02`));\nconst finalScore1 = getValue(`${finalRoundKey}-score01`);\nconst finalScore2 = getValue(`${finalRoundKey}-score02`);\n\nif (finalTeam1 && finalTeam2) {\n  out.push({\n    competition: \"UEFA Champions League\",\n    season,\n    season_label: seasonLabel,\n    stage: \"final\",\n    round_dates: finalDate,\n    team_1: finalTeam1,\n    team_2: finalTeam2,\n    team_1_leg1: null,\n    team_1_leg2: null,\n    team_1_agg: cleanWiki(finalScore1),\n    team_2_leg1: null,\n    team_2_leg2: null,\n    team_2_agg: cleanWiki(finalScore2),\n    source: \"wikipedia\"\n  });\n}\n\nreturn out.map(x => ({ json: x }));"
       },
       "position": [
-        944,
+        928,
         224
       ],
       "type": "n8n-nodes-base.code",
@@ -861,8 +906,9 @@
     {
       "id": "7726097d-99eb-460a-b1c2-e62e84b92b9a",
       "name": "Extract Knockout Detail Wikitext",
+      "onError": "continueRegularOutput",
       "parameters": {
-        "jsCode": "const wikitext = items[0].json.wikitext;\n\nif (!wikitext) {\n  throw new Error(\"No hay wikitext\");\n}\n\nconst startCandidates = [\n  \"=== Knockout phase play-offs ===\",\n  \"=== Play-offs de la fase eliminatoria ===\",\n  \"=== Eliminatorias ===\"\n];\n\nlet sectionStart = -1;\nfor (const candidate of startCandidates) {\n  const idx = wikitext.indexOf(candidate);\n  if (idx !== -1) {\n    sectionStart = idx;\n    break;\n  }\n}\n\nif (sectionStart === -1) {\n  throw new Error(\"No se encontró el inicio del bloque de eliminatorias\");\n}\n\nconst afterSection = wikitext.slice(sectionStart);\n\nconst bracketStartCandidates = [\n  \"{{16TeamBracket\",\n  \"{{8TeamBracket\",\n  \"{{TeamBracket\",\n  \"{{Bracket\"\n];\n\nlet relativeBracketStart = -1;\nfor (const candidate of bracketStartCandidates) {\n  const idx = afterSection.indexOf(candidate);\n  if (idx !== -1) {\n    relativeBracketStart = idx;\n    break;\n  }\n}\n\nif (relativeBracketStart === -1) {\n  return [{\n    json: {\n      foundBracket: false,\n      debug_start: afterSection.slice(0, 4000)\n    }\n  }];\n}\n\nconst bracketStart = sectionStart + relativeBracketStart;\nconst afterBracket = wikitext.slice(bracketStart);\n\nconst nextSectionMatch = afterBracket.match(/\\n===\\s*[^=]+?\\s*===/);\nlet bracketChunk = nextSectionMatch\n  ? afterBracket.slice(0, nextSectionMatch.index)\n  : afterBracket;\n\nreturn [\n  {\n    json: {\n      bracketText: bracketChunk,\n      foundBracket: true\n    }\n  }\n];"
+        "jsCode": "const wikitext = items[0].json.parse?.wikitext || items[0].json.wikitext || null;\n\nif (!wikitext) {\n  throw new Error(\"No hay wikitext\");\n}\n\nreturn [\n  {\n    json: {\n      title: items[0].json.parse?.title || null,\n      wikitext\n    }\n  }\n];\nconst startCandidates = [\n  \"=== Knockout phase play-offs ===\",\n  \"=== Play-offs de la fase eliminatoria ===\",\n  \"=== Eliminatorias ===\"\n];\n\nlet sectionStart = -1;\nfor (const candidate of startCandidates) {\n  const idx = wikitext.indexOf(candidate);\n  if (idx !== -1) {\n    sectionStart = idx;\n    break;\n  }\n}\n\nif (sectionStart === -1) {\n  throw new Error(\"No se encontró el inicio del bloque de eliminatorias\");\n}\n\nconst afterSection = wikitext.slice(sectionStart);\n\nconst bracketStartCandidates = [\n  \"{{16TeamBracket\",\n  \"{{8TeamBracket\",\n  \"{{TeamBracket\",\n  \"{{Bracket\"\n];\n\nlet relativeBracketStart = -1;\nfor (const candidate of bracketStartCandidates) {\n  const idx = afterSection.indexOf(candidate);\n  if (idx !== -1) {\n    relativeBracketStart = idx;\n    break;\n  }\n}\n\nif (relativeBracketStart === -1) {\n  return [{\n    json: {\n      foundBracket: false,\n      debug_start: afterSection.slice(0, 4000)\n    }\n  }];\n}\n\nconst bracketStart = sectionStart + relativeBracketStart;\nconst afterBracket = wikitext.slice(bracketStart);\n\nconst nextSectionMatch = afterBracket.match(/\\n===\\s*[^=]+?\\s*===/);\nlet bracketChunk = nextSectionMatch\n  ? afterBracket.slice(0, nextSectionMatch.index)\n  : afterBracket;\n\nreturn [\n  {\n    json: {\n      bracketText: bracketChunk,\n      foundBracket: true\n    }\n  }\n];"
       },
       "position": [
         2192,
@@ -902,9 +948,11 @@
     {
       "id": "d35e4857-5ab4-4096-849b-34698dd9870c",
       "name": "Merge",
-      "parameters": {},
+      "parameters": {
+        "numberInputs": 3
+      },
       "position": [
-        2896,
+        3104,
         16
       ],
       "type": "n8n-nodes-base.merge",
@@ -917,8 +965,8 @@
         "jsCode": "const items = $input.all();\nconst out = [];\n\nfunction cleanText(s) {\n  if (!s) return null;\n\n  return String(s)\n    .replace(/\\{\\{[^}]+\\}\\}/g, \"\")   // plantillas wiki\n    .replace(/\\|.*$/, \"\")            // alias estadio\n    .replace(/}}/g, \"\")\n    .trim();\n}\n\nfunction normalizeDate(date, season) {\n  if (!date) return null;\n\n  // ya viene bien\n  if (date.includes(\"-\")) return date;\n\n  const months = {\n    enero: \"01\",\n    febrero: \"02\",\n    marzo: \"03\",\n    abril: \"04\",\n    mayo: \"05\",\n    junio: \"06\",\n    julio: \"07\",\n    agosto: \"08\",\n    septiembre: \"09\",\n    octubre: \"10\",\n    noviembre: \"11\",\n    diciembre: \"12\"\n  };\n\n  const match = date.match(/(\\d+)\\s+de\\s+(\\w+)/i);\n  if (!match) return null;\n\n  const day = match[1].padStart(2, \"0\");\n  const month = months[match[2].toLowerCase()];\n  const year = season.split(\"/\")[0];\n\n  return `${year}-${month}-${day}`;\n}\n\nfunction normalizeLeg(leg) {\n  if (!leg) return null;\n  if (leg === \"first_leg\") return 1;\n  if (leg === \"second_leg\") return 2;\n  return null;\n}\n\nfunction generateSourceId(m) {\n  return [\n    m.competition,\n    m.season,\n    m.stage,\n    m.date,\n    m.home_team,\n    m.away_team,\n    m.leg || 0\n  ].join(\"_\").toLowerCase().replace(/\\s+/g, \"\");\n}\n\nfor (const item of items) {\n  const m = item.json;\n\n  const normalized = {\n    competition: m.competition,\n    season: m.season,\n\n    stage: m.stage || \"league_phase\",\n    matchday: m.matchday || null,\n    leg: normalizeLeg(m.leg),\n\n    date: normalizeDate(m.date, m.season),\n    time: m.time || null,\n\n    home_team: cleanText(m.home_team),\n    away_team: cleanText(m.away_team),\n\n    home_score: m.home_score ?? null,\n    away_score: m.away_score ?? null,\n\n    stadium: cleanText(m.stadium),\n    attendance: m.attendance ?? null,\n\n    source: m.source || \"wikipedia\"\n  };\n\n  normalized.source_id = generateSourceId(normalized);\n\n  out.push({ json: normalized });\n}\n\nreturn out;"
       },
       "position": [
-        3184,
-        16
+        3376,
+        48
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
@@ -938,7 +986,7 @@
         "tableId": "competitions"
       },
       "position": [
-        3264,
+        3472,
         -160
       ],
       "type": "n8n-nodes-base.supabase",
@@ -969,10 +1017,10 @@
       "id": "06483af3-f88c-4b2d-bcec-3f1f9871a2d3",
       "name": "Merge1",
       "parameters": {
-        "numberInputs": 3
+        "numberInputs": 4
       },
       "position": [
-        3552,
+        3760,
         0
       ],
       "type": "n8n-nodes-base.merge",
@@ -985,7 +1033,7 @@
         "jsCode": "const items = $input.all();\n\nfunction normalizeText(s) {\n  return String(s || \"\")\n    .normalize(\"NFD\")\n    .replace(/[\\u0300-\\u036f]/g, \"\")\n    .toLowerCase()\n    .trim();\n}\n\nfunction slugify(s) {\n  return normalizeText(s)\n    .replace(/[^a-z0-9]+/g, \"_\")\n    .replace(/^_+|_+$/g, \"\");\n}\n\nfunction normalizeSeasonLabel(season) {\n  const str = String(season || \"\").trim();\n  if (!str) return null;\n\n  if (/^\\d{4}\\/\\d{2}$/.test(str)) return str;\n  if (/^\\d{4}-\\d{2}$/.test(str)) return str.replace(\"-\", \"/\");\n\n  const m = str.match(/^(\\d{4})[\\/-](\\d{4})$/);\n  if (m) return `${m[1]}/${m[2].slice(-2)}`;\n\n  return str;\n}\n\nfunction getCompetitionSlug(name) {\n  const n = normalizeText(name);\n\n  if (n.includes(\"champions\")) return \"uefa_champions_league\";\n  if (n.includes(\"europa league\")) return \"uefa_europa_league\";\n  if (n.includes(\"conference\")) return \"uefa_conference_league\";\n  if (n.includes(\"laliga\")) return \"laliga\";\n\n  return slugify(name);\n}\n\n// 1) Separar tipos de item\nconst competitions = items.filter(i =>\n  i.json &&\n  i.json.name &&\n  i.json.slug &&\n  Object.prototype.hasOwnProperty.call(i.json, \"competition_type\")\n);\n\nconst seasons = items.filter(i =>\n  i.json &&\n  i.json.competition_id &&\n  i.json.season_label &&\n  Object.prototype.hasOwnProperty.call(i.json, \"is_current\") &&\n  !i.json.competition &&\n  !i.json.home_team\n);\n\nconst matches = items.filter(i =>\n  i.json &&\n  (i.json.home_team || i.json.away_team || i.json.competition)\n);\n\n// 2) Índice de competitions por slug\nconst competitionBySlug = new Map();\nfor (const c of competitions) {\n  const dbSlug = String(c.json.slug || \"\").trim();\n  if (dbSlug) {\n    competitionBySlug.set(dbSlug, c.json);\n  }\n}\n\n// 3) Índice de seasons por competition_id + season_label\nconst seasonByCompetitionAndLabel = new Map();\nfor (const s of seasons) {\n  const key = `${s.json.competition_id}__${normalizeSeasonLabel(s.json.season_label)}`;\n  seasonByCompetitionAndLabel.set(key, s.json);\n}\n\n// 4) Resolver solo matches\nreturn matches.map(item => {\n  const j = item.json;\n\n  const competitionSlug =\n    j.competition_slug ||\n    getCompetitionSlug(j.competition);\n\n  const seasonLabel =\n    normalizeSeasonLabel(j.season_label || j.season);\n\n  let competition = competitionBySlug.get(competitionSlug) || null;\n\n  // Fallback manual por si los slugs de BD no coinciden exacto\n  if (!competition) {\n    if (competitionSlug === \"laliga\") {\n      competition =\n        competitionBySlug.get(\"laliga-ea-sports\") ||\n        competitionBySlug.get(\"laliga\") ||\n        null;\n    } else if (competitionSlug === \"uefa_champions_league\") {\n      competition =\n        competitionBySlug.get(\"uefa-champions-league\") ||\n        competitionBySlug.get(\"uefa_champions_league\") ||\n        null;\n    } else if (competitionSlug === \"uefa_europa_league\") {\n      competition =\n        competitionBySlug.get(\"uefa-europa-league\") ||\n        competitionBySlug.get(\"uefa_europa_league\") ||\n        null;\n    } else if (competitionSlug === \"uefa_conference_league\") {\n      competition =\n        competitionBySlug.get(\"uefa-conference-league\") ||\n        competitionBySlug.get(\"uefa_conference_league\") ||\n        null;\n    }\n  }\n\n  const seasonKey =\n    competition?.id && seasonLabel\n      ? `${competition.id}__${seasonLabel}`\n      : null;\n\n  const competitionSeason =\n    seasonKey ? seasonByCompetitionAndLabel.get(seasonKey) || null : null;\n\n  return {\n    json: {\n      ...j,\n      competition_slug: competitionSlug,\n      season_label: seasonLabel,\n      competition_id: competition?.id ?? null,\n      competition_season_id: competitionSeason?.id ?? null,\n    }\n  };\n});"
       },
       "position": [
-        3776,
+        3984,
         16
       ],
       "type": "n8n-nodes-base.code",
@@ -998,10 +1046,10 @@
           "name": "Supabase account 2"
         }
       },
-      "disabled": true,
-      "executeOnce": true,
+      "executeOnce": false,
       "id": "be32fce2-9497-4fef-ace5-fcf4dc13917a",
       "name": "HTTP Request2",
+      "onError": "continueRegularOutput",
       "parameters": {
         "authentication": "predefinedCredentialType",
         "headerParameters": {
@@ -1031,8 +1079,8 @@
         "url": "https://scmytuehzrdyjsxzmujv.supabase.co/rest/v1/matches"
       },
       "position": [
-        4544,
-        -192
+        4752,
+        -256
       ],
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4
@@ -1044,7 +1092,7 @@
         "jsCode": "const items = $input.all();\n\nfunction slugify(text) {\n  return String(text || \"\")\n    .toLowerCase()\n    .normalize(\"NFD\")\n    .replace(/[\\u0300-\\u036f]/g, \"\")\n    .replace(/[^a-z0-9]+/g, \"-\")\n    .replace(/^-+|-+$/g, \"\");\n}\n\nreturn items.map(item => {\n  const name = item.json.name || item.json.team_name;\n\n  return {\n    json: {\n      name,\n      slug: slugify(name)\n    }\n  };\n});"
       },
       "position": [
-        4848,
+        5056,
         80
       ],
       "type": "n8n-nodes-base.code",
@@ -1057,7 +1105,7 @@
         "jsCode": "const items = $input.all();\n\nfunction cleanName(name) {\n  return String(name || '').trim();\n}\n\nconst out = [];\n\nfor (const item of items) {\n  const home = cleanName(item.json.home_team);\n  const away = cleanName(item.json.away_team);\n\n  if (home) {\n    out.push({ json: { team_name: home } });\n  }\n\n  if (away) {\n    out.push({ json: { team_name: away } });\n  }\n}\n\nreturn out;"
       },
       "position": [
-        4000,
+        4208,
         16
       ],
       "type": "n8n-nodes-base.code",
@@ -1070,7 +1118,7 @@
         "jsCode": "const items = $input.all();\n\nconst seen = new Set();\nconst out = [];\n\nfor (const item of items) {\n  const name = String(item.json.team_name || '').trim();\n  if (!name) continue;\n\n  const key = name.toLowerCase();\n  if (seen.has(key)) continue;\n\n  seen.add(key);\n  out.push({\n    json: {\n      team_name: name\n    }\n  });\n}\n\nreturn out;"
       },
       "position": [
-        4192,
+        4400,
         16
       ],
       "type": "n8n-nodes-base.code",
@@ -1092,7 +1140,7 @@
         "tableId": "teams"
       },
       "position": [
-        4208,
+        4416,
         192
       ],
       "type": "n8n-nodes-base.supabase",
@@ -1106,7 +1154,7 @@
         "jsCode": "function normalize(name) {\n  return String(name || \"\")\n    .toLowerCase()\n    .normalize(\"NFD\")\n    .replace(/[\\u0300-\\u036f]/g, \"\") // quitar tildes\n    .replace(/\\b(cf|fc|club|de|del|sd|rcd|ud|cd)\\b/g, \" \")\n    .replace(/[^a-z0-9\\s]/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nconst nuevos = $items(\"Quitar duplicados\");\nconst existentes = $items(\"Load Teams\");\n\nconst existingSet = new Set(\n  existentes.map(item => normalize(item.json.name))\n);\n\nconst out = [];\n\nfor (const item of nuevos) {\n  const rawName = item.json.team_name || item.json.name;\n  if (!rawName) continue;\n\n  const normalized = normalize(rawName);\n\n  if (!existingSet.has(normalized)) {\n    out.push({\n      json: {\n        name: rawName,\n        normalized_name: normalized\n      }\n    });\n  }\n}\n\nreturn out;"
       },
       "position": [
-        4656,
+        4864,
         80
       ],
       "type": "n8n-nodes-base.code",
@@ -1117,7 +1165,7 @@
       "name": "Merge2",
       "parameters": {},
       "position": [
-        4432,
+        4640,
         80
       ],
       "type": "n8n-nodes-base.merge",
@@ -1176,7 +1224,7 @@
         "url": "=https://en.wikipedia.org/api/rest_v1/page/summary/{{encodeURIComponent($json.wiki_search_name)}}"
       },
       "position": [
-        5232,
+        5440,
         80
       ],
       "type": "n8n-nodes-base.httpRequest",
@@ -1189,7 +1237,7 @@
         "jsCode": "const aliasMap = {\n  \"young boys\": \"BSC Young Boys\",\n  \"celtic\": \"Celtic F.C.\",\n  \"slovan bratislava\": \"ŠK Slovan Bratislava\",\n  \"milan\": \"AC Milan\",\n  \"liverpool\": \"Liverpool F.C.\",\n  \"stuttgart\": \"VfB Stuttgart\",\n  \"lille\": \"Lille OSC\",\n  \"bologna\": \"Bologna FC 1909\",\n  \"arsenal\": \"Arsenal F.C.\",\n  \"atalanta\": \"Atalanta BC\",\n  \"monaco\": \"AS Monaco FC\",\n  \"brujas\": \"Club Brugge KV\",\n  \"benfica\": \"S.L. Benfica\",\n  \"shakhtar donetsk\": \"FC Shakhtar Donetsk\",\n  \"dinamo zagreb\": \"GNK Dinamo Zagreb\",\n  \"bayern munich\": \"FC Bayern Munich\",\n  \"aston villa\": \"Aston Villa F.C.\",\n  \"paris saint germain\": \"Paris Saint-Germain FC\"\n};\n\nreturn $input.all().map(item => {\n  const normalized = item.json.normalized_name || item.json.name?.toLowerCase().trim();\n\n  return {\n    json: {\n      ...item.json,\n      wiki_search_name: aliasMap[normalized] || item.json.name\n    }\n  };\n});"
       },
       "position": [
-        5056,
+        5264,
         80
       ],
       "type": "n8n-nodes-base.code",
@@ -1202,7 +1250,7 @@
         "jsCode": "function extractCountry(item) {\n  const text = `${item.description || \"\"} ${item.extract || \"\"}`.toLowerCase();\n\n  const rules = [\n    [\"italy\", \"Italy\"],\n    [\"italian\", \"Italy\"],\n    [\"england\", \"England\"],\n    [\"english\", \"England\"],\n    [\"france\", \"France\"],\n    [\"french\", \"France\"],\n    [\"germany\", \"Germany\"],\n    [\"german\", \"Germany\"],\n    [\"netherlands\", \"Netherlands\"],\n    [\"dutch\", \"Netherlands\"],\n    [\"portugal\", \"Portugal\"],\n    [\"portuguese\", \"Portugal\"],\n    [\"spain\", \"Spain\"],\n    [\"spanish\", \"Spain\"],\n    [\"scotland\", \"Scotland\"],\n    [\"scottish\", \"Scotland\"],\n    [\"croatia\", \"Croatia\"],\n    [\"croatian\", \"Croatia\"],\n    [\"ukraine\", \"Ukraine\"],\n    [\"ukrainian\", \"Ukraine\"],\n    [\"austria\", \"Austria\"],\n    [\"austrian\", \"Austria\"],\n    [\"switzerland\", \"Switzerland\"],\n    [\"swiss\", \"Switzerland\"],\n    [\"belgium\", \"Belgium\"],\n    [\"belgian\", \"Belgium\"],\n    [\"slovakia\", \"Slovakia\"],\n    [\"slovak\", \"Slovakia\"]\n  ];\n\n  for (const [needle, country] of rules) {\n    if (text.includes(needle)) return country;\n  }\n\n  return null;\n}\n\nreturn $input.all().map(item => {\n  return {\n    json: {\n      ...item.json,\n      country_name: extractCountry(item.json)\n    }\n  };\n});"
       },
       "position": [
-        5440,
+        5648,
         80
       ],
       "type": "n8n-nodes-base.code",
@@ -1213,7 +1261,7 @@
       "name": "Merge Countries",
       "parameters": {},
       "position": [
-        5648,
+        5856,
         80
       ],
       "type": "n8n-nodes-base.merge",
@@ -1226,7 +1274,7 @@
         "jsCode": "function normalize(text) {\n  return String(text || \"\")\n    .toLowerCase()\n    .normalize(\"NFD\")\n    .replace(/[\\u0300-\\u036f]/g, \"\")\n    .replace(/[^a-z0-9\\s]/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nconst countryTranslations = {\n  england: \"inglaterra\",\n  spain: \"espana\",\n  italy: \"italia\",\n  germany: \"alemania\",\n  france: \"francia\",\n  netherlands: \"paises bajos\",\n  portugal: \"portugal\",\n  belgium: \"belgica\",\n  switzerland: \"suiza\",\n  austria: \"austria\",\n  croatia: \"croacia\",\n  ukraine: \"ucrania\",\n  scotland: \"escocia\",\n  slovakia: \"eslovaquia\"\n};\n\nconst items = $input.all();\n\n// ⚡ IMPORTANTE: separar bien\nconst teams = items.filter(i => i.json.country_name);\nconst countries = items.filter(i => i.json.code); // 🔥 clave: los países tienen \"code\"\n\n// crear mapa correcto\nconst countryMap = new Map();\n\nfor (const c of countries) {\n  countryMap.set(normalize(c.json.name), c.json.id);\n}\n\n// mapear equipos\nreturn teams.map(item => {\n  const original = item.json.country_name;\n\n  let translated = normalize(original);\n\n  if (countryTranslations[translated]) {\n    translated = countryTranslations[translated];\n  }\n\n  return {\n    json: {\n      ...item.json,\n      country_id: countryMap.get(translated) || null\n    }\n  };\n});"
       },
       "position": [
-        5824,
+        6032,
         80
       ],
       "type": "n8n-nodes-base.code",
@@ -1239,7 +1287,7 @@
         "jsCode": "function slugify(text) {\n  return String(text || \"\")\n    .toLowerCase()\n    .normalize(\"NFD\")\n    .replace(/[\\u0300-\\u036f]/g, \"\")\n    .replace(/[^a-z0-9]+/g, \"-\")\n    .replace(/^-+|-+$/g, \"\");\n}\n\nreturn $input.all()\n  .filter(item => item.json.country_id)\n  .map(item => {\n    const name = item.json.name || item.json.title || item.json.titles?.normalized || null;\n\n    return {\n      json: {\n        name,\n        slug: slugify(name),\n        country_id: item.json.country_id\n      }\n    };\n  })\n  .filter(item => item.json.name);"
       },
       "position": [
-        6016,
+        6224,
         144
       ],
       "type": "n8n-nodes-base.code",
@@ -1254,7 +1302,7 @@
         "jsCode": "return $input.all()\n  .filter(item => !item.json.country_id)\n  .map(item => ({\n    json: {\n      name: item.json.name || item.json.title || null,\n      country_name: item.json.country_name || null,\n      wiki_title: item.json.title || null,\n      error: item.json.error?.message || null\n    }\n  }));"
       },
       "position": [
-        6016,
+        6224,
         0
       ],
       "type": "n8n-nodes-base.code",
@@ -1290,7 +1338,7 @@
         "tableId": "teams"
       },
       "position": [
-        6432,
+        6640,
         144
       ],
       "retryOnFail": false,
@@ -1346,7 +1394,7 @@
         "jsCode": "const seen = new Set();\nconst out = [];\n\nfor (const item of $input.all()) {\n  const slug = item.json.slug;\n  if (!slug) continue;\n\n  if (seen.has(slug)) continue;\n  seen.add(slug);\n\n  out.push(item);\n}\n\nreturn out;"
       },
       "position": [
-        6240,
+        6448,
         144
       ],
       "type": "n8n-nodes-base.code",
@@ -1359,21 +1407,8 @@
         "jsCode": "function normalize(text) {\n  return String(text || \"\")\n    .toLowerCase()\n    .normalize(\"NFD\")\n    .replace(/[\\u0300-\\u036f]/g, \"\")\n    .replace(/[^a-z0-9\\s]/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nconst matches = $input.all();\nconst teams = $items(\"Load Teams1\");\n\nconst teamMap = new Map();\n\nfor (const t of teams) {\n  const name = t.json.name;\n  if (!name) continue;\n\n  const normalizedName = normalize(name);\n\n  teamMap.set(normalizedName, {\n    id: t.json.id,\n    name: t.json.name,\n    slug: t.json.slug || null,\n  });\n}\n\nconst aliases = {\n  \"psg\": \"paris saint germain fc\",\n  \"paris saint germain\": \"paris saint germain fc\",\n  \"paris sg\": \"paris saint germain fc\",\n\n  \"bayern\": \"fc bayern munich\",\n  \"bayern munich\": \"fc bayern munich\",\n\n  \"manchester city\": \"manchester city f c\",\n  \"man city\": \"manchester city f c\",\n  \"manchester city fc\": \"manchester city f c\",\n\n  \"arsenal\": \"arsenal f c\",\n  \"arsenal fc\": \"arsenal f c\",\n\n  \"liverpool\": \"liverpool f c\",\n  \"liverpool fc\": \"liverpool f c\",\n\n  \"celtic\": \"celtic f c\",\n  \"celtic fc\": \"celtic f c\",\n\n  \"milan\": \"ac milan\",\n  \"ac milan\": \"ac milan\",\n\n  \"young boys\": \"bsc young boys\",\n  \"slovan bratislava\": \"sk slovan bratislava\",\n  \"benfica\": \"s l benfica\",\n\n  \"stuttgart\": \"vfb stuttgart\",\n\n  \"shakhtar donetsk\": \"fc shakhtar donetsk\",\n  \"shakhtar\": \"fc shakhtar donetsk\",\n\n  \"club brugge\": \"club brugge kv\",\n  \"brugge\": \"club brugge kv\",\n\n  \"dinamo zagreb\": \"gnk dinamo zagreb\",\n\n  \"sporting lisbon\": \"sporting cp\",\n  \"sporting de lisboa\": \"sporting cp\",\n  \"sporting lisboa\": \"sporting cp\",\n  \"sporting portugal\": \"sporting cp\",\n  \"sporting\": \"sporting cp\",\n\n  \"leverkusen\": \"bayer 04 leverkusen\",\n  \"bayer leverkusen\": \"bayer 04 leverkusen\",\n\n  \"brest\": \"stade brestois 29\",\n  \"stade brestois\": \"stade brestois 29\",\n\n  \"juventus\": \"juventus fc\",\n  \"aston villa\": \"aston villa f c\",\n\n  \"real madrid\": \"real madrid cf\",\n\n  \"bologna\": \"bologna fc 1909\",\n\n  \"red bull salzburgo\": \"fc salzburg\",\n  \"red bull salzburg\": \"fc salzburg\",\n  \"salzburg\": \"fc salzburg\",\n\n  \"sparta praga\": \"ac sparta praha\",\n  \"sparta praha\": \"ac sparta praha\",\n  \"sparta prague\": \"ac sparta praha\",\n\n  \"girona\": \"girona fc\",\n  \"barcelona\": \"fc barcelona\",\n  \"atletico madrid\": \"club atletico de madrid\",\n  \"betis\": \"real betis balompie\",\n  \"real sociedad\": \"real sociedad de futbol\",\n  \"celta\": \"rc celta de vigo\",\n  \"alaves\": \"deportivo alaves\",\n  \"las palmas\": \"ud las palmas\",\n  \"leganes\": \"cd leganes\",\n  \"almeria\": \"ud almeria\",\n  \"cadiz\": \"cadiz cf\",\n  \"valladolid\": \"real valladolid cf\",\n  \"mallorca\": \"rcd mallorca\",\n  \"espanyol\": \"rcd espanyol de barcelona\",\n  \"rayo vallecano\": \"rayo vallecano de madrid\",\n  \"brujas\": \"club brugge kv\",\n\"inter de milan\": \"inter milan\",\n\"monaco\": \"as monaco\",\n\"mónaco\": \"as monaco\",\n\"estrella roja\": \"fk crvena zvezda\",\n\"sparta praga\": \"ac sparta praha\",\n\"red bull salzburgo\": \"fc salzburg\",\n\"red bull salzburg\": \"fc salzburg\",\n\"salzburgo\": \"fc salzburg\"\n};\n\nfunction resolveTeam(rawName) {\n  let key = normalize(rawName);\n  if (!key) return null;\n\n  if (aliases[key]) {\n    key = aliases[key];\n  }\n\n  let found = teamMap.get(key);\n  if (found) return found;\n\n  for (const [teamKey, teamValue] of teamMap.entries()) {\n    if (teamKey.includes(key) || key.includes(teamKey)) {\n      return teamValue;\n    }\n  }\n\n  return null;\n}\n\nreturn matches.map(item => {\n  const j = item.json;\n\n  const homeName =\n    j.home_team ||\n    j.homeTeam ||\n    j.home_team_name ||\n    j.team1 ||\n    j.home ||\n    null;\n\n  const awayName =\n    j.away_team ||\n    j.awayTeam ||\n    j.away_team_name ||\n    j.team2 ||\n    j.away ||\n    null;\n\n  const home = resolveTeam(homeName);\n  const away = resolveTeam(awayName);\n\n  return {\n    json: {\n      ...j,\n      home_team_id: home?.id || null,\n      away_team_id: away?.id || null,\n      home_team_resolved: home?.name || null,\n      away_team_resolved: away?.name || null\n    }\n  };\n});"
       },
       "position": [
-        4112,
-        -256
-      ],
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2
-    },
-    {
-      "id": "fe67dba8-63a4-4ace-a230-06370b6a3f91",
-      "name": "Matches Unresolved",
-      "parameters": {
-        "jsCode": "return $input.all()\n  .filter(item => !item.json.home_team_id || !item.json.away_team_id)\n  .map(item => ({\n    json: {\n      home_team: item.json.home_team || item.json.homeTeam || item.json.home_team_name || null,\n      away_team: item.json.away_team || item.json.awayTeam || item.json.away_team_name || null,\n      home_team_id: item.json.home_team_id || null,\n      away_team_id: item.json.away_team_id || null\n    }\n  }));"
-      },
-      "position": [
         4320,
-        -352
+        -256
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
@@ -1382,11 +1417,11 @@
       "id": "03137559-0c2d-40a9-aa22-7078968b00d7",
       "name": "Prepare Insert Matches",
       "parameters": {
-        "jsCode": "return $input.all()\n  .filter(item => item.json.home_team_id && item.json.away_team_id)\n  .map(item => {\n    const j = item.json;\n\n    return {\n      json: {\n        source_id: j.source_id ?? null,\n        source: j.source ?? null,\n\n        competition_id: j.competition_id ?? null,\n        competition_season_id: j.competition_season_id ?? null,\n\n        home_team_id: j.home_team_id,\n        away_team_id: j.away_team_id,\n\n        match_date: j.match_date ?? j.date ?? null,\n        kickoff_time: j.kickoff_time ?? j.time ?? null,\n        round: j.round ?? j.matchday ?? null,\n        stage: j.stage ?? null,\n\n        home_score: j.home_score ?? j.score_home ?? null,\n        away_score: j.away_score ?? j.score_away ?? null,\n\n        home_penalties: j.home_penalties ?? null,\n        away_penalties: j.away_penalties ?? null,\n\n        venue: j.venue ?? null,\n        city: j.city ?? null,\n\n        status: j.status ?? null,\n        external_id: j.external_id ?? null\n      }\n    };\n  });"
+        "jsCode": "return items.map(item => {\n  const j = item.json;\n\n  return {\n    json: {\n      source_id: j.source_id,\n      source: j.source,\n\n      competition_id: j.competition_id,\n      competition_season_id: j.competition_season_id,\n      season: j.season || j.season_label,\n\n      home_team_id: j.home_team_id,\n      away_team_id: j.away_team_id,\n\n      match_date: j.date,\n      kickoff_time: j.time,\n\n      round: j.matchday || j.round,\n      stage: j.stage,\n\n      home_score: j.home_score,\n      away_score: j.away_score,\n\n      // 🔥 NUEVO\n      stadium_raw: j.stadium,\n      city_raw: j.city\n    }\n  };\n});"
       },
       "position": [
-        4320,
-        -192
+        4528,
+        -256
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
@@ -1414,33 +1449,133 @@
       "typeVersion": 1
     },
     {
-      "id": "3db7b754-8b99-4b54-8757-2516942332cb",
-      "name": "Extract Playoff",
+      "id": "a2a646f4-66af-4967-87cd-1d1895ec4a34",
+      "name": "HTTP Request - Playoff",
       "parameters": {
-        "jsCode": "const wikitext = items[0].json.wikitext;\n\nif (!wikitext) {\n  throw new Error(\"No hay wikitext\");\n}\n\n// Intentamos coger el bloque completo de eliminatorias modernas\nconst startCandidates = [\n  \"=== Knockout phase play-offs ===\",\n  \"=== Play-offs de la fase eliminatoria ===\",\n  \"=== Eliminatorias ===\"\n];\n\nlet start = -1;\nfor (const candidate of startCandidates) {\n  const idx = wikitext.indexOf(candidate);\n  if (idx !== -1) {\n    start = idx;\n    break;\n  }\n}\n\nif (start === -1) {\n  throw new Error(\"No se encontró el inicio del bloque de eliminatorias\");\n}\n\n// Cortamos hasta después de la final si existe, o hasta el siguiente bloque grande\nconst endCandidates = [\n  \"=== Final ===\",\n  \"=== Véase también ===\",\n  \"=== Referencias ===\",\n  \"=== Ronda preliminar ===\"\n];\n\nlet end = -1;\nfor (const candidate of endCandidates) {\n  const idx = wikitext.indexOf(candidate, start + 1);\n  if (idx !== -1) {\n    end = idx;\n    break;\n  }\n}\n\nif (end === -1) {\n  end = wikitext.length;\n}\n\nconst bracketText = wikitext.slice(start, end);\n\nreturn [\n  {\n    json: {\n      bracketText\n    }\n  }\n];"
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "query"
+            },
+            {
+              "name": "prop",
+              "value": "revisions"
+            },
+            {
+              "name": "rvprop",
+              "value": "content"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            },
+            {
+              "name": "titles",
+              "value": "={{ $json.playoff_page }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "sendQuery": true,
+        "url": "https://en.wikipedia.org/w/api.php"
       },
       "position": [
-        800,
-        -224
+        992,
+        -176
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4
+    },
+    {
+      "id": "212bf854-f066-4509-b305-70ae47d0f0d9",
+      "name": "Extract Playoff WIki",
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\nconst pages = item.query.pages;\nconst pageId = Object.keys(pages)[0];\nconst page = pages[pageId];\n\nlet wikitext = null;\n\n// formato nuevo (slots)\nif (page.revisions?.[0]?.slots?.main?.[\"*\"]) {\n  wikitext = page.revisions[0].slots.main[\"*\"];\n}\n// formato legacy\nelse if (page.revisions?.[0]?.[\"*\"]) {\n  wikitext = page.revisions[0][\"*\"];\n}\n\nif (!wikitext) {\n  throw new Error(\"No se pudo extraer wikitext del playoff\");\n}\n\nreturn [\n  {\n    json: {\n      wikitext,\n      playoff_page: $json.playoff_page\n    }\n  }\n];"
+      },
+      "position": [
+        1200,
+        -176
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
     },
     {
-      "id": "9bfa26d2-7fe2-4fcc-b23a-aa08255b3cfb",
-      "name": "Parse Playoff",
+      "id": "cbd9bbed-8131-49e2-bfdb-d0c2bde2e7d3",
+      "name": "Extract Playoff_page",
       "parameters": {
-        "jsCode": "const text = items[0].json.playoffText || \"\";\n\nconst rows = text\n  .split(\"|-\")\n  .map(r => r.trim())\n  .filter(r => r.includes(\"[[\"));\n\nreturn rows.slice(0, 10).map((row, i) => ({\n  json: {\n    index: i,\n    row\n  }\n}));"
+        "jsCode": "const raw = items[0].json.season || \"2024-25\";\n\nconst parts = String(raw)\n  .replace(\"/\", \"-\")\n  .split(\"-\");\n\nif (parts.length < 2) {\n  throw new Error(\"Season inválida\");\n}\n\nconst fixedSeason = `${parts[0]}${String.fromCharCode(8211)}${parts[1]}`;\n\nconst playoff_page = `${fixedSeason}_UEFA_Champions_League_knockout_phase`;\n\nreturn [\n  {\n    json: {\n      playoff_page,\n      debug_season: fixedSeason\n    }\n  }\n];"
       },
       "position": [
-        1008,
-        -224
+        800,
+        -176
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "56658641-ac4b-4021-b371-9989cb8abbda",
+      "name": "Parse Playoff Sections",
+      "parameters": {
+        "jsCode": "const text = items[0].json.wikitext || \"\";\n\nif (!text) {\n  throw new Error(\"No hay wikitext\");\n}\n\nfunction extractSection(startTitle, endTitles = []) {\n  const start = text.indexOf(startTitle);\n  if (start === -1) return null;\n\n  let end = text.length;\n\n  for (const endTitle of endTitles) {\n    const idx = text.indexOf(endTitle, start + startTitle.length);\n    if (idx !== -1 && idx < end) {\n      end = idx;\n    }\n  }\n\n  return text.slice(start, end).trim();\n}\n\nconst playoff = extractSection(\n  \"==Knockout phase play-offs==\",\n  [\"==Round of 16==\", \"==Quarter-finals==\", \"==Semi-finals==\", \"==Final==\"]\n);\n\n\n\nreturn [\n  {\n    json: {\n      season: items[0].json.season || \"2024-25\",\n      season_label: items[0].json.season_label || \"2024/25\",\n      playoff\n    }\n  }\n];"
+      },
+      "position": [
+        1440,
+        -256
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d2c6dce5-7070-4f8f-97eb-7e6c99050e4a",
+      "name": "Parse Playoff Boxes",
+      "parameters": {
+        "jsCode": "const input = items[0].json;\n\nconst season = input.season || \"2024-25\";\nconst season_label = input.season_label || \"2024/25\";\n\nconst sections = [\n  { key: \"playoff\", stage: \"knockout_playoff\" },\n  { key: \"round_of_16\", stage: \"round_of_16\" },\n  { key: \"quarter_finals\", stage: \"quarter_final\" },\n  { key: \"semi_finals\", stage: \"semi_final\" },\n];\n\nfunction cleanWiki(value) {\n  if (!value) return null;\n\n  return String(value)\n    .replace(/\\{\\{fbaicon\\|[^}]+\\}\\}/gi, \"\")\n    .replace(/\\{\\{small\\|([^}]+)\\}\\}/gi, \"$1\")\n    .replace(/\\{\\{goal\\|[^}]+\\}\\}/gi, \"\")\n    .replace(/\\{\\{pengoal\\}\\}/gi, \"\")\n    .replace(/\\{\\{penmiss\\}\\}/gi, \"\")\n    .replace(/\\{\\{aet\\}\\}/gi, \"aet\")\n    .replace(/\\{\\{pso\\}\\}/gi, \"pso\")\n    .replace(/\\{\\{Start date\\|(\\d{4})\\|(\\d{1,2})\\|(\\d{1,2}).*?\\}\\}/gi, \"$1-$2-$3\")\n    .replace(/\\[\\[([^|\\]]+)\\|([^\\]]+)\\]\\]/g, \"$2\")\n    .replace(/\\[\\[([^\\]]+)\\]\\]/g, \"$1\")\n    .replace(/<ref[^>]*>.*?<\\/ref>/gis, \"\")\n    .replace(/<ref[^\\/]*\\/>/gi, \"\")\n    .replace(/'''/g, \"\")\n    .replace(/''/g, \"\")\n    .replace(/&nbsp;/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction getField(box, name) {\n  const re = new RegExp(`\\\\|\\\\s*${name}\\\\s*=([^]*?)(?=\\\\n\\\\|\\\\s*[a-zA-Z0-9_]+\\\\s*=|$)`, \"i\");\n  const m = box.match(re);\n  return m ? cleanWiki(m[1]) : null;\n}\n\nfunction parseScore(scoreRaw) {\n  if (!scoreRaw) return { home: null, away: null };\n  const m = String(scoreRaw).match(/(\\d+)\\s*[–-]\\s*(\\d+)/);\n  if (!m) return { home: null, away: null };\n  return { home: Number(m[1]), away: Number(m[2]) };\n}\n\nconst out = [];\n\nfor (const sectionDef of sections) {\n  const text = input[sectionDef.key];\n  if (!text) continue;\n\n  const boxes = text.match(/\\{\\{Football box[\\s\\S]*?\\n\\}\\}/g) || [];\n\n  for (let i = 0; i < boxes.length; i++) {\n    const box = boxes[i];\n\n    const date = getField(box, \"date\");\n    const time = getField(box, \"time\");\n    const team1 = getField(box, \"team1\");\n    const team2 = getField(box, \"team2\");\n    const scoreRaw = getField(box, \"score\");\n    const stadium = getField(box, \"stadium\");\n    const attendance = getField(box, \"attendance\");\n    const referee = getField(box, \"referee\");\n    const report = getField(box, \"report\");\n    const aet = /(\\|\\s*aet\\s*=)/i.test(box);\n\n    const score = parseScore(scoreRaw);\n\n    out.push({\n      json: {\n        competition: \"UEFA Champions League\",\n        season,\n        season_label,\n        stage: sectionDef.stage,\n        source: \"wikipedia_en\",\n        source_format: \"football_box\",\n        match_in_stage: i + 1,\n        date,\n        time,\n        home_team: team1,\n        away_team: team2,\n        home_score: score.home,\n        away_score: score.away,\n        score_text: scoreRaw,\n        aet,\n        stadium,\n        attendance,\n        referee,\n        report\n      }\n    });\n  }\n}\n\nreturn out;"
+      },
+      "position": [
+        1664,
+        -272
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "61ffe343-5679-40a7-b437-b0979fbcf1f3",
+      "name": "Filtrado",
+      "parameters": {
+        "jsCode": "return items.filter(item => {\n  const stage = (item.json.stage || \"\").toLowerCase();\n  const competition = (item.json.competition || \"\").toLowerCase();\n\n  // SOLO Champions principal\n  const isChampions =\n    competition.includes(\"champions\") ||\n    competition.includes(\"ucl\");\n\n  // EXCLUIR previas\n  const isQualifying =\n    stage.includes(\"qualif\") ||\n    stage.includes(\"prelim\") ||\n    stage.includes(\"round 1\") ||\n    stage.includes(\"round 2\") ||\n    stage.includes(\"round 3\");\n\n  return isChampions && !isQualifying;\n});"
+      },
+      "position": [
+        4144,
+        -128
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "settings": {
     "binaryMode": "separate",
     "executionOrder": "v1"
