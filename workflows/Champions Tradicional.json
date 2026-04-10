@@ -1,0 +1,160 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "connections": {
+    "HTTP Request - Wikipedia": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse Matches HTML",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Set Params Champions": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Split Out Seasons",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Split Out Seasons": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request - Wikipedia",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Set Params Champions",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "id": "xG2vnW1kn5Q2w5bh",
+  "isArchived": false,
+  "name": "Champions Tradicional",
+  "nodes": [
+    {
+      "id": "69b53640-e186-4ac6-a5a3-58bf6daae8c5",
+      "name": "When clicking ‘Execute workflow’",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "b2f6d7f2-c85a-4bea-8a81-7b8b5e46851e",
+      "name": "Set Params Champions",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "82337a6a-8f72-42e0-9246-811874aead10",
+              "name": "competition_code",
+              "type": "string",
+              "value": "ucl_old"
+            },
+            {
+              "id": "b1c13dae-74a6-464b-a0e2-206ae0ef8c51",
+              "name": "competition_name",
+              "type": "string",
+              "value": "UEFA Champions League"
+            },
+            {
+              "id": "d406b77d-ab7c-450b-8f7f-c3f8bd659ab1",
+              "name": "source",
+              "type": "string",
+              "value": "wikipedia"
+            },
+            {
+              "id": "84fce48a-74f6-4ea5-aa3c-857890a4e0f4",
+              "name": "=seasons",
+              "type": "array",
+              "value": "={{[\n  { label: \"2022/23\", slug: \"2022-23\" },\n  { label: \"2023/24\", slug: \"2023-24\" }\n]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        208,
+        0
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "3c0ee750-d8b3-4abf-8d31-60b8e8c3be84",
+      "name": "Split Out Seasons",
+      "parameters": {
+        "fieldToSplitOut": "seasons",
+        "options": {}
+      },
+      "position": [
+        416,
+        0
+      ],
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1
+    },
+    {
+      "id": "f02071fb-72ea-4cc5-925c-cc2372e31dbf",
+      "name": "HTTP Request - Wikipedia",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {},
+        "sendHeaders": true,
+        "url": "={{ \"https://en.wikipedia.org/wiki/\" + $json.slug + \"_UEFA_Champions_League\" }}"
+      },
+      "position": [
+        624,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4
+    },
+    {
+      "id": "23f0d0cc-176d-4610-b234-9b88d8973a63",
+      "name": "Parse Matches HTML",
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "position": [
+        832,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
