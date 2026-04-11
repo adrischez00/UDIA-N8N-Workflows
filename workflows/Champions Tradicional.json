@@ -214,6 +214,11 @@
             "index": 0,
             "node": "Extract Match Tables",
             "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Equipos No Añadidos",
+            "type": "main"
           }
         ]
       ]
@@ -397,7 +402,7 @@
               "id": "84fce48a-74f6-4ea5-aa3c-857890a4e0f4",
               "name": "=seasons",
               "type": "array",
-              "value": "={{[\n  { label: \"2020/21\", slug: \"2020-21\" }\n]}}"
+              "value": "={{[\n  { label: \"2012/13\", slug: \"2012-13\" }\n]}}"
             },
             {
               "id": "366f0c06-7b60-4417-9d9a-74c0d76c72dd",
@@ -424,7 +429,7 @@
         "options": {}
       },
       "position": [
-        416,
+        400,
         96
       ],
       "type": "n8n-nodes-base.splitOut",
@@ -447,7 +452,7 @@
         "url": "={{\n  \"https://en.wikipedia.org/w/api.php?action=parse&page=\"\n  + encodeURIComponent($json.wiki_page)\n  + \"&format=json&prop=text\"\n}}"
       },
       "position": [
-        736,
+        752,
         -48
       ],
       "type": "n8n-nodes-base.httpRequest",
@@ -486,8 +491,8 @@
         "jsCode": "const out = [];\n\nfor (const item of $input.all()) {\n  const j = item.json;\n  const slug = String(j.slug || \"\");\n  const slugEnDash = slug.replace(/-/g, \"–\");\n\n  const startYear = slug.split(\"-\")[0];\n  const endYearShort = slug.split(\"-\")[1];\n  const finalYear = startYear && endYearShort\n    ? `20${endYearShort}`\n    : null;\n\n  out.push({\n    json: {\n      ...j,\n      stage_type: \"group_stage\",\n      wiki_page: `${slugEnDash}_UEFA_Champions_League_group_stage`\n    }\n  });\n\n  out.push({\n    json: {\n      ...j,\n      stage_type: \"knockout_phase\",\n      wiki_page: `${slugEnDash}_UEFA_Champions_League_knockout_phase`\n    }\n  });\n\n  if (finalYear) {\n    out.push({\n      json: {\n        ...j,\n        stage_type: \"final_only\",\n        wiki_page: `${finalYear}_UEFA_Champions_League_final`\n      }\n    });\n  }\n}\n\nreturn out;"
       },
       "position": [
-        608,
-        96
+        576,
+        32
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
@@ -501,7 +506,7 @@
         "options": {}
       },
       "position": [
-        864,
+        896,
         112
       ],
       "type": "n8n-nodes-base.merge",
@@ -581,15 +586,14 @@
       "typeVersion": 3.2
     },
     {
-      "alwaysOutputData": true,
+      "alwaysOutputData": false,
       "id": "c11dd2c9-7124-4975-90f0-237f01f11244",
       "name": "Equipos No Añadidos",
-      "onError": "continueRegularOutput",
       "parameters": {
         "jsCode": "const items = $input.all();\n\nconst scrapedTeams = [];\nconst dbTeams = [];\nconst dbAliases = [];\n\nfor (const item of items) {\n  const j = item.json;\n\n  // aliases\n  if (j.alias_slug) {\n    dbAliases.push(j);\n    continue;\n  }\n\n  // teams reales de BD\n  if (j.id && j.slug) {\n    dbTeams.push(j);\n    continue;\n  }\n\n  // equipos scrapeados\n  if (j.name && j.slug) {\n    scrapedTeams.push(j);\n    continue;\n  }\n}\n\nconst teamSlugs = new Set(\n  dbTeams\n    .map(t => String(t.slug || \"\").trim().toLowerCase())\n    .filter(Boolean)\n);\n\nconst aliasSlugs = new Set(\n  dbAliases\n    .map(a => String(a.alias_slug || \"\").trim().toLowerCase())\n    .filter(Boolean)\n);\n\nconst out = [];\n\nfor (const e of scrapedTeams) {\n  const slug = String(e.slug || \"\").trim().toLowerCase();\n  if (!slug) continue;\n\n  const existsInTeams = teamSlugs.has(slug);\n  const existsInAliases = aliasSlugs.has(slug);\n\n  if (!existsInTeams && !existsInAliases) {\n    out.push({ json: e });\n  }\n}\n\nreturn out;"
       },
       "position": [
-        2560,
+        2576,
         272
       ],
       "type": "n8n-nodes-base.code",
@@ -753,12 +757,6 @@
               "value": "finished"
             },
             {
-              "id": "010a0de8-1173-4809-830c-7f93bc640cca",
-              "name": "=source_id",
-              "type": "string",
-              "value": "={{ $json.source_id }}"
-            },
-            {
               "id": "919bd0c1-a776-4fd1-9afd-e6fcaa61babf",
               "name": "attendance",
               "type": "number",
@@ -804,7 +802,7 @@
               "id": "648cc435-5dba-483d-aa1b-8ab73014d341",
               "name": "source_id",
               "type": "string",
-              "value": "={{ [\n  $json.source || 'wikipedia',\n  $json.competition_id || '',\n  $json.competition_season_id || '',\n  $json.season || '',\n  $json.round || '',\n  $json.match_date || '',\n  $json.kickoff_time || '',\n  $json.home_team_id || '',\n  $json.away_team_id || ''\n].join('_') }}"
+              "value": "={{ [\n  $json.source  || 'wikipedia',\n  $json.season_slug,\n  $json.competition_id || '',\n  $json.competition_season_id || '',\n  $json.season || '',\n  $json.round || '',\n  $json.match_date || '',\n  $json.kickoff_time || '',\n  $json.home_team_id || '',\n  $json.away_team_id || ''\n].join('_') }}"
             },
             {
               "id": "39c96e43-6c8c-455e-aaf0-c963423c089e",
@@ -848,13 +846,13 @@
       "typeVersion": 3.4
     },
     {
+      "alwaysOutputData": false,
       "credentials": {
         "supabaseApi": {
           "id": "xgmADd6dlV14GpeX",
           "name": "Supabase account 2"
         }
       },
-      "disabled": true,
       "executeOnce": false,
       "id": "03a5e932-722f-428c-b909-90e80e6b1c99",
       "name": "HTTP Request",
@@ -878,8 +876,8 @@
         "url": "https://scmytuehzrdyjsxzmujv.supabase.co/rest/v1/matches?on_conflict=source_id"
       },
       "position": [
-        3264,
-        -224
+        3312,
+        -304
       ],
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4
@@ -961,6 +959,7 @@
           "name": "Supabase account 2"
         }
       },
+      "executeOnce": true,
       "id": "5b26be59-bd05-4a97-bca0-a1ecafe5c371",
       "name": "Create Competition",
       "parameters": {
@@ -991,8 +990,8 @@
         "tableId": "competitions"
       },
       "position": [
-        1072,
-        -272
+        928,
+        -304
       ],
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1
@@ -1028,7 +1027,7 @@
         "tableId": "competition_seasons"
       },
       "position": [
-        1040,
+        928,
         -576
       ],
       "type": "n8n-nodes-base.supabase",
@@ -1075,8 +1074,10 @@
           "name": "Supabase account 2"
         }
       },
+      "executeOnce": true,
       "id": "dd81f929-2ea0-4134-9fdf-fcfb0954e259",
       "name": "Create Competition Season",
+      "onError": "continueRegularOutput",
       "parameters": {
         "fieldsUi": {
           "fieldValues": [
@@ -1086,7 +1087,7 @@
             },
             {
               "fieldId": "source",
-              "fieldValue": "={{ $json.source }}"
+              "fieldValue": "wikipedia"
             },
             {
               "fieldId": "is_current",
@@ -1094,14 +1095,14 @@
             },
             {
               "fieldId": "competition_id",
-              "fieldValue": "f09df076-13f0-4a74-94d3-51232e5b8b71"
+              "fieldValue": "={{ $('Get Competitions').item.json.id }}"
             }
           ]
         },
         "tableId": "competition_seasons"
       },
       "position": [
-        1632,
+        1504,
         -496
       ],
       "type": "n8n-nodes-base.supabase",
