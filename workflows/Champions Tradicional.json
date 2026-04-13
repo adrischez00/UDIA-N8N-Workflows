@@ -138,6 +138,17 @@
         ]
       ]
     },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
     "HTTP Request - Wikipedia": {
       "main": [
         [
@@ -853,6 +864,7 @@
           "name": "Supabase account 2"
         }
       },
+      "disabled": true,
       "executeOnce": false,
       "id": "03a5e932-722f-428c-b909-90e80e6b1c99",
       "name": "HTTP Request",
@@ -1239,6 +1251,19 @@
       ],
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4
+    },
+    {
+      "id": "b7d983c1-6cd8-430f-ad15-15706fa3359a",
+      "name": "Code in JavaScript1",
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "position": [
+        3536,
+        -352
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
     }
   ],
   "pinData": {},
