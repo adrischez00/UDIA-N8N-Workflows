@@ -1,0 +1,15 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "connections": {},
+  "id": "MkYkK0FkQjq9cSZK",
+  "isArchived": false,
+  "name": "My workflow 4",
+  "nodes": [],
+  "pinData": {},
+  "settings": {
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
