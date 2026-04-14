@@ -2,17 +2,6 @@
   "active": false,
   "activeVersion": null,
   "connections": {
-    "Aplicar Contexto Partidos": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Merge5",
-            "type": "main"
-          }
-        ]
-      ]
-    },
     "Check Competition Season": {
       "main": [
         [
@@ -26,13 +15,7 @@
     },
     "Create Competition Season": {
       "main": [
-        [
-          {
-            "index": 0,
-            "node": "Merge CompSeason ID",
-            "type": "main"
-          }
-        ]
+        []
       ]
     },
     "Generate Matchdays": {
@@ -62,17 +45,6 @@
         ]
       ]
     },
-    "HTTP Wikipedia La Liga": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Parse Season Matches",
-            "type": "main"
-          }
-        ]
-      ]
-    },
     "IF Create CompSeason": {
       "main": [
         [
@@ -84,8 +56,26 @@
         ],
         [
           {
+            "index": 1,
+            "node": "Merge",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
             "index": 0,
-            "node": "Merge CompSeason ID",
+            "node": "Prepare FInal",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Equipos Restantes",
             "type": "main"
           }
         ]
@@ -95,13 +85,8 @@
       "main": [
         [
           {
-            "index": 2,
+            "index": 3,
             "node": "Merge",
-            "type": "main"
-          },
-          {
-            "index": 0,
-            "node": "Merge4",
             "type": "main"
           }
         ]
@@ -111,12 +96,7 @@
       "main": [
         [
           {
-            "index": 0,
-            "node": "Check Competition Season",
-            "type": "main"
-          },
-          {
-            "index": 1,
+            "index": 2,
             "node": "Merge2",
             "type": "main"
           }
@@ -143,7 +123,7 @@
             "type": "main"
           },
           {
-            "index": 0,
+            "index": 1,
             "node": "Merge2",
             "type": "main"
           }
@@ -165,7 +145,7 @@
       "main": [
         [
           {
-            "index": 1,
+            "index": 2,
             "node": "Merge",
             "type": "main"
           }
@@ -177,18 +157,7 @@
         [
           {
             "index": 0,
-            "node": "Resolve Team IDs + Validate Matches",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Merge CompSeason ID": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "HTTP Wikipedia La Liga",
+            "node": "Resolve Team IDs",
             "type": "main"
           }
         ]
@@ -210,29 +179,7 @@
         [
           {
             "index": 0,
-            "node": "Resolve IDs",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Merge3": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Aplicar Contexto Partidos",
-            "type": "main"
-          }
-        ]
-      ]
-    },
-    "Parse Season Matches": {
-      "main": [
-        [
-          {
-            "index": 0,
-            "node": "Merge",
+            "node": "Check Competition Season",
             "type": "main"
           }
         ]
@@ -243,29 +190,34 @@
         [
           {
             "index": 0,
-            "node": "Merge3",
+            "node": "Merge2",
             "type": "main"
-          }
-        ]
-      ]
-    },
-    "Resolve IDs": {
-      "main": [
-        [
+          },
           {
-            "index": 1,
-            "node": "Merge3",
+            "index": 0,
+            "node": "Merge",
             "type": "main"
           }
         ]
       ]
     },
-    "Resolve Team IDs + Validate Matches": {
+    "Prepare FInal": {
       "main": [
         [
           {
             "index": 0,
-            "node": "Validate",
+            "node": "Execute a SQL query",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resolve Team IDs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If",
             "type": "main"
           }
         ]
@@ -328,7 +280,7 @@
       "id": "8776b80f-1b29-4f83-8ad8-f49c553a405d",
       "name": "Set Contexto",
       "parameters": {
-        "jsCode": "// ════════════════════════════════════════════════════════════════\n// CONFIGURACIÓN — único lugar que tocas para otra temporada\n// ════════════════════════════════════════════════════════════════\nconst config = {\n  // Formato con barra — igual que en tu DB\n  season_label: '2020/21',\n\n  // Slug de la competition en tu DB\n  competition_slug: 'laliga-ea-sports',\n\n  // Wikipedia: título de la temporada (sin https://en.wikipedia.org/wiki/)\n  // Patrón: YYYY–YY_La_Liga  (guión largo Unicode en el año)\n  wiki_season_title: '2020%E2%80%9321_La_Liga',\n\n  // Transfermarkt\n  transfermarkt_competition_code: 'ES1', // LaLiga\n  total_matchdays: 38,\n};\n\n// ════════════════════════════════════════════════════════════════\n// DERIVADOS AUTOMÁTICOS — no tocar\n// ════════════════════════════════════════════════════════════════\nconst seasonCompact = config.season_label.replace('/', ''); // '202021'\nconst seasonSlug = `laliga-${config.season_label.replace('/', '-')}`; // 'laliga-2020-21'\nconst wikiUrl = `https://en.wikipedia.org/wiki/${config.wiki_season_title}`;\n\n// Para Transfermarkt, 2020/21 => saison_id=2020\nconst seasonStartYear = parseInt(config.season_label.split('/')[0], 10);\n\nconst transfermarkt_base_url =\n  `https://www.transfermarkt.es/laliga/spieltag/wettbewerb/${config.transfermarkt_competition_code}`;\n\nreturn [{\n  json: {\n    ...config,\n\n    // Wikipedia\n    season_compact: seasonCompact,\n    season_slug: seasonSlug,\n    wiki_url: wikiUrl,\n\n    // Transfermarkt\n    transfermarkt_saison_id: seasonStartYear,\n    transfermarkt_base_url,\n  }\n}];"
+        "jsCode": "// ════════════════════════════════════════════════════════════════\n// CONFIGURACIÓN — único lugar que tocas para otra temporada\n// ════════════════════════════════════════════════════════════════\nconst config = {\n  // Formato con barra — igual que en tu DB\n  season_label: '2019/20',\n\n  // Slug de la competition en tu DB\n  competition_slug: 'laliga-ea-sports',\n\n  // Wikipedia: título de la temporada (sin https://en.wikipedia.org/wiki/)\n  // Patrón: YYYY–YY_La_Liga  (guión largo Unicode en el año)\n  wiki_season_title: '2019%E2%80%9320_La_Liga',\n\n  // Transfermarkt\n  transfermarkt_competition_code: 'ES1', // LaLiga\n  total_matchdays: 38,\n};\n\n// ════════════════════════════════════════════════════════════════\n// DERIVADOS AUTOMÁTICOS — no tocar\n// ════════════════════════════════════════════════════════════════\nconst seasonCompact = config.season_label.replace('/', ''); // '202021'\nconst seasonSlug = `laliga-${config.season_label.replace('/', '-')}`; // 'laliga-2020-21'\nconst wikiUrl = `https://en.wikipedia.org/wiki/${config.wiki_season_title}`;\n\n// Para Transfermarkt, 2020/21 => saison_id=2020\nconst seasonStartYear = parseInt(config.season_label.split('/')[0], 10);\n\nconst transfermarkt_base_url =\n  `https://www.transfermarkt.es/laliga/spieltag/wettbewerb/${config.transfermarkt_competition_code}`;\n\nreturn [{\n  json: {\n    ...config,\n\n    // Wikipedia\n    season_compact: seasonCompact,\n    season_slug: seasonSlug,\n    wiki_url: wikiUrl,\n\n    // Transfermarkt\n    transfermarkt_saison_id: seasonStartYear,\n    transfermarkt_base_url,\n  }\n}];"
       },
       "position": [
         -528,
@@ -358,7 +310,7 @@
       },
       "position": [
         32,
-        384
+        432
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
@@ -370,7 +322,7 @@
         "jsCode": "\n// Ahora tenemos competition_id en $json y todas las seasons en Load CompSeason DB\nconst ctx         = $('Load Competition Season').first().json;\nconst allSeasons  = $('Load CompSeason DB').all().map(i => i.json);\n\n// Buscar la season correcta: mismo competition_id y season_label\nconst existing = allSeasons.find(s =>\n  s.competition_id === ctx.competition_id &&\n  s.season_label   === ctx.season_label\n);\n\nif (existing) {\n  // Ya existe\n  return [{\n    json: {\n      ...ctx,\n      competition_season_id: existing.id,\n      _cs_created: false,\n    }\n  }];\n}\n\n// No existe — señal para crear\nreturn [{\n  json: {\n    ...ctx,\n    competition_season_id: null,\n    _cs_created: true,\n    _cs_insert: {\n      competition_id: ctx.competition_id,\n      season_label:   ctx.season_label,\n      is_current:     false,\n      source:         'wikipedia',\n    }\n  }\n}];\n"
       },
       "position": [
-        432,
+        464,
         384
       ],
       "type": "n8n-nodes-base.code",
@@ -390,7 +342,7 @@
         }
       },
       "position": [
-        624,
+        640,
         384
       ],
       "type": "n8n-nodes-base.if",
@@ -429,58 +381,11 @@
         "tableId": "competition_seasons"
       },
       "position": [
-        864,
-        224
+        640,
+        208
       ],
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1
-    },
-    {
-      "id": "bcfb2470-653e-4bac-a861-527db66ae082",
-      "name": "Merge CompSeason ID",
-      "parameters": {
-        "jsCode": "const item = $input.first().json;\nconst ctx  = $('Set Contexto').first().json;  // fuente garantizada de wiki_url\n\nconst csId = item.id || item.competition_season_id;\nif (!csId) {\n  throw new Error('No se pudo obtener competition_season_id');\n}\n\nreturn [{\n  json: {\n    competition_id:         item.competition_id        || ctx.competition_id,\n    competition_season_id:  csId,\n    season_label:           item.season_label          || ctx.season_label,\n    competition_slug:       item.competition_slug      || ctx.competition_slug,\n    season_compact:         item.season_compact        || ctx.season_compact,\n    season_slug:            item.season_slug           || ctx.season_slug,\n    wiki_url:               ctx.wiki_url,\n    competition_name:       item.competition_name,\n  }\n}];"
-      },
-      "position": [
-        1088,
-        400
-      ],
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2
-    },
-    {
-      "id": "e914288c-77fa-4b6a-ac2d-4c5af971d4f7",
-      "name": "HTTP Wikipedia La Liga",
-      "parameters": {
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "User-Agent",
-              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-            },
-            {
-              "name": "Accept",
-              "value": "text/html"
-            }
-          ]
-        },
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "text"
-            }
-          },
-          "timeout": 30000
-        },
-        "sendHeaders": true,
-        "url": "={{ $('Merge CompSeason ID').first().json.wiki_url }}"
-      },
-      "position": [
-        1296,
-        400
-      ],
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2
     },
     {
       "credentials": {
@@ -497,8 +402,8 @@
         "tableId": "teams"
       },
       "position": [
-        176,
-        608
+        224,
+        688
       ],
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1
@@ -518,8 +423,8 @@
         "tableId": "team_aliases"
       },
       "position": [
-        176,
-        816
+        224,
+        864
       ],
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1
@@ -570,54 +475,14 @@
       "id": "f0ffc80a-19ea-4091-ad0e-da3c34052b22",
       "name": "Merge",
       "parameters": {
-        "mode": "chooseBranch",
-        "numberInputs": 3
+        "numberInputs": 4
       },
       "position": [
-        1696,
-        640
+        1136,
+        304
       ],
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2
-    },
-    {
-      "id": "573d1594-b40a-4885-a695-67be39f0f8a8",
-      "name": "Resolve Team IDs + Validate Matches",
-      "parameters": {
-        "jsCode": "const inputItems = $input.all();\n\nconst teams = $('Load Teams').all().map(x => x.json);\nconst aliases = $('Load Aliases').all().map(x => x.json);\n\nfunction normalize(s) {\n  return (s || '')\n    .toLowerCase()\n    .normalize('NFD')\n    .replace(/[\\u0300-\\u036f]/g, '')\n    .replace(/[^a-z0-9]/g, '');\n}\n\nconst teamMap = new Map();\nfor (const t of teams) {\n  const candidates = [\n    t.name,\n    t.team_name,\n    t.display_name,\n    t.slug,\n    t.short_name\n  ].filter(Boolean);\n\n  for (const c of candidates) {\n    const key = normalize(c);\n    if (key && !teamMap.has(key)) {\n      teamMap.set(key, t);\n    }\n  }\n}\n\nconst aliasMap = new Map();\nfor (const a of aliases) {\n  const aliasRaw =\n    a.alias ||\n    a.alias_name ||\n    a.name ||\n    a.team_alias ||\n    null;\n\n  const aliasKey = normalize(aliasRaw);\n  if (!aliasKey) continue;\n\n  // intentar encontrar team_id directo\n  const teamId =\n    a.team_id ||\n    a.canonical_team_id ||\n    a.target_team_id ||\n    null;\n\n  if (teamId) {\n    aliasMap.set(aliasKey, { team_id: teamId });\n    continue;\n  }\n\n  // si el alias apunta a un nombre canónico\n  const canonicalName =\n    a.canonical_name ||\n    a.team_name ||\n    a.target_team_name ||\n    null;\n\n  if (canonicalName) {\n    aliasMap.set(aliasKey, { canonical_name: canonicalName });\n  }\n}\n\nfunction resolveTeam(rawName) {\n  const key = normalize(rawName);\n  if (!key) return null;\n\n  // 1) match directo\n  if (teamMap.has(key)) {\n    return teamMap.get(key);\n  }\n\n  // 2) alias -> team_id o canonical_name\n  if (aliasMap.has(key)) {\n    const aliasData = aliasMap.get(key);\n\n    if (aliasData.team_id) {\n      const found = teams.find(t =>\n        t.id === aliasData.team_id ||\n        t.team_id === aliasData.team_id\n      );\n      if (found) return found;\n    }\n\n    if (aliasData.canonical_name) {\n      const canonKey = normalize(aliasData.canonical_name);\n      if (teamMap.has(canonKey)) {\n        return teamMap.get(canonKey);\n      }\n    }\n  }\n\n  // 3) fuzzy básico: contains\n  for (const [k, t] of teamMap.entries()) {\n    if (k === key) return t;\n    if (k.includes(key) || key.includes(k)) return t;\n  }\n\n  return null;\n}\n\nconst out = [];\nconst errors = [];\nconst seen = new Set();\n\nfor (const inputItem of inputItems) {\n  const m = inputItem.json || {};\n\n  if (m.error) {\n    errors.push({\n      type: 'upstream_error',\n      detail: m\n    });\n    continue;\n  }\n\n  const homeResolved = resolveTeam(m.home_team_raw);\n  const awayResolved = resolveTeam(m.away_team_raw);\n\n  const homeTeamId =\n    homeResolved?.id ??\n    homeResolved?.team_id ??\n    null;\n\n  const awayTeamId =\n    awayResolved?.id ??\n    awayResolved?.team_id ??\n    null;\n\n  const sourceId = m.source_id || null;\n\n  if (!sourceId) {\n    errors.push({\n      type: 'missing_source_id',\n      match: m\n    });\n    continue;\n  }\n\n  if (seen.has(sourceId)) {\n    errors.push({\n      type: 'duplicate_source_id',\n      source_id: sourceId,\n      match: m\n    });\n    continue;\n  }\n  seen.add(sourceId);\n\n  if (!homeTeamId || !awayTeamId) {\n    errors.push({\n      type: 'unresolved_team',\n      source_id: sourceId,\n      home_team_raw: m.home_team_raw,\n      away_team_raw: m.away_team_raw,\n      resolved_home: homeResolved?.name || homeResolved?.team_name || null,\n      resolved_away: awayResolved?.name || awayResolved?.team_name || null\n    });\n    continue;\n  }\n\n  out.push({\n    json: {\n      competition_id: m.competition_id ?? null,\n      competition_season_id: m.competition_season_id ?? null,\n      home_team_id: homeTeamId,\n      away_team_id: awayTeamId,\n      home_team_raw: m.home_team_raw ?? null,\n      away_team_raw: m.away_team_raw ?? null,\n      match_date: m.match_date ?? null,\n      home_score: m.home_score ?? null,\n      away_score: m.away_score ?? null,\n      status: m.status ?? 'finished',\n      stage: m.stage ?? 'league',\n      source: m.source ?? 'wikipedia',\n      source_id: sourceId,\n      season: m.season ?? null,\n      season_slug: m.season_slug ?? null\n    }\n  });\n}\n\nconst summary = {\n  total_input: inputItems.length,\n  total_ok: out.length,\n  total_errors: errors.length,\n  unresolved_count: errors.filter(e => e.type === 'unresolved_team').length,\n  duplicate_count: errors.filter(e => e.type === 'duplicate_source_id').length\n};\n\n// si quieres cortar duro cuando no esté perfecto\nif (errors.length > 0) {\n  return [{\n    json: {\n      error: 'validation_failed',\n      summary,\n      errors: errors.slice(0, 100)\n    }\n  }];\n}\n\n// si quieres además validar 380 exactos\nif (out.length !== 380) {\n  return [{\n    json: {\n      error: 'unexpected_match_count',\n      summary,\n      expected: 380,\n      actual: out.length\n    }\n  }];\n}\n\nreturn out;"
-      },
-      "position": [
-        1872,
-        656
-      ],
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2
-    },
-    {
-      "id": "b71c6129-42f2-4778-91d6-2951d8f76c8f",
-      "name": "Parse Season Matches",
-      "parameters": {
-        "jsCode": "const item = $json;\nconst html = item.data || '';\n\nconst ctx = $('Set Contexto').first().json;\nconst compSeason = $('Merge CompSeason ID').first().json || {};\n\nfunction strip(s) {\n  return (s || '')\n    .replace(/<br\\s*\\/?>/gi, ' ')\n    .replace(/<[^>]+>/g, ' ')\n    .replace(/&amp;/g, '&')\n    .replace(/&nbsp;/g, ' ')\n    .replace(/&#160;/g, ' ')\n    .replace(/&#8212;/g, '—')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction normalize(s) {\n  return (s || '')\n    .toLowerCase()\n    .normalize('NFD')\n    .replace(/[\\u0300-\\u036f]/g, '')\n    .replace(/[^a-z0-9]/g, '');\n}\n\nconst seasonCompact =\n  ctx.season_compact ||\n  (ctx.season_label ? String(ctx.season_label).replace('/', '') : null);\n\nif (!seasonCompact) {\n  return [{ json: { error: 'missing_season_compact' } }];\n}\n\nconst competitionId =\n  compSeason.competition_id ||\n  ctx.competition_id ||\n  null;\n\nconst competitionSeasonId =\n  compSeason.competition_season_id ||\n  compSeason.id ||\n  null;\n\n// 1) localizar la tabla matriz Home \\ Away\nconst tables = html.match(/<table[\\s\\S]*?<\\/table>/gi) || [];\n\nlet matrixTable = null;\nfor (const table of tables) {\n  const text = strip(table);\n  if (/Home\\s*\\\\\\s*Away/i.test(text) || /Home\\s*Away/i.test(text)) {\n    // esta es la tabla cruzada de resultados\n    matrixTable = table;\n    break;\n  }\n}\n\nif (!matrixTable) {\n  return [{ json: { error: 'matrix_table_not_found' } }];\n}\n\n// 2) sacar filas\nconst rowMatches = [...matrixTable.matchAll(/<tr[^>]*>([\\s\\S]*?)<\\/tr>/gi)];\nif (rowMatches.length < 3) {\n  return [{ json: { error: 'matrix_rows_not_found' } }];\n}\n\n// helper para sacar celdas de una fila\nfunction extractCells(rowHtml) {\n  return [...rowHtml.matchAll(/<t[hd][^>]*>([\\s\\S]*?)<\\/t[hd]>/gi)].map(m => strip(m[1]));\n}\n\n// 3) primera fila = cabecera con abreviaturas\nconst headerCells = extractCells(rowMatches[0][1]);\n\n// Esperamos algo como: [\"Home \\\\ Away\", \"ALA\", \"ATH\", ...]\nif (headerCells.length < 5) {\n  return [{ json: { error: 'matrix_header_invalid', debug_header: headerCells } }];\n}\n\nconst awayAbbrevs = headerCells.slice(1);\n\n// 4) resto de filas = equipos locales + marcadores\nconst rawRows = rowMatches.slice(1).map(r => extractCells(r[1]));\n\n// Nos quedamos con filas que realmente parecen de equipos\nconst teamRows = rawRows.filter(r => r.length >= 5);\n\n// 5) construir mapa columna -> equipo usando el nombre de la fila\n// La tabla está ordenada igual en cabecera y filas\nconst rowTeamNames = teamRows.map(r => r[0]);\n\nif (rowTeamNames.length !== awayAbbrevs.length) {\n  return [{\n    json: {\n      error: 'matrix_dimension_mismatch',\n      awayAbbrevsCount: awayAbbrevs.length,\n      rowTeamNamesCount: rowTeamNames.length\n    }\n  }];\n}\n\n// 6) parsear todos los cruces\nconst out = [];\nconst seen = new Set();\n\nfor (let i = 0; i < teamRows.length; i++) {\n  const row = teamRows[i];\n  const homeTeamRaw = row[0];\n  const scoreCells = row.slice(1);\n\n  for (let j = 0; j < scoreCells.length; j++) {\n    const cell = scoreCells[j];\n    const awayTeamRaw = rowTeamNames[j];\n\n    // diagonal o vacío\n    if (!cell || cell === '—' || normalize(homeTeamRaw) === normalize(awayTeamRaw)) {\n      continue;\n    }\n\n    const scoreMatch = cell.match(/\\b(\\d+)[–-](\\d+)\\b/);\n    if (!scoreMatch) continue;\n\n    const homeScore = parseInt(scoreMatch[1], 10);\n    const awayScore = parseInt(scoreMatch[2], 10);\n\n    // En esta matriz no suele venir fecha; la añadiremos luego si hace falta en otra fase\n    // De momento construimos el partido sin fecha exacta\n    const sourceId = `laliga_${seasonCompact}_${normalize(homeTeamRaw)}_${normalize(awayTeamRaw)}_${homeScore}_${awayScore}`;\n\n    if (seen.has(sourceId)) continue;\n    seen.add(sourceId);\n\n    out.push({\n      competition_id: competitionId,\n      competition_season_id: competitionSeasonId,\n      home_team_raw: homeTeamRaw,\n      away_team_raw: awayTeamRaw,\n      match_date: null,\n      home_score: homeScore,\n      away_score: awayScore,\n      status: 'finished',\n      stage: 'league',\n      source: 'wikipedia',\n      source_id: sourceId,\n      season: ctx.season_label ?? null,\n      season_slug: ctx.season_slug ?? null,\n    });\n  }\n}\n\nif (!out.length) {\n  return [{ json: { error: 'no_matches_parsed_from_matrix' } }];\n}\n\nreturn out.map(m => ({ json: m }));"
-      },
-      "position": [
-        1504,
-        400
-      ],
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2
-    },
-    {
-      "id": "00282708-ad8f-43a3-9987-923a803774c3",
-      "name": "Validate",
-      "parameters": {
-        "jsCode": "const inputItems = $input.all();\n\nconst teams = $('Load Teams').all().map(x => x.json);\nconst aliases = $('Load Aliases').all().map(x => x.json);\n\nfunction normalize(s) {\n  return (s || '')\n    .toLowerCase()\n    .normalize('NFD')\n    .replace(/[\\u0300-\\u036f]/g, '')\n    .replace(/[^a-z0-9]/g, '');\n}\n\nconst teamMap = new Map();\nfor (const t of teams) {\n  const candidates = [\n    t.name,\n    t.team_name,\n    t.display_name,\n    t.slug,\n    t.short_name\n  ].filter(Boolean);\n\n  for (const c of candidates) {\n    const key = normalize(c);\n    if (key && !teamMap.has(key)) {\n      teamMap.set(key, t);\n    }\n  }\n}\n\nconst aliasMap = new Map();\nfor (const a of aliases) {\n  const aliasRaw =\n    a.alias ||\n    a.alias_name ||\n    a.name ||\n    a.team_alias ||\n    null;\n\n  const aliasKey = normalize(aliasRaw);\n  if (!aliasKey) continue;\n\n  // intentar encontrar team_id directo\n  const teamId =\n    a.team_id ||\n    a.canonical_team_id ||\n    a.target_team_id ||\n    null;\n\n  if (teamId) {\n    aliasMap.set(aliasKey, { team_id: teamId });\n    continue;\n  }\n\n  // si el alias apunta a un nombre canónico\n  const canonicalName =\n    a.canonical_name ||\n    a.team_name ||\n    a.target_team_name ||\n    null;\n\n  if (canonicalName) {\n    aliasMap.set(aliasKey, { canonical_name: canonicalName });\n  }\n}\n\nfunction resolveTeam(rawName) {\n  const key = normalize(rawName);\n  if (!key) return null;\n\n  // 1) match directo\n  if (teamMap.has(key)) {\n    return teamMap.get(key);\n  }\n\n  // 2) alias -> team_id o canonical_name\n  if (aliasMap.has(key)) {\n    const aliasData = aliasMap.get(key);\n\n    if (aliasData.team_id) {\n      const found = teams.find(t =>\n        t.id === aliasData.team_id ||\n        t.team_id === aliasData.team_id\n      );\n      if (found) return found;\n    }\n\n    if (aliasData.canonical_name) {\n      const canonKey = normalize(aliasData.canonical_name);\n      if (teamMap.has(canonKey)) {\n        return teamMap.get(canonKey);\n      }\n    }\n  }\n\n  // 3) fuzzy básico: contains\n  for (const [k, t] of teamMap.entries()) {\n    if (k === key) return t;\n    if (k.includes(key) || key.includes(k)) return t;\n  }\n\n  return null;\n}\n\nconst out = [];\nconst errors = [];\nconst seen = new Set();\n\nfor (const inputItem of inputItems) {\n  const m = inputItem.json || {};\n\n  if (m.error) {\n    errors.push({\n      type: 'upstream_error',\n      detail: m\n    });\n    continue;\n  }\n\n  const homeResolved = resolveTeam(m.home_team_raw);\n  const awayResolved = resolveTeam(m.away_team_raw);\n\n  const homeTeamId =\n    homeResolved?.id ??\n    homeResolved?.team_id ??\n    null;\n\n  const awayTeamId =\n    awayResolved?.id ??\n    awayResolved?.team_id ??\n    null;\n\n  const sourceId = m.source_id || null;\n\n  if (!sourceId) {\n    errors.push({\n      type: 'missing_source_id',\n      match: m\n    });\n    continue;\n  }\n\n  if (seen.has(sourceId)) {\n    errors.push({\n      type: 'duplicate_source_id',\n      source_id: sourceId,\n      match: m\n    });\n    continue;\n  }\n  seen.add(sourceId);\n\n  if (!homeTeamId || !awayTeamId) {\n    errors.push({\n      type: 'unresolved_team',\n      source_id: sourceId,\n      home_team_raw: m.home_team_raw,\n      away_team_raw: m.away_team_raw,\n      resolved_home: homeResolved?.name || homeResolved?.team_name || null,\n      resolved_away: awayResolved?.name || awayResolved?.team_name || null\n    });\n    continue;\n  }\n\n  out.push({\n    json: {\n      competition_id: m.competition_id ?? null,\n      competition_season_id: m.competition_season_id ?? null,\n      home_team_id: homeTeamId,\n      away_team_id: awayTeamId,\n      home_team_raw: m.home_team_raw ?? null,\n      away_team_raw: m.away_team_raw ?? null,\n      match_date: m.match_date ?? null,\n      home_score: m.home_score ?? null,\n      away_score: m.away_score ?? null,\n      status: m.status ?? 'finished',\n      stage: m.stage ?? 'league',\n      source: m.source ?? 'wikipedia',\n      source_id: sourceId,\n      season: m.season ?? null,\n      season_slug: m.season_slug ?? null\n    }\n  });\n}\n\nconst summary = {\n  total_input: inputItems.length,\n  total_ok: out.length,\n  total_errors: errors.length,\n  unresolved_count: errors.filter(e => e.type === 'unresolved_team').length,\n  duplicate_count: errors.filter(e => e.type === 'duplicate_source_id').length\n};\n\n// si quieres cortar duro cuando no esté perfecto\nif (errors.length > 0) {\n  return [{\n    json: {\n      error: 'validation_failed',\n      summary,\n      errors: errors.slice(0, 100)\n    }\n  }];\n}\n\n// si quieres además validar 380 exactos\nif (out.length !== 380) {\n  return [{\n    json: {\n      error: 'unexpected_match_count',\n      summary,\n      expected: 380,\n      actual: out.length\n    }\n  }];\n}\n\nreturn out;"
-      },
-      "position": [
-        2064,
-        560
-      ],
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2
     },
     {
       "id": "ac5b4893-049e-49e7-a3bf-27c566071934",
@@ -709,7 +574,9 @@
     {
       "id": "d19cb91c-913e-4c0a-a94f-2d792d432459",
       "name": "Merge2",
-      "parameters": {},
+      "parameters": {
+        "numberInputs": 3
+      },
       "position": [
         352,
         192
@@ -718,63 +585,100 @@
       "typeVersion": 3.2
     },
     {
-      "id": "0f04aa20-48fc-435a-9ea8-7fc5ab8fa113",
-      "name": "Resolve IDs",
+      "id": "573d1594-b40a-4885-a695-67be39f0f8a8",
+      "name": "Resolve Team IDs",
       "parameters": {
-        "jsCode": "function norm(s) {\n  return String(s || '')\n    .toLowerCase()\n    .normalize('NFD')\n    .replace(/[\\u0300-\\u036f]/g, '')\n    .trim();\n}\n\nfunction compactSeason(s) {\n  return String(s || '').replace(/[^0-9]/g, '');\n}\n\nconst items = $input.all().map(i => i.json);\n\n// 1) Contexto\nconst ctx = $items(\"Set Contexto\")[0]?.json;\n\nif (!ctx) {\n  return [{ json: { error: \"context_not_found\" } }];\n}\n\n// 2) Separar competitions y competition_seasons desde Merge2\nconst competitions = items.filter(i =>\n  i.id &&\n  i.slug &&\n  i.name &&\n  !i.season_label\n);\n\nconst competitionSeasons = items.filter(i =>\n  i.id &&\n  i.competition_id &&\n  i.season_label\n);\n\n// 3) Resolver competition\nconst competition = competitions.find(c =>\n  norm(c.slug) === norm(ctx.competition_slug)\n);\n\nif (!competition) {\n  return [{\n    json: {\n      error: \"competition_not_found\",\n      competition_slug: ctx.competition_slug,\n      available_competitions: competitions.map(c => ({\n        id: c.id,\n        slug: c.slug,\n        name: c.name,\n      })),\n    }\n  }];\n}\n\n// 4) Resolver competition season\nconst targetSeason = compactSeason(ctx.season_label || ctx.season);\n\nconst competitionSeason = competitionSeasons.find(cs =>\n  cs.competition_id === competition.id &&\n  compactSeason(cs.season_label) === targetSeason\n);\n\nif (!competitionSeason) {\n  return [{\n    json: {\n      error: \"competition_season_not_found\",\n      competition_id: competition.id,\n      season_label: ctx.season_label || ctx.season,\n      available_seasons_for_competition: competitionSeasons\n        .filter(cs => cs.competition_id === competition.id)\n        .map(cs => ({\n          id: cs.id,\n          season_label: cs.season_label,\n          competition_id: cs.competition_id,\n        })),\n    }\n  }];\n}\n\n// 5) Devolver SOLO 1 item de contexto resuelto\nreturn [{\n  json: {\n    ...ctx,\n    competition_id: competition.id,\n    competition_name: competition.name || null,\n    competition_season_id: competitionSeason.id,\n  }\n}];"
+        "jsCode": "function normalizeTeamName(s = '') {\n  return String(s || '')\n    .normalize('NFD')\n    .replace(/[\\u0300-\\u036f]/g, '')\n    .toLowerCase()\n    .replace(/\\b(sd|rc|cf|fc|club|de|del|la|real)\\b/g, ' ')\n    .replace(/[^a-z0-9]+/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction slugify(s = '') {\n  return normalizeTeamName(s).replace(/\\s+/g, '-');\n}\n\n// Estos nombres tienen que coincidir EXACTAMENTE con tus nodos\nconst matches = $items(\"Parse Transfermarkt Matchday\").map(i => i.json);\nconst ctx = $items(\"Check Competition Season\")[0]?.json;\nconst teams = $items(\"Load Teams\").map(i => i.json);\nconst aliases = $items(\"Load Aliases\").map(i => i.json);\n\nif (!ctx) {\n  return [{\n    json: {\n      error: 'missing_competition_context'\n    }\n  }];\n}\n\n// Mapa slug -> team_id\nconst slugToTeamId = {};\n\n// Teams directos\nfor (const t of teams) {\n  if (t.slug) {\n    slugToTeamId[String(t.slug).toLowerCase()] = t.id;\n  }\n}\n\n// Aliases\nfor (const a of aliases) {\n  if (a.alias_slug) {\n    slugToTeamId[String(a.alias_slug).toLowerCase()] = a.team_id;\n  }\n}\n\nconst result = matches.map(m => {\n  const homeSlug = slugify(m.home_team_raw || '');\n  const awaySlug = slugify(m.away_team_raw || '');\n\n  const homeTeamId = slugToTeamId[homeSlug] || null;\n  const awayTeamId = slugToTeamId[awaySlug] || null;\n\n  const validationErrors = [];\n  if (!homeTeamId) validationErrors.push('missing_home_team_id');\n  if (!awayTeamId) validationErrors.push('missing_away_team_id');\n\n  return {\n    json: {\n      // contexto competición\n      competition_id: ctx.competition_id,\n      competition_name: ctx.competition_name || null,\n      competition_season_id: ctx.competition_season_id,\n      season: ctx.season_label || null,\n      season_label: ctx.season_label || null,\n      season_slug: ctx.season_slug || null,\n\n      // partido\n      round: m.round ?? null,\n      match_date: m.match_date || null,\n      kickoff_time: m.kickoff_time || null,\n      home_team_raw: m.home_team_raw || null,\n      away_team_raw: m.away_team_raw || null,\n      home_score: m.home_score ?? null,\n      away_score: m.away_score ?? null,\n      transfermarkt_url: m.transfermarkt_url || null,\n      source: m.source || 'transfermarkt',\n      _match_key: m._match_key || null,\n      join_key: m.join_key || null,\n\n      // ids de equipos\n      home_team_id: homeTeamId,\n      away_team_id: awayTeamId,\n      home_team_slug: homeSlug,\n      away_team_slug: awaySlug,\n\n      // validación\n      validation_errors: validationErrors,\n      is_valid: validationErrors.length === 0,\n    }\n  };\n});\n\nreturn result;"
       },
       "position": [
-        544,
-        192
+        1312,
+        336
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
     },
     {
-      "id": "f74420b9-ab3d-439f-893a-da73a913e930",
-      "name": "Merge3",
-      "parameters": {},
-      "position": [
-        768,
-        16
-      ],
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2
-    },
-    {
-      "id": "010b4a18-f3a9-4d47-b51a-26fc2bb2ae8f",
-      "name": "Aplicar Contexto Partidos",
+      "id": "00282708-ad8f-43a3-9987-923a803774c3",
+      "name": "Prepare FInal",
       "parameters": {
-        "jsCode": "const ctx = $items(\"Resolve IDs\")[0]?.json;\nconst matches = $items(\"Parse Transfermarkt Matchday\").map(i => i.json);\n\nif (!ctx || !ctx.competition_id || !ctx.competition_season_id) {\n  return [{\n    json: {\n      error: \"resolved_context_missing\",\n      ctx: ctx || null\n    }\n  }];\n}\n\nreturn matches.map(m => ({\n  json: {\n    ...m,\n    competition_id: ctx.competition_id,\n    competition_name: ctx.competition_name,\n    competition_season_id: ctx.competition_season_id,\n    season: ctx.season || ctx.season_label || null,\n    season_label: ctx.season_label || ctx.season || null,\n  }\n}));"
+        "jsCode": "function buildKickoffAt(matchDate, kickoffTime) {\n  if (!matchDate || !kickoffTime) return null;\n  return `${matchDate}T${kickoffTime}:00`;\n}\n\nconst items = $input.all().map(i => i.json);\n\nreturn items.map(j => {\n  const validationErrors = Array.isArray(j.validation_errors)\n    ? [...j.validation_errors]\n    : [];\n\n  if (!j.competition_id) validationErrors.push('missing_competition_id');\n  if (!j.competition_season_id) validationErrors.push('missing_competition_season_id');\n  if (!j.home_team_id) validationErrors.push('missing_home_team_id');\n  if (!j.away_team_id) validationErrors.push('missing_away_team_id');\n  if (!j.match_date) validationErrors.push('missing_match_date');\n\n  const kickoffAt = buildKickoffAt(j.match_date, j.kickoff_time);\n\n  return {\n    json: {\n      competition_id: j.competition_id ?? null,\n      competition_season_id: j.competition_season_id ?? null,\n      season: j.season || j.season_label || null,\n      home_team_id: j.home_team_id ?? null,\n      away_team_id: j.away_team_id ?? null,\n\n      stadium_id: null,\n      kickoff_at: kickoffAt,\n      home_score: j.home_score ?? null,\n      away_score: j.away_score ?? null,\n      status: 'finished',\n      source: j.source || 'transfermarkt',\n      source_id: j._match_key || j.join_key || null,\n\n      stage: 'league',\n      leg: null,\n      is_neutral: false,\n      attendance: null,\n\n      kickoff_time: j.kickoff_time || null,\n      match_date: j.match_date || null,\n      round: j.round ?? null,\n\n      stadium_raw: null,\n      city_raw: null,\n      season_slug: j.season_slug || null,\n\n      went_extra_time: false,\n      went_penalties: false,\n      home_penalty_score: null,\n      away_penalty_score: null,\n      win_method: null,\n\n      // útiles para revisión/debug\n      competition_name: j.competition_name || null,\n      home_team_raw: j.home_team_raw || null,\n      away_team_raw: j.away_team_raw || null,\n      home_team_slug: j.home_team_slug || null,\n      away_team_slug: j.away_team_slug || null,\n      transfermarkt_url: j.transfermarkt_url || null,\n\n      validation_errors: validationErrors,\n      is_valid: validationErrors.length === 0,\n    }\n  };\n});"
       },
       "position": [
-        976,
-        16
+        1712,
+        224
       ],
       "type": "n8n-nodes-base.code",
       "typeVersion": 2
     },
     {
-      "id": "877a5664-0a2d-43db-b057-8af70a78c9d4",
-      "name": "Merge4",
-      "parameters": {},
+      "id": "91b657b6-55a8-4af2-bbbf-40b086e63c4e",
+      "name": "If",
+      "parameters": {
+        "conditions": {
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "f1717b73-c2e9-4efc-b06d-5aa168eba613",
+              "leftValue": "={{ $json.is_valid }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
       "position": [
-        384,
-        816
+        1520,
+        336
       ],
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
     },
     {
-      "id": "1987aff5-1d6b-4f35-8aab-2bcbf5ba977b",
-      "name": "Merge5",
-      "parameters": {},
+      "id": "aaff736d-f41a-42bc-a9a8-c6615e082d7a",
+      "name": "Equipos Restantes",
+      "parameters": {
+        "jsCode": "const items = $input.all().map(i => i.json);\n\nconst missing = new Map();\n\nfor (const j of items) {\n\n  // HOME\n  if (!j.home_team_id && j.home_team_raw) {\n    const key = j.home_team_raw.toLowerCase();\n\n    if (!missing.has(key)) {\n      missing.set(key, {\n        team_raw: j.home_team_raw,\n        team_slug: j.home_team_slug || null,\n        side: 'home'\n      });\n    }\n  }\n\n  // AWAY\n  if (!j.away_team_id && j.away_team_raw) {\n    const key = j.away_team_raw.toLowerCase();\n\n    if (!missing.has(key)) {\n      missing.set(key, {\n        team_raw: j.away_team_raw,\n        team_slug: j.away_team_slug || null,\n        side: 'away'\n      });\n    }\n  }\n}\n\nreturn Array.from(missing.values()).map(x => ({ json: x }));"
+      },
       "position": [
-        1248,
-        32
+        1728,
+        432
       ],
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "C8u6ZZCdRokKnIu9",
+          "name": "Postgres account"
+        }
+      },
+      "id": "750ce17b-8006-4622-ac8e-8722e1662048",
+      "name": "Execute a SQL query",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "=[\n  {{$json.competition_id}},\n  {{$json.competition_season_id}},\n  {{$json.season}},\n  {{$json.home_team_id}},\n  {{$json.away_team_id}},\n  {{$json.kickoff_at}},\n  {{$json.home_score}},\n  {{$json.away_score}},\n  {{$json.status}},\n  {{$json.source}},\n  {{$json.source_id}},\n  {{$json.stage}},\n  {{$json.kickoff_time}},\n  {{$json.match_date}},\n  {{$json.round}},\n  {{$json.season_slug}}\n]"
+        },
+        "query": "insert into public.matches (\n  competition_id,\n  competition_season_id,\n  season,\n  home_team_id,\n  away_team_id,\n  kickoff_at,\n  home_score,\n  away_score,\n  status,\n  source,\n  source_id,\n  stage,\n  kickoff_time,\n  match_date,\n  round,\n  season_slug\n)\nvalues (\n  $1, $2, $3, $4, $5,\n  $6, $7, $8, $9, $10,\n  $11, $12, $13, $14, $15, $16\n)\non conflict (source_id) do nothing;"
+      },
+      "position": [
+        1920,
+        224
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
     }
   ],
   "pinData": {},
